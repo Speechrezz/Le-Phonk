@@ -8,10 +8,14 @@
         <FILE id="zVNLZL" name="Constants.h" compile="0" resource="0" file="Source/Common/Constants.h"/>
       </GROUP>
       <GROUP id="{A9A414F8-F009-37A7-F694-EAEDFAC45030}" name="DSP">
+        <FILE id="qLTXSI" name="Lemonz.cpp" compile="1" resource="0" file="Source/DSP/Lemonz.cpp"/>
+        <FILE id="DqlQ7M" name="Lemonz.h" compile="0" resource="0" file="Source/DSP/Lemonz.h"/>
         <FILE id="sE2QUX" name="OTT.cpp" compile="1" resource="0" file="Source/DSP/OTT.cpp"/>
         <FILE id="rRvLuM" name="OTT.h" compile="0" resource="0" file="Source/DSP/OTT.h"/>
         <FILE id="AUV5xg" name="UpDownComp.cpp" compile="1" resource="0" file="Source/DSP/UpDownComp.cpp"/>
         <FILE id="wWmqwv" name="UpDownComp.h" compile="0" resource="0" file="Source/DSP/UpDownComp.h"/>
+        <FILE id="Czfxd2" name="Zekete.cpp" compile="1" resource="0" file="Source/DSP/Zekete.cpp"/>
+        <FILE id="VYCOLh" name="Zekete.h" compile="0" resource="0" file="Source/DSP/Zekete.h"/>
       </GROUP>
       <GROUP id="{69A35449-46DD-630F-FB48-80D356D167E5}" name="GUI">
         <GROUP id="{C45996B4-6EDA-02A3-1FC1-23CBB35D97A8}" name="Utils">

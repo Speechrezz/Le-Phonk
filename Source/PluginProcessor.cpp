@@ -24,6 +24,7 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
 #endif
 {
     ott.setAtomics(treeState);
+    lemonz.setAtomics(treeState);
 }
 
 LePhonkAudioProcessor::~LePhonkAudioProcessor()
@@ -112,6 +113,7 @@ void LePhonkAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     spec.sampleRate = sampleRate;
 
     ott.prepare(spec);
+    lemonz.prepare(spec);
 }
 
 void LePhonkAudioProcessor::releaseResources()
@@ -159,6 +161,7 @@ void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto context = juce::dsp::ProcessContextReplacing<float>(audioBlock);
 
     ott.process(context);
+    lemonz.process(context);
 }
 
 //==============================================================================
