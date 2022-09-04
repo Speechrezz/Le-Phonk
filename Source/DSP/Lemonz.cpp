@@ -27,18 +27,24 @@ Lemonz::Lemonz()
 }
 void Lemonz::prepare(const juce::dsp::ProcessSpec& spec)
 {
-    gain.prepare(spec);
-    gain.setRampDurationSeconds(0.005);
+    gainIn.prepare(spec);
+    gainIn.setRampDurationSeconds(0.005);
+
+    gainOut.prepare(spec);
+    gainOut.setRampDurationSeconds(0.005);
+
     shaper.prepare(spec);
 }
 void Lemonz::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
     float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, 12.f);
-    gain.setGainDecibels(dB);
+    dB = juce::jmap(dB, 0.f, 18.f);
+    gainIn.setGainDecibels(dB);
+    gainOut.setGainDecibels(dB * -0.9f);
 
-    gain.process(context);
+    gainIn.process(context);
     shaper.process(context);
+    gainOut.process(context);
 }
 void Lemonz::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {

@@ -25,6 +25,7 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
 {
     ott.setAtomics(treeState);
     lemonz.setAtomics(treeState);
+    zekete.setAtomics(treeState);
 }
 
 LePhonkAudioProcessor::~LePhonkAudioProcessor()
@@ -114,6 +115,7 @@ void LePhonkAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 
     ott.prepare(spec);
     lemonz.prepare(spec);
+    zekete.prepare(spec);
 }
 
 void LePhonkAudioProcessor::releaseResources()
@@ -160,6 +162,7 @@ void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto audioBlock = juce::dsp::AudioBlock<float>(buffer).getSubsetChannelBlock(0, (size_t)totalNumInputChannels);
     auto context = juce::dsp::ProcessContextReplacing<float>(audioBlock);
 
+    zekete.process(context);
     ott.process(context);
     lemonz.process(context);
 }

@@ -27,7 +27,7 @@ public:
 
 private:
     juce::dsp::WaveShaper<float> shaper;
-    juce::dsp::Gain<float> gain;
+    juce::dsp::Gain<float> gainIn, gainOut;
 
     std::atomic<float>* paramAtomic{ nullptr };
 

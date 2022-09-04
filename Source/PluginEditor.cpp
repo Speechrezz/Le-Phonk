@@ -16,13 +16,13 @@ LePhonkAudioProcessorEditor::LePhonkAudioProcessorEditor (LePhonkAudioProcessor&
 
     auto& treeState = audioProcessor.treeState;
 
+    Zekete.init(treeState, ZEKETE_ID, ZEKETE_NAME);
     OTT.init   (treeState, OTT_ID,    OTT_NAME);
     Lemonz.init(treeState, LEMONZ_ID, LEMONZ_NAME);
-    Zekete.init(treeState, ZEKETE_ID, ZEKETE_NAME);
 
+    addAndMakeVisible(Zekete.slider);
     addAndMakeVisible(OTT.slider);
     addAndMakeVisible(Lemonz.slider);
-    addAndMakeVisible(Zekete.slider);
 }
 
 LePhonkAudioProcessorEditor::~LePhonkAudioProcessorEditor()
@@ -42,9 +42,9 @@ void LePhonkAudioProcessorEditor::resized()
 {
     auto rect = getLocalBounds().withTrimmedTop(200).reduced(20, 0);
 
+    Zekete.slider.setBounds(rect.removeFromTop(120));
+    rect.removeFromTop(100);
     OTT.slider.setBounds(rect.removeFromTop(120));
     rect.removeFromTop(100);
     Lemonz.slider.setBounds(rect.removeFromTop(120));
-    rect.removeFromTop(100);
-    Zekete.slider.setBounds(rect.removeFromTop(120));
 }
