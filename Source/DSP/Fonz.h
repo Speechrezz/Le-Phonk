@@ -14,11 +14,11 @@
 
 namespace xynth
 {
-class Lemonz
+class Fonz
 {
 public:
-    Lemonz();
-    ~Lemonz() = default;
+    Fonz();
+    ~Fonz() = default;
 
     void prepare(const juce::dsp::ProcessSpec& spec);
     void process(juce::dsp::ProcessContextReplacing<float>& context);

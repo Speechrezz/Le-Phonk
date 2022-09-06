@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "Common/Constants.h"
 #include "DSP/OTT.h"
-#include "DSP/Lemonz.h"
+#include "DSP/Fonz.h"
 #include "DSP/Zekete.h"
 
 //==============================================================================
@@ -62,7 +62,7 @@ public:
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     xynth::OTT ott;
-    xynth::Lemonz lemonz;
+    xynth::Fonz fonz;
     xynth::Zekete zekete;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LePhonkAudioProcessor)

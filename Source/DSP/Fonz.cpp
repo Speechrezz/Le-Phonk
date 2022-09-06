@@ -8,7 +8,7 @@
   ==============================================================================
 */
 
-#include "Lemonz.h"
+#include "Fonz.h"
 #include "../Common/Constants.h"
 
 constexpr float limit = 2.f;
@@ -17,7 +17,7 @@ constexpr float limitSqr = limitInv * limitInv;
 
 namespace xynth
 {
-Lemonz::Lemonz()
+Fonz::Fonz()
 {
     shaper.functionToUse = [](float x)
     {
@@ -25,7 +25,7 @@ Lemonz::Lemonz()
         return x / (1 + x * x * limitSqr);
     };
 }
-void Lemonz::prepare(const juce::dsp::ProcessSpec& spec)
+void Fonz::prepare(const juce::dsp::ProcessSpec& spec)
 {
     gainIn.prepare(spec);
     gainIn.setRampDurationSeconds(0.005);
@@ -35,7 +35,7 @@ void Lemonz::prepare(const juce::dsp::ProcessSpec& spec)
 
     shaper.prepare(spec);
 }
-void Lemonz::process(juce::dsp::ProcessContextReplacing<float>& context)
+void Fonz::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
     float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
     dB = juce::jmap(dB, 0.f, 18.f);
@@ -46,8 +46,8 @@ void Lemonz::process(juce::dsp::ProcessContextReplacing<float>& context)
     shaper.process(context);
     gainOut.process(context);
 }
-void Lemonz::setAtomics(juce::AudioProcessorValueTreeState& treeState)
+void Fonz::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
-    paramAtomic = treeState.getRawParameterValue(LEMONZ_ID);
+    paramAtomic = treeState.getRawParameterValue(FONZ_ID);
 }
 } // namespace xynth

@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "GUI/WindowLayout.h"
-#include "GUI/Utils/GuiData.h"
+#include "GUI/CustomLooks/HellLook.h"
 
 struct DefaultLookAndFeel
 {
@@ -19,7 +19,7 @@ struct DefaultLookAndFeel
     ~DefaultLookAndFeel() { juce::LookAndFeel::setDefaultLookAndFeel(nullptr); }
 
     // Change to desired LookAndFeel
-    juce::LookAndFeel_V4 lnf;
+    juce::HellLook lnf;
 };
 
 class LePhonkAudioProcessorEditor  : public juce::AudioProcessorEditor

@@ -14,6 +14,9 @@
 #include "../Common/Constants.h"
 #include "Utils/FullSlider.h"
 #include "Utils/GuiData.h"
+#include "Zekete/ZeketeLayout.h"
+#include "Ottz/OttzLayout.h"
+#include "Fonz/FonzLayout.h"
 
 //==============================================================================
 /*
@@ -29,7 +32,9 @@ public:
 
 private:
     xynth::GuiData& guiData;
-    xynth::FullSlider OTT, Lemonz, Zekete;
+    ZeketeLayout zeketeLayout;
+    OttzLayout   ottzLayout;
+    FonzLayout   fonzLayout;
 
     juce::Image backgroundImage;
 

@@ -24,7 +24,7 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
 #endif
 {
     ott.setAtomics(treeState);
-    lemonz.setAtomics(treeState);
+    fonz.setAtomics(treeState);
     zekete.setAtomics(treeState);
 }
 
@@ -37,7 +37,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout LePhonkAudioProcessor::creat
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_ID,    OTT_NAME,     0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(LEMONZ_ID, LEMONZ_NAME,  0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(FONZ_ID,   FONZ_NAME,    0.f, 100.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(ZEKETE_ID, ZEKETE_NAME,  0.f, 100.f, 0.f));
 
     return { params.begin(), params.end() };
@@ -114,7 +114,7 @@ void LePhonkAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     spec.sampleRate = sampleRate;
 
     ott.prepare(spec);
-    lemonz.prepare(spec);
+    fonz.prepare(spec);
     zekete.prepare(spec);
 }
 
@@ -164,7 +164,7 @@ void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
     zekete.process(context);
     ott.process(context);
-    lemonz.process(context);
+    fonz.process(context);
 }
 
 //==============================================================================

@@ -11,14 +11,17 @@
 #pragma once
 #include <JuceHeader.h>
 #include "../../PluginProcessor.h"
+#include "../CustomLooks/CustomLook.h"
 
 namespace xynth
 {
 struct GuiData
 {
-    GuiData(LePhonkAudioProcessor& p, double& s) : audioProcessor(p), scale(s) {}
+    GuiData(LePhonkAudioProcessor& p, juce::CustomLook& lnf, double& s)
+        : audioProcessor(p), scale(s), customLook(lnf) {}
 
     LePhonkAudioProcessor& audioProcessor;
+    juce::CustomLook& customLook;
     double& scale;
 };
 } //namespace xynth

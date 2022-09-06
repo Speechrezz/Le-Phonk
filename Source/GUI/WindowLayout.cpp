@@ -11,18 +11,13 @@
 #include <JuceHeader.h>
 #include "WindowLayout.h"
 
-//==============================================================================
-WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g)
+WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), fonzLayout(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
-    Zekete.init(treeState, ZEKETE_ID, ZEKETE_NAME);
-    OTT.init(treeState, OTT_ID, OTT_NAME);
-    Lemonz.init(treeState, LEMONZ_ID, LEMONZ_NAME);
-
-    addAndMakeVisible(Zekete.slider);
-    addAndMakeVisible(OTT.slider);
-    addAndMakeVisible(Lemonz.slider);
+    addAndMakeVisible(zeketeLayout);
+    addAndMakeVisible(ottzLayout);
+    addAndMakeVisible(fonzLayout);
 
     backgroundImage = juce::ImageCache::getFromMemory(BinaryData::hellBG_png, BinaryData::hellBG_pngSize);
 }
@@ -39,11 +34,12 @@ void WindowLayout::paint (juce::Graphics& g)
 
 void WindowLayout::resized()
 {
-    auto rect = getLocalBounds().withTrimmedTop(200).reduced(20, 0);
+    const int spacing = 19;
 
-    Zekete.slider.setBounds(rect.removeFromTop(120));
-    rect.removeFromTop(100);
-    OTT.slider.setBounds(rect.removeFromTop(120));
-    rect.removeFromTop(100);
-    Lemonz.slider.setBounds(rect.removeFromTop(120));
+    auto rect = getLocalBounds().withTrimmedTop(130).reduced(58, 0);
+    zeketeLayout.setBounds(rect.removeFromTop(354));
+    rect.removeFromTop(spacing);
+    ottzLayout.setBounds(rect.removeFromTop(129));
+    rect.removeFromTop(spacing);
+    fonzLayout.setBounds(rect.removeFromTop(129));
 }
