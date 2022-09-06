@@ -15,18 +15,17 @@
 
 namespace juce
 {
-class HellLook  : public juce::CustomLook
+class HellLook  : public CustomLook
 {
 public:
-    Colour accent1 = Colour::fromRGB(210, 82, 74);
-    Colour neutral1 = Colour::fromRGB(64, 45, 44);
-    Colour base1 = Colour::fromRGB(27, 16, 15);
-
     HellLook() = default;
 
     void drawRotarySlider(Graphics&, int x, int y, int width, int height, float sliderPosProportional,
         float rotaryStartAngle, float rotaryEndAngle, Slider&) override;
 
+    Colour getAccent1() override;
+    Colour getNeutral1() override;
+    Colour getBase1() override;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HellLook)

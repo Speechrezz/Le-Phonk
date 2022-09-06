@@ -32,6 +32,7 @@ public:
     void resized() override;
 
 private:
+    juce::SharedResourcePointer<DefaultLookAndFeel> defaultLnf;
     LePhonkAudioProcessor& audioProcessor;
     xynth::GuiData guiData;
     WindowLayout windowLayout;
@@ -40,8 +41,6 @@ private:
 
     // Stores global plugin settings
     juce::ApplicationProperties properties;
-
-    juce::SharedResourcePointer<DefaultLookAndFeel> defaultLnf;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LePhonkAudioProcessorEditor)
 };

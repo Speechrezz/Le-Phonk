@@ -15,13 +15,13 @@ namespace juce
 void HellLook::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
     float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider)
 {
-    const auto bgColour = neutral1;
-    const auto mainColour = accent1;
+    const auto bgColour = getNeutral1();
+    const auto mainColour = getAccent1();
 
     // If mouse is hovering over
     const bool highlight = slider.isMouseOverOrDragging();
 
-    float thickness = highlight ? 6.f : 5.f;
+    float thickness = highlight ? 5.f : 4.f;
 
     // Radius of knob
     float radius = juce::jmin(width / 2, height / 2);
@@ -50,5 +50,20 @@ void HellLook::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int 
     foregroundArc.addCentredArc(centreX, centreY, radius, radius, 0.0f, rotaryStartAngle, angle, true);
     g.setColour(mainColour);
     g.strokePath(foregroundArc, juce::PathStrokeType(thickness, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+}
+
+Colour HellLook::getAccent1()
+{
+    return Colour::fromRGB(210, 82, 74);
+}
+
+Colour HellLook::getNeutral1()
+{
+    return Colour::fromRGB(64, 45, 44);
+}
+
+Colour HellLook::getBase1()
+{
+    return Colour::fromRGB(27, 16, 15);
 }
 } // namespace juce

@@ -12,16 +12,17 @@
 #include <JuceHeader.h>
 #include "../../PluginProcessor.h"
 #include "../CustomLooks/CustomLook.h"
+#include "../CustomLooks/HellLook.h"
 
 namespace xynth
 {
 struct GuiData
 {
-    GuiData(LePhonkAudioProcessor& p, juce::CustomLook& lnf, double& s)
+    GuiData(LePhonkAudioProcessor& p, juce::HellLook& lnf, double& s)
         : audioProcessor(p), scale(s), customLook(lnf) {}
 
     LePhonkAudioProcessor& audioProcessor;
-    juce::CustomLook& customLook;
+    juce::HellLook& customLook;
     double& scale;
 };
 } //namespace xynth

@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="hRZUqN" name="LePhonk" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Zekete Inc.">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Zekete Inc."
+              pluginFormats="buildStandalone,buildVST3">
   <MAINGROUP id="b44zzt" name="LePhonk">
     <GROUP id="{E1A5876A-A34C-223E-AF5D-64B8F5D5B7FA}" name="Res">
+      <GROUP id="{07B2E8D6-7C51-DE1D-14AA-1DCEA89F0C8C}" name="Fonts">
+        <FILE id="Lppiz6" name="MuseoModerno-Black.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-Black.ttf"/>
+        <FILE id="rAx9Yd" name="MuseoModerno-Bold.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-Bold.ttf"/>
+        <FILE id="QGXwS6" name="MuseoModerno-ExtraBold.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-ExtraBold.ttf"/>
+        <FILE id="HVTneo" name="MuseoModerno-ExtraLight.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-ExtraLight.ttf"/>
+        <FILE id="MWgVOm" name="MuseoModerno-Light.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-Light.ttf"/>
+        <FILE id="wCdYTG" name="MuseoModerno-Medium.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-Medium.ttf"/>
+        <FILE id="gz8KZ1" name="MuseoModerno-Regular.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-Regular.ttf"/>
+        <FILE id="kpC4oF" name="MuseoModerno-SemiBold.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-SemiBold.ttf"/>
+        <FILE id="hf2f8R" name="MuseoModerno-Thin.ttf" compile="0" resource="1"
+              file="Res/Fonts/MuseoModerno-Thin.ttf"/>
+      </GROUP>
       <FILE id="QY2H3m" name="hellBG.png" compile="0" resource="1" file="Res/hellBG.png"/>
       <FILE id="wO0vO4" name="juiceBG.png" compile="0" resource="1" file="Res/juiceBG.png"/>
     </GROUP>

@@ -19,11 +19,10 @@ public:
     FullSlider();
     ~FullSlider() = default;
 
-    void init(juce::AudioProcessorValueTreeState& treeState, juce::String paramID, juce::String labelText = "");
+    void init(juce::AudioProcessorValueTreeState& treeState, juce::String paramID);
 
     juce::Slider slider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attach;
-    juce::Label label;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FullSlider)

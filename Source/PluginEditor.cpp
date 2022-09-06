@@ -19,7 +19,7 @@
 #include "PluginEditor.h"
 
 LePhonkAudioProcessorEditor::LePhonkAudioProcessorEditor (LePhonkAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), guiData(p, defaultLnf->lnf, scale), windowLayout(guiData)
+    : AudioProcessorEditor (&p), audioProcessor(p), guiData(p, defaultLnf->lnf, scale), windowLayout(guiData)
 {
     // Setup global plugin settings
     juce::PropertiesFile::Options fileOptions;
