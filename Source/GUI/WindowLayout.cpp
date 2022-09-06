@@ -34,7 +34,7 @@ void WindowLayout::paint (juce::Graphics& g)
 
 void WindowLayout::resized()
 {
-    const int spacing = 19;
+    const int spacing = 18;
 
     auto rect = getLocalBounds().withTrimmedTop(130).reduced(58, 0);
     zeketeLayout.setBounds(rect.removeFromTop(354));

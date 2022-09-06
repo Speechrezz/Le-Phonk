@@ -11,12 +11,15 @@
 #include <JuceHeader.h>
 #include "ZeketeLayout.h"
 
-ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g)
+ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
     slider.init(treeState, ZEKETE_ID);
+    slider.slider.setSliderStyle(juce::Slider::LinearHorizontal);
+    slider.slider.setSliderSnapsToMousePosition(false);
     addAndMakeVisible(slider.slider);
+    addAndMakeVisible(distGraph);
 }
 
 ZeketeLayout::~ZeketeLayout()
@@ -25,14 +28,19 @@ ZeketeLayout::~ZeketeLayout()
 
 void ZeketeLayout::paint (juce::Graphics& g)
 {
-    g.setColour(guiData.customLook.getAccent1());
-    g.drawHorizontalLine(46, 29, getWidth() - 29);
+    auto& look = guiData.customLook;
+    auto rect = getLocalBounds();
+    look.drawSectionBackground(g, rect);
 
-    guiData.customLook.drawSectionBackground(g, getLocalBounds());
+    g.setColour(look.getAccent1());
+    g.setFont(look.getCustomFontSemiBold());
+    g.drawText("Zekete", rect.removeFromTop(44), juce::Justification::centred);
+    g.drawLine(29.f, 46.f, float(getWidth()) - 29.f, 46.f, 2.f);
 }
 
 void ZeketeLayout::resized()
 {
-    auto rect = getLocalBounds().withSizeKeepingCentre(74, 74);
-    slider.slider.setBounds(rect);
+    auto rect = getLocalBounds();
+    distGraph.setBounds(rect.removeFromBottom(177));
+    slider.slider.setBounds(rect.withSizeKeepingCentre(250, 74));
 }

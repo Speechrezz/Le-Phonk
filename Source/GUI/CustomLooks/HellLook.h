@@ -23,6 +23,9 @@ public:
     void drawRotarySlider(Graphics&, int x, int y, int width, int height, float sliderPosProportional,
         float rotaryStartAngle, float rotaryEndAngle, Slider&) override;
 
+    void drawLinearSlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
+        float minSliderPos, float maxSliderPos, const Slider::SliderStyle style, Slider& slider) override;
+
     Colour getAccent1() override;
     Colour getNeutral1() override;
     Colour getBase1() override;

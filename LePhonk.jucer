@@ -63,6 +63,8 @@
           <FILE id="kMfcp7" name="GuiData.h" compile="0" resource="0" file="Source/GUI/Utils/GuiData.h"/>
         </GROUP>
         <GROUP id="{F45831FC-53F5-55B3-EA18-72357E5F4192}" name="Zekete">
+          <FILE id="fLBxep" name="DistGraph.cpp" compile="1" resource="0" file="Source/GUI/Zekete/DistGraph.cpp"/>
+          <FILE id="eOtaa4" name="DistGraph.h" compile="0" resource="0" file="Source/GUI/Zekete/DistGraph.h"/>
           <FILE id="wbyo7M" name="ZeketeLayout.cpp" compile="1" resource="0"
                 file="Source/GUI/Zekete/ZeketeLayout.cpp"/>
           <FILE id="ilr0FU" name="ZeketeLayout.h" compile="0" resource="0" file="Source/GUI/Zekete/ZeketeLayout.h"/>

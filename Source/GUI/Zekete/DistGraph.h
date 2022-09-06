@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    ZeketeLayout.h
-    Created: 5 Sep 2022 5:20:41pm
+    DistGraph.h
+    Created: 6 Sep 2022 12:07:31pm
     Author:  thesp
 
   ==============================================================================
@@ -12,22 +12,18 @@
 
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
-#include "../Utils/FullSlider.h"
-#include "DistGraph.h"
 
-class ZeketeLayout  : public juce::Component
+class DistGraph  : public juce::Component
 {
 public:
-    ZeketeLayout(xynth::GuiData&);
-    ~ZeketeLayout() override;
+    DistGraph(xynth::GuiData&);
+    ~DistGraph() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
     xynth::GuiData& guiData;
-    xynth::FullSlider slider;
-    DistGraph distGraph;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ZeketeLayout)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistGraph)
 };
