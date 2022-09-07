@@ -45,7 +45,7 @@ void DistGraph::paint (juce::Graphics& g)
     if (newSample > sample)
         sample = newSample;
     else
-        sample *= 0.9f;
+        sample *= 0.92f;
     
     juce::Path p;
     p.startNewSubPath(-maxGain, -std::tanh(-maxGain));
@@ -54,15 +54,16 @@ void DistGraph::paint (juce::Graphics& g)
 
     const auto transform = p.getTransformToScaleToFit(rect.reduced(0.f, 12.f), false, juce::Justification::centred);
     g.setColour(look.getNeutral1());
-    g.strokePath(p, juce::PathStrokeType(4.0), transform);
+    g.strokePath(p, juce::PathStrokeType(4.f), transform);
 
     juce::Path fg;
     fg.startNewSubPath(-sample, -std::tanh(-sample));
     for (float pos = -sample; pos <= sample; pos += stepSize)
         fg.lineTo(pos, -std::tanh(pos));
 
-    g.setColour(look.getAccent1());
-    g.strokePath(fg, juce::PathStrokeType(4.0, juce::PathStrokeType::mitered, juce::PathStrokeType::rounded), transform);
+    const float alpha = std::min(1.f, sample * 40.f);
+    g.setColour(look.getAccent1().withAlpha(alpha));
+    g.strokePath(fg, juce::PathStrokeType(4.f, juce::PathStrokeType::mitered, juce::PathStrokeType::rounded), transform);
 
     look.drawDistGraphForeground(g, rect);
 }
