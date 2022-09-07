@@ -42,5 +42,5 @@ void ZeketeLayout::resized()
 {
     auto rect = getLocalBounds();
     distGraph.setBounds(rect.removeFromBottom(177));
-    slider.slider.setBounds(rect.withSizeKeepingCentre(250, 74));
+    slider.slider.setBounds(rect.withSizeKeepingCentre(246, 74));
 }

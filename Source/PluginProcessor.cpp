@@ -113,9 +113,11 @@ void LePhonkAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     spec.numChannels = getNumInputChannels();
     spec.sampleRate = sampleRate;
 
+    zekete.prepare(spec);
     ott.prepare(spec);
     fonz.prepare(spec);
-    zekete.prepare(spec);
+
+    ringBuffer.prepare(spec);
 }
 
 void LePhonkAudioProcessor::releaseResources()
@@ -162,6 +164,7 @@ void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto audioBlock = juce::dsp::AudioBlock<float>(buffer).getSubsetChannelBlock(0, (size_t)totalNumInputChannels);
     auto context = juce::dsp::ProcessContextReplacing<float>(audioBlock);
 
+    ringBuffer.writeSamples(audioBlock);
     zekete.process(context);
     ott.process(context);
     fonz.process(context);

@@ -31,6 +31,8 @@
     <GROUP id="{3E49C20C-D9BE-4D74-032E-3F83EB62E981}" name="Source">
       <GROUP id="{B992F30C-E01C-523F-8E8D-82D74F7B5F4F}" name="Common">
         <FILE id="zVNLZL" name="Constants.h" compile="0" resource="0" file="Source/Common/Constants.h"/>
+        <FILE id="cGeQ6i" name="RingBuffer.cpp" compile="1" resource="0" file="Source/Common/RingBuffer.cpp"/>
+        <FILE id="Y1RGlo" name="RingBuffer.h" compile="0" resource="0" file="Source/Common/RingBuffer.h"/>
       </GROUP>
       <GROUP id="{A9A414F8-F009-37A7-F694-EAEDFAC45030}" name="DSP">
         <FILE id="S1lT3C" name="Fonz.cpp" compile="1" resource="0" file="Source/DSP/Fonz.cpp"/>

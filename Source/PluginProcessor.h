@@ -13,6 +13,7 @@
 #include "DSP/OTT.h"
 #include "DSP/Fonz.h"
 #include "DSP/Zekete.h"
+#include "Common/RingBuffer.h"
 
 //==============================================================================
 /**
@@ -58,12 +59,13 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     juce::AudioProcessorValueTreeState treeState;
+    xynth::RingBuffer ringBuffer;
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     xynth::OTT ott;
     xynth::Fonz fonz;
     xynth::Zekete zekete;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LePhonkAudioProcessor)
 };

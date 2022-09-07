@@ -29,9 +29,9 @@ void OTT::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& comp : comps)
         comp.prepare(spec);
 
-    comps[high].update(-35.5f, 999.f, -40.8f, 4.17f, 13.5f, 132.f, 15.3f);
-    comps[mid].update (-30.2f, 66.7f, -41.8f, 4.17f, 22.4f, 282.f, 10.5f);
-    comps[low].update (-33.8f, 66.7f, -40.8f, 4.17f, 47.8f, 282.f, 15.3f);
+    comps[high].update(-35.5f, 999.f, -40.8f, 4.17f, 13.5f, 132.f, 14.9f);
+    comps[mid].update (-30.2f, 66.7f, -41.8f, 4.17f, 22.4f, 282.f, 12.5f);
+    comps[low].update (-33.8f, 66.7f, -40.8f, 4.17f, 47.8f, 282.f, 14.3f);
 
     // Prepare the filters
     for (auto& filters : filtersArray)
