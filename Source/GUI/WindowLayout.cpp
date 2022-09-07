@@ -11,13 +11,15 @@
 #include <JuceHeader.h>
 #include "WindowLayout.h"
 
-WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), fonzLayout(g)
+WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), 
+    fonzLayout(g), bypassGain(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
     addAndMakeVisible(zeketeLayout);
     addAndMakeVisible(ottzLayout);
     addAndMakeVisible(fonzLayout);
+    addAndMakeVisible(bypassGain);
 
     backgroundImage = juce::ImageCache::getFromMemory(BinaryData::hellBG_png, BinaryData::hellBG_pngSize);
 }
@@ -36,10 +38,15 @@ void WindowLayout::resized()
 {
     const int spacing = 18;
 
-    auto rect = getLocalBounds().withTrimmedTop(130).reduced(58, 0);
+    auto rect = getLocalBounds();
+    auto headerRect = rect.removeFromTop(130).withTrimmedBottom(25).reduced(29, 0);
+    rect.reduce(58, 0);
+
     zeketeLayout.setBounds(rect.removeFromTop(354));
     rect.removeFromTop(spacing);
     ottzLayout.setBounds(rect.removeFromTop(129));
     rect.removeFromTop(spacing);
     fonzLayout.setBounds(rect.removeFromTop(129));
+
+    bypassGain.setBounds(headerRect.removeFromBottom(44).removeFromRight(54));
 }

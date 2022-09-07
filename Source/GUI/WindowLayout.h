@@ -17,6 +17,7 @@
 #include "Zekete/ZeketeLayout.h"
 #include "Ottz/OttzLayout.h"
 #include "Fonz/FonzLayout.h"
+#include "Header/BypassGain.h"
 
 //==============================================================================
 /*
@@ -35,6 +36,7 @@ private:
     ZeketeLayout zeketeLayout;
     OttzLayout   ottzLayout;
     FonzLayout   fonzLayout;
+    BypassGain   bypassGain;
 
     juce::Image backgroundImage;
 

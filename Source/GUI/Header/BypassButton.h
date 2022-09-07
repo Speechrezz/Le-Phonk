@@ -1,0 +1,30 @@
+/*
+  ==============================================================================
+
+    BypassButton.h
+    Created: 7 Sep 2022 11:04:29am
+    Author:  thesp
+
+  ==============================================================================
+*/
+
+#pragma once
+
+#include <JuceHeader.h>
+#include "../Utils/GuiData.h"
+#include "../Utils/FullSlider.h"
+
+class BypassButton  : public juce::ToggleButton
+{
+public:
+    BypassButton(xynth::GuiData&);
+    ~BypassButton() override;
+
+    void resized() override;
+
+private:
+    xynth::GuiData& guiData;
+    juce::AudioProcessorValueTreeState::ButtonAttachment attach;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BypassButton)
+};

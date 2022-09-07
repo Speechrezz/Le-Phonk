@@ -67,5 +67,9 @@ private:
     xynth::Fonz fonz;
     xynth::Zekete zekete;
 
+    std::atomic<float>* enableAtomic{ nullptr };
+    std::atomic<float>* gainAtomic  { nullptr };
+    float prevGain{ 0.f };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LePhonkAudioProcessor)
 };

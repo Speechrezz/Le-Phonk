@@ -26,6 +26,9 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
     ott.setAtomics(treeState);
     fonz.setAtomics(treeState);
     zekete.setAtomics(treeState);
+
+    enableAtomic = treeState.getRawParameterValue(ENABLE_ID);
+    gainAtomic   = treeState.getRawParameterValue(GAIN_ID);
 }
 
 LePhonkAudioProcessor::~LePhonkAudioProcessor()
@@ -39,6 +42,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout LePhonkAudioProcessor::creat
     params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_ID,    OTT_NAME,     0.f, 100.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(FONZ_ID,   FONZ_NAME,    0.f, 100.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(ZEKETE_ID, ZEKETE_NAME,  0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(GAIN_ID,   GAIN_NAME,    GAIN_MIN, GAIN_MAX, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterBool> (ENABLE_ID, ENABLE_NAME,  true));
 
     return { params.begin(), params.end() };
 }
@@ -155,6 +160,7 @@ bool LePhonkAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+    if (enableAtomic->load(std::memory_order_relaxed) == 0.f) return;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -164,10 +170,16 @@ void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto audioBlock = juce::dsp::AudioBlock<float>(buffer).getSubsetChannelBlock(0, (size_t)totalNumInputChannels);
     auto context = juce::dsp::ProcessContextReplacing<float>(audioBlock);
 
+    // Main process block
     ringBuffer.writeSamples(audioBlock);
     zekete.process(context);
     ott.process(context);
     fonz.process(context);
+
+    // Output gain
+    const float gain = juce::Decibels::decibelsToGain(gainAtomic->load(std::memory_order_relaxed));
+    buffer.applyGainRamp(0, buffer.getNumSamples(), prevGain, gain);
+    prevGain = gain;
 }
 
 //==============================================================================

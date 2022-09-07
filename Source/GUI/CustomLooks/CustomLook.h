@@ -24,6 +24,15 @@ public:
     virtual void drawDistGraphForeground(Graphics& g, Rectangle<float> area);
     void drawCornerResizer(Graphics& g, int w, int h, bool, bool) override;
 
+    void drawRotarySlider(Graphics&, int x, int y, int width, int height, float sliderPosProportional,
+        float rotaryStartAngle, float rotaryEndAngle, Slider&) override;
+
+    void drawLinearSlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
+        float minSliderPos, float maxSliderPos, const Slider::SliderStyle style, Slider& slider) override;
+
+    void drawToggleButton(Graphics&, ToggleButton&,
+        bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
+
     virtual Colour getAccent1() = 0;
     virtual Colour getNeutral1() = 0;
     virtual Colour getBase1() = 0;

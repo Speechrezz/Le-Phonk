@@ -55,6 +55,13 @@
           <FILE id="lWUrHM" name="FonzLayout.cpp" compile="1" resource="0" file="Source/GUI/Fonz/FonzLayout.cpp"/>
           <FILE id="LMze8X" name="FonzLayout.h" compile="0" resource="0" file="Source/GUI/Fonz/FonzLayout.h"/>
         </GROUP>
+        <GROUP id="{FCE6E79D-8F12-B2C9-109B-F310E7B8638F}" name="Header">
+          <FILE id="l0yzpV" name="BypassButton.cpp" compile="1" resource="0"
+                file="Source/GUI/Header/BypassButton.cpp"/>
+          <FILE id="EobosC" name="BypassButton.h" compile="0" resource="0" file="Source/GUI/Header/BypassButton.h"/>
+          <FILE id="bNjbpO" name="BypassGain.cpp" compile="1" resource="0" file="Source/GUI/Header/BypassGain.cpp"/>
+          <FILE id="PmqRt2" name="BypassGain.h" compile="0" resource="0" file="Source/GUI/Header/BypassGain.h"/>
+        </GROUP>
         <GROUP id="{7497AE49-928B-B22F-0B54-086E5CA94409}" name="Ottz">
           <FILE id="QHr7bS" name="OttzLayout.cpp" compile="1" resource="0" file="Source/GUI/Ottz/OttzLayout.cpp"/>
           <FILE id="ULr9X3" name="OttzLayout.h" compile="0" resource="0" file="Source/GUI/Ottz/OttzLayout.h"/>
