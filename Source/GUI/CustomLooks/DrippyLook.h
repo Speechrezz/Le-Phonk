@@ -23,6 +23,13 @@ public:
     String getLnfName() override { return "DrippyLook"; }
     Image& getBackgroundImage() override { return bgImage; };
 
+    // Custom draws
+    void drawSectionBackground(Graphics& g, Rectangle<int> area) override;
+    void drawDistGraphBackground(Graphics& g, Rectangle<float> area, float amplitude) override;
+
+    void drawRotarySlider(Graphics&, int x, int y, int width, int height, float sliderPosProportional,
+        float rotaryStartAngle, float rotaryEndAngle, Slider&) override;
+
     Colour getAccent1() override;
     Colour getAccent2() override;
     Colour getNeutral1() override;
@@ -30,6 +37,13 @@ public:
 
 private:
     Image bgImage;
+    Image danGraphImage;
+    Image skyKnobImage;
+    Image peteKnobImage;
+
+
+    float prevAmp{ 0.f };
+    int hold{ 0 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DrippyLook)
 };

@@ -50,5 +50,5 @@ void WindowLayout::resized()
     bypassGain.setBounds(headerRect.removeFromBottom(44).removeFromRight(54));
 
     skinSelect.setBounds(headerRect.removeFromRight(114)
-        .withTrimmedTop(8).withSizeKeepingCentre(114, 32));
+        .withTrimmedTop(8).withSizeKeepingCentre(114, 30));
 }

@@ -5,6 +5,11 @@
               pluginFormats="buildStandalone,buildVST3">
   <MAINGROUP id="b44zzt" name="LePhonk">
     <GROUP id="{E1A5876A-A34C-223E-AF5D-64B8F5D5B7FA}" name="Res">
+      <GROUP id="{DEBDC2BA-8924-E707-CA53-D427479F3797}" name="Drippy">
+        <FILE id="x70q8u" name="danBG.png" compile="0" resource="1" file="Res/Drippy/danBG.png"/>
+        <FILE id="S8OK49" name="peteKnob.png" compile="0" resource="1" file="Res/Drippy/peteKnob.png"/>
+        <FILE id="WFH8se" name="skyKnob.png" compile="0" resource="1" file="Res/Drippy/skyKnob.png"/>
+      </GROUP>
       <GROUP id="{07B2E8D6-7C51-DE1D-14AA-1DCEA89F0C8C}" name="Fonts">
         <FILE id="Lppiz6" name="MuseoModerno-Black.ttf" compile="0" resource="1"
               file="Res/Fonts/MuseoModerno-Black.ttf"/>
@@ -81,6 +86,8 @@
         <GROUP id="{F45831FC-53F5-55B3-EA18-72357E5F4192}" name="Zekete">
           <FILE id="fLBxep" name="DistGraph.cpp" compile="1" resource="0" file="Source/GUI/Zekete/DistGraph.cpp"/>
           <FILE id="eOtaa4" name="DistGraph.h" compile="0" resource="0" file="Source/GUI/Zekete/DistGraph.h"/>
+          <FILE id="CJyoqj" name="DistSelect.cpp" compile="1" resource="0" file="Source/GUI/Zekete/DistSelect.cpp"/>
+          <FILE id="R8Nfv1" name="DistSelect.h" compile="0" resource="0" file="Source/GUI/Zekete/DistSelect.h"/>
           <FILE id="wbyo7M" name="ZeketeLayout.cpp" compile="1" resource="0"
                 file="Source/GUI/Zekete/ZeketeLayout.cpp"/>
           <FILE id="ilr0FU" name="ZeketeLayout.h" compile="0" resource="0" file="Source/GUI/Zekete/ZeketeLayout.h"/>

@@ -17,3 +17,6 @@
 #define GAIN_NAME "Output Gain"
 #define GAIN_MIN -36.f
 #define GAIN_MAX 12.f
+
+#define DIST_SELECT_ID "distSelect"
+#define DIST_SELECT_NAME "Zekete Type"

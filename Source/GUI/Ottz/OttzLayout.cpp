@@ -16,6 +16,7 @@ OttzLayout::OttzLayout(xynth::GuiData& g) : guiData(g)
     auto& treeState = g.audioProcessor.treeState;
 
     slider.init(treeState, OTT_ID);
+    slider.slider.setDescription(OTT_NAME);
     addAndMakeVisible(slider.slider);
 }
 

@@ -58,6 +58,8 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    juce::StringArray distTypes{ "Dist 1", "Dist 2", "Dist 3" };
+
     juce::AudioProcessorValueTreeState treeState;
     xynth::RingBuffer ringBuffer;
 

@@ -14,6 +14,7 @@
 #include "../Utils/GuiData.h"
 #include "../Utils/FullSlider.h"
 #include "DistGraph.h"
+#include "DistSelect.h"
 
 class ZeketeLayout  : public juce::Component
 {
@@ -28,6 +29,7 @@ private:
     xynth::GuiData& guiData;
     xynth::FullSlider slider;
     DistGraph distGraph;
+    DistSelect distSelect;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ZeketeLayout)
 };

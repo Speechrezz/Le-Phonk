@@ -21,11 +21,11 @@ CustomLook::CustomLook()
 
 void CustomLook::drawSectionBackground(Graphics& g, Rectangle<int> area)
 {
-g.setColour(Colours::black.withAlpha(0.3f));
-g.fillRoundedRectangle(area.toFloat(), 8.f);
+    g.setColour(Colours::black.withAlpha(0.3f));
+    g.fillRoundedRectangle(area.toFloat(), 8.f);
 }
 
-void CustomLook::drawDistGraphBackground(Graphics& g, Rectangle<float> area)
+void CustomLook::drawDistGraphBackground(Graphics& g, Rectangle<float> area, float)
 {
     g.setColour(getBase1());
     g.fillRoundedRectangle(area, 8.f);

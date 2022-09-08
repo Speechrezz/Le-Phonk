@@ -11,15 +11,17 @@
 #include <JuceHeader.h>
 #include "ZeketeLayout.h"
 
-ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g)
+ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSelect(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
     slider.init(treeState, ZEKETE_ID);
     slider.slider.setSliderStyle(juce::Slider::LinearHorizontal);
     slider.slider.setSliderSnapsToMousePosition(false);
+
     addAndMakeVisible(slider.slider);
     addAndMakeVisible(distGraph);
+    addAndMakeVisible(distSelect);
 }
 
 ZeketeLayout::~ZeketeLayout()
@@ -42,5 +44,8 @@ void ZeketeLayout::resized()
 {
     auto rect = getLocalBounds();
     distGraph.setBounds(rect.removeFromBottom(177));
-    slider.slider.setBounds(rect.withSizeKeepingCentre(246, 74));
+    rect.removeFromBottom(30);
+    slider.slider.setBounds(rect.removeFromBottom(16).reduced(23, 0));
+    rect.removeFromBottom(26);
+    distSelect.setBounds(rect.removeFromBottom(32).reduced(29, 0));
 }

@@ -16,6 +16,7 @@ FonzLayout::FonzLayout(xynth::GuiData& g) : guiData(g)
     auto& treeState = g.audioProcessor.treeState;
 
     slider.init(treeState, FONZ_ID);
+    slider.slider.setDescription(FONZ_NAME);
     addAndMakeVisible(slider.slider);
 }
 

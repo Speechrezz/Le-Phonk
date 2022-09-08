@@ -24,7 +24,7 @@ public:
 
     // Custom draws
     virtual void drawSectionBackground(Graphics& g, Rectangle<int> area);
-    virtual void drawDistGraphBackground(Graphics& g, Rectangle<float> area);
+    virtual void drawDistGraphBackground(Graphics& g, Rectangle<float> area, float amplitude);
     virtual void drawDistGraphForeground(Graphics& g, Rectangle<float> area);
     virtual Image& getBackgroundImage() { return bgImage; };
 

@@ -39,7 +39,7 @@ void Zekete::prepare(const juce::dsp::ProcessSpec& spec)
 void Zekete::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
     float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, 24.f);
+    dB = juce::jmap(dB, 0.f, ZEKETE_MAX_DB);
     gainIn.setGainDecibels(dB);
     gainOut.setGainDecibels(dB * -0.9f);
 

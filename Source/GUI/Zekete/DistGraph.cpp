@@ -33,20 +33,17 @@ void DistGraph::paint (juce::Graphics& g)
     clip.addRoundedRectangle(rect, 8.f);
     g.reduceClipRegion(clip);
 
-    look.drawDistGraphBackground(g, rect);
-
-    const float maxGain = 4.f;
-    const float stepSize = 0.02f;
-
-    const float dB = juce::jmap(gainAtomic->load(std::memory_order_relaxed) * 0.01f, 0.f, 24.f);
+    const float dB = juce::jmap(gainAtomic->load(std::memory_order_relaxed) * 0.01f, 0.f, ZEKETE_MAX_DB);
     const float gain = juce::Decibels::decibelsToGain(dB);
     const float newSample = guiData.audioProcessor.ringBuffer.readSamples() * gain;
 
-    if (newSample > sample)
-        sample = newSample;
-    else
-        sample *= 0.92f;
+    const float maxGain = std::sqrt(gain);
+    const float stepSize = maxGain / 200.f;
+
+    sample = newSample > sample ? newSample : sample * 0.92f;
     
+    look.drawDistGraphBackground(g, rect, std::tanh(sample * 0.2f));
+
     juce::Path p;
     p.startNewSubPath(-maxGain, -std::tanh(-maxGain));
     for (float pos = -maxGain; pos <= maxGain; pos += stepSize)
@@ -62,7 +59,6 @@ void DistGraph::paint (juce::Graphics& g)
         fg.lineTo(pos, -std::tanh(pos));
 
     const float alpha = std::min(1.f, sample * 40.f);
-    DBG(look.getLnfName());
     g.setColour(look.getAccent2().withAlpha(alpha));
     g.strokePath(fg, juce::PathStrokeType(4.f, juce::PathStrokeType::mitered, juce::PathStrokeType::rounded), transform);
 
