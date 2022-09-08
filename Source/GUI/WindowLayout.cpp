@@ -12,7 +12,7 @@
 #include "WindowLayout.h"
 
 WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), 
-    fonzLayout(g), bypassGain(g)
+    fonzLayout(g), bypassGain(g), skinSelect(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
@@ -20,8 +20,7 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
     addAndMakeVisible(ottzLayout);
     addAndMakeVisible(fonzLayout);
     addAndMakeVisible(bypassGain);
-
-    backgroundImage = juce::ImageCache::getFromMemory(BinaryData::hellBG_png, BinaryData::hellBG_pngSize);
+    addAndMakeVisible(skinSelect);
 }
 
 WindowLayout::~WindowLayout()
@@ -31,7 +30,7 @@ WindowLayout::~WindowLayout()
 void WindowLayout::paint (juce::Graphics& g)
 {
     auto rect = getLocalBounds();
-    g.drawImageWithin(backgroundImage, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), juce::RectanglePlacement::fillDestination);
+    g.drawImageWithin(guiData.getLnf().getBackgroundImage(), rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), juce::RectanglePlacement::fillDestination);
 }
 
 void WindowLayout::resized()
@@ -49,4 +48,7 @@ void WindowLayout::resized()
     fonzLayout.setBounds(rect.removeFromTop(129));
 
     bypassGain.setBounds(headerRect.removeFromBottom(44).removeFromRight(54));
+
+    skinSelect.setBounds(headerRect.removeFromRight(114)
+        .withTrimmedTop(8).withSizeKeepingCentre(114, 32));
 }

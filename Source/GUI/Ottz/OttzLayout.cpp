@@ -27,10 +27,10 @@ void OttzLayout::paint (juce::Graphics& g)
 {
     auto rect = getLocalBounds();
     auto textRect = rect.removeFromTop(41);
-    guiData.customLook.drawSectionBackground(g, rect);
+    guiData.getLnf().drawSectionBackground(g, rect);
 
-    g.setColour(guiData.customLook.getAccent1());
-    g.setFont(guiData.customLook.getCustomFontSemiBold());
+    g.setColour(guiData.getLnf().getAccent1());
+    g.setFont(guiData.getLnf().getCustomFontSemiBold());
     g.drawText("Le Ottz", textRect, juce::Justification::centredTop);
 }
 

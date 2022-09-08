@@ -26,7 +26,7 @@ DistGraph::~DistGraph()
 
 void DistGraph::paint (juce::Graphics& g)
 {
-    auto& look = guiData.customLook;
+    auto& look = guiData.getLnf();
     auto rect = getLocalBounds().toFloat();
 
     juce::Path clip;
@@ -54,7 +54,7 @@ void DistGraph::paint (juce::Graphics& g)
 
     const auto transform = p.getTransformToScaleToFit(rect.reduced(0.f, 12.f), false, juce::Justification::centred);
     g.setColour(look.getNeutral1());
-    g.strokePath(p, juce::PathStrokeType(4.f), transform);
+    g.strokePath(p, juce::PathStrokeType(3.f), transform);
 
     juce::Path fg;
     fg.startNewSubPath(-sample, -std::tanh(-sample));
@@ -62,7 +62,8 @@ void DistGraph::paint (juce::Graphics& g)
         fg.lineTo(pos, -std::tanh(pos));
 
     const float alpha = std::min(1.f, sample * 40.f);
-    g.setColour(look.getAccent1().withAlpha(alpha));
+    DBG(look.getLnfName());
+    g.setColour(look.getAccent2().withAlpha(alpha));
     g.strokePath(fg, juce::PathStrokeType(4.f, juce::PathStrokeType::mitered, juce::PathStrokeType::rounded), transform);
 
     look.drawDistGraphForeground(g, rect);

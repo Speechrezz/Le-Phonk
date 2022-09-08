@@ -28,11 +28,11 @@ ZeketeLayout::~ZeketeLayout()
 
 void ZeketeLayout::paint (juce::Graphics& g)
 {
-    auto& look = guiData.customLook;
+    auto& look = guiData.getLnf();
     auto rect = getLocalBounds();
     look.drawSectionBackground(g, rect);
 
-    g.setColour(look.getAccent1());
+    g.setColour(look.getAccent2());
     g.setFont(look.getCustomFontSemiBold());
     g.drawText("Zekete", rect.removeFromTop(44), juce::Justification::centred);
     g.drawLine(29.f, 46.f, float(getWidth()) - 29.f, 46.f, 2.f);

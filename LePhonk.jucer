@@ -25,6 +25,7 @@
         <FILE id="hf2f8R" name="MuseoModerno-Thin.ttf" compile="0" resource="1"
               file="Res/Fonts/MuseoModerno-Thin.ttf"/>
       </GROUP>
+      <FILE id="QJWxVP" name="drippyBG.png" compile="0" resource="1" file="Res/drippyBG.png"/>
       <FILE id="QY2H3m" name="hellBG.png" compile="0" resource="1" file="Res/hellBG.png"/>
       <FILE id="wO0vO4" name="juiceBG.png" compile="0" resource="1" file="Res/juiceBG.png"/>
     </GROUP>
@@ -48,8 +49,12 @@
         <GROUP id="{95F78D68-E3ED-B26C-A000-74F12488291B}" name="CustomLooks">
           <FILE id="hA6Aom" name="CustomLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/CustomLook.cpp"/>
           <FILE id="f0vDI9" name="CustomLook.h" compile="0" resource="0" file="Source/GUI/CustomLooks/CustomLook.h"/>
+          <FILE id="IcPnBA" name="DrippyLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/DrippyLook.cpp"/>
+          <FILE id="lfnlXE" name="DrippyLook.h" compile="0" resource="0" file="Source/GUI/CustomLooks/DrippyLook.h"/>
           <FILE id="WIuv2N" name="HellLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/HellLook.cpp"/>
           <FILE id="Sy9EDH" name="HellLook.h" compile="0" resource="0" file="Source/GUI/CustomLooks/HellLook.h"/>
+          <FILE id="RNym6B" name="JuiceLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/JuiceLook.cpp"/>
+          <FILE id="LZH6Dn" name="JuiceLook.h" compile="0" resource="0" file="Source/GUI/CustomLooks/JuiceLook.h"/>
         </GROUP>
         <GROUP id="{E0DE8151-B7C5-274B-594D-9F8AFD255A9E}" name="Fonz">
           <FILE id="lWUrHM" name="FonzLayout.cpp" compile="1" resource="0" file="Source/GUI/Fonz/FonzLayout.cpp"/>
@@ -61,6 +66,8 @@
           <FILE id="EobosC" name="BypassButton.h" compile="0" resource="0" file="Source/GUI/Header/BypassButton.h"/>
           <FILE id="bNjbpO" name="BypassGain.cpp" compile="1" resource="0" file="Source/GUI/Header/BypassGain.cpp"/>
           <FILE id="PmqRt2" name="BypassGain.h" compile="0" resource="0" file="Source/GUI/Header/BypassGain.h"/>
+          <FILE id="jLnDR6" name="SkinSelect.cpp" compile="1" resource="0" file="Source/GUI/Header/SkinSelect.cpp"/>
+          <FILE id="QxJ6O0" name="SkinSelect.h" compile="0" resource="0" file="Source/GUI/Header/SkinSelect.h"/>
         </GROUP>
         <GROUP id="{7497AE49-928B-B22F-0B54-086E5CA94409}" name="Ottz">
           <FILE id="QHr7bS" name="OttzLayout.cpp" compile="1" resource="0" file="Source/GUI/Ottz/OttzLayout.cpp"/>

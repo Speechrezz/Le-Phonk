@@ -19,7 +19,7 @@
 #include "PluginEditor.h"
 
 LePhonkAudioProcessorEditor::LePhonkAudioProcessorEditor (LePhonkAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor(p), guiData(p, defaultLnf->lnf, scale), windowLayout(guiData)
+    : AudioProcessorEditor (&p), audioProcessor(p), guiData(p, *defaultLnf, scale, properties), windowLayout(guiData)
 {
     // Setup global plugin settings
     juce::PropertiesFile::Options fileOptions;
@@ -47,6 +47,9 @@ LePhonkAudioProcessorEditor::LePhonkAudioProcessorEditor (LePhonkAudioProcessor&
     const double aspectRatio = double(WIDTH) / double(HEIGHT);
     getConstrainer()->setFixedAspectRatio(aspectRatio);
     setResizeLimits(WIDTH / 2, HEIGHT / 2, WIDTH * MAX_SCALE, HEIGHT * MAX_SCALE);
+
+    const int skin = properties.getUserSettings()->getIntValue("Skin", 0);
+    guiData.updateLnf(skin);
 
     addAndMakeVisible(windowLayout);
 }

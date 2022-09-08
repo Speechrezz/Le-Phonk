@@ -12,16 +12,59 @@
 #include <JuceHeader.h>
 #include "../../PluginProcessor.h"
 #include "../CustomLooks/CustomLook.h"
+#include "../CustomLooks/HellLook.h"
+#include "../CustomLooks/JuiceLook.h"
+#include "../CustomLooks/DrippyLook.h"
 
 namespace xynth
 {
+struct DefaultLookAndFeel
+{
+    DefaultLookAndFeel()  { juce::LookAndFeel::setDefaultLookAndFeel(lnf);    }
+    ~DefaultLookAndFeel() { juce::LookAndFeel::setDefaultLookAndFeel(nullptr); }
+
+    void updateLnf() { juce::LookAndFeel::setDefaultLookAndFeel(lnf); }
+
+    juce::HellLook   hellLook;
+    juce::JuiceLook  juiceLook;
+    juce::DrippyLook drippyLook;
+
+    // Change to desired LookAndFeel
+    juce::CustomLook* lnf = &hellLook;
+};
+
 struct GuiData
 {
-    GuiData(LePhonkAudioProcessor& p, juce::CustomLook& lnf, double& s)
-        : audioProcessor(p), scale(s), customLook(lnf) {}
+    GuiData(LePhonkAudioProcessor& p, DefaultLookAndFeel& defLnf, double& s, juce::ApplicationProperties& props)
+        : audioProcessor(p), scale(s), defaultLnf(defLnf), properties(props) 
+    {}
+
+    void updateLnf(int skin) 
+    { 
+        if (skin == hell)
+            defaultLnf.lnf = &defaultLnf.hellLook;
+        else if (skin == juice)
+            defaultLnf.lnf = &defaultLnf.juiceLook;
+        else if (skin == drippy)
+            defaultLnf.lnf = &defaultLnf.drippyLook;
+        else
+            jassertfalse; // wrong index (too many items?)
+
+        defaultLnf.updateLnf(); 
+
+        properties.getUserSettings()->setValue("Skin", skin);
+        properties.saveIfNeeded();
+    }
 
     LePhonkAudioProcessor& audioProcessor;
-    juce::CustomLook& customLook;
     double& scale;
+    DefaultLookAndFeel& defaultLnf;
+    juce::ApplicationProperties& properties;
+
+    juce::CustomLook& getLnf() { return *defaultLnf.lnf; }
+
+private:
+    enum skinEnum { hell, juice, drippy };
+
 };
 } //namespace xynth

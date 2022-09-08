@@ -8,31 +8,32 @@
   ==============================================================================
 */
 
-#include "HellLook.h"
+#include "DrippyLook.h"
 
 namespace juce
 {
-HellLook::HellLook()
+
+DrippyLook::DrippyLook()
 {
-    bgImage = juce::ImageCache::getFromMemory(BinaryData::hellBG_png, BinaryData::hellBG_pngSize);
+    bgImage = juce::ImageCache::getFromMemory(BinaryData::drippyBG_png, BinaryData::drippyBG_pngSize);
 }
 
-Colour HellLook::getAccent1()
+Colour DrippyLook::getAccent1()
 {
     return Colour::fromRGB(210, 82, 74);
 }
 
-Colour HellLook::getAccent2()
+Colour DrippyLook::getAccent2()
 {
     return getAccent1();
 }
 
-Colour HellLook::getNeutral1()
+Colour DrippyLook::getNeutral1()
 {
     return Colour::fromRGB(64, 45, 44);
 }
 
-Colour HellLook::getBase1()
+Colour DrippyLook::getBase1()
 {
     return Colour::fromRGB(27, 16, 15);
 }

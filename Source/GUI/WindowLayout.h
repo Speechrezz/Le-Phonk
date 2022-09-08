@@ -18,6 +18,7 @@
 #include "Ottz/OttzLayout.h"
 #include "Fonz/FonzLayout.h"
 #include "Header/BypassGain.h"
+#include "Header/SkinSelect.h"
 
 //==============================================================================
 /*
@@ -37,8 +38,7 @@ private:
     OttzLayout   ottzLayout;
     FonzLayout   fonzLayout;
     BypassGain   bypassGain;
-
-    juce::Image backgroundImage;
+    SkinSelect   skinSelect;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WindowLayout)
 };

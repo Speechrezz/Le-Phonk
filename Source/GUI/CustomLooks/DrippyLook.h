@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    HellLook.h
+    DrippyLook.h
     Created: 5 Sep 2022 5:04:02pm
     Author:  thesp
 
@@ -15,12 +15,12 @@
 
 namespace juce
 {
-class HellLook  : public CustomLook
+class DrippyLook : public CustomLook
 {
 public:
-    HellLook();
+    DrippyLook();
 
-    String getLnfName() override { return "HellLook"; }
+    String getLnfName() override { return "DrippyLook"; }
     Image& getBackgroundImage() override { return bgImage; };
 
     Colour getAccent1() override;
@@ -31,6 +31,6 @@ public:
 private:
     Image bgImage;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HellLook)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DrippyLook)
 };
 } // namespace juce

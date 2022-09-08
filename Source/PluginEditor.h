@@ -11,16 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "GUI/WindowLayout.h"
-#include "GUI/CustomLooks/HellLook.h"
-
-struct DefaultLookAndFeel
-{
-    DefaultLookAndFeel() { juce::LookAndFeel::setDefaultLookAndFeel(&lnf); }
-    ~DefaultLookAndFeel() { juce::LookAndFeel::setDefaultLookAndFeel(nullptr); }
-
-    // Change to desired LookAndFeel
-    juce::HellLook lnf;
-};
+#include "GUI/Utils/GuiData.h"
 
 class LePhonkAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
@@ -31,16 +22,16 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    juce::SharedResourcePointer<xynth::DefaultLookAndFeel> defaultLnf;
+
 private:
-    juce::SharedResourcePointer<DefaultLookAndFeel> defaultLnf;
     LePhonkAudioProcessor& audioProcessor;
     xynth::GuiData guiData;
     WindowLayout windowLayout;
 
-    double scale{ 1.0 };
-
     // Stores global plugin settings
     juce::ApplicationProperties properties;
+    double scale{ 1.0 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LePhonkAudioProcessorEditor)
 };
