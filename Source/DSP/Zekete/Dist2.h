@@ -35,12 +35,18 @@ public:
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;
 
 private:
+    void processAllPass(juce::dsp::ProcessContextReplacing<float>& context);
+
     juce::dsp::WaveShaper<float> shaper;
     juce::dsp::Gain<float> gainIn, gainOut;
 
     std::array<juce::dsp::ProcessorDuplicator<
         juce::dsp::IIR::Filter<float>,
         juce::dsp::IIR::Coefficients<float>>, 2> filters;
+
+    std::array<juce::dsp::ProcessorDuplicator<
+        juce::dsp::IIR::Filter<float>,
+        juce::dsp::IIR::Coefficients<float>>, 6> allPassFilters;
 
     std::atomic<float>* paramAtomic{ nullptr };
 

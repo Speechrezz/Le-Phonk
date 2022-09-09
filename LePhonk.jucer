@@ -44,8 +44,6 @@
           <FILE id="ONXiy5" name="Dist2.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist2.h"/>
           <FILE id="c8JGFz" name="Dist3.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist3.cpp"/>
           <FILE id="md0m2t" name="Dist3.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist3.h"/>
-          <FILE id="vzro0b" name="DistTemplate.cpp" compile="1" resource="0"
-                file="Source/DSP/Zekete/DistTemplate.cpp"/>
           <FILE id="FU5QIm" name="DistTemplate.h" compile="0" resource="0" file="Source/DSP/Zekete/DistTemplate.h"/>
           <FILE id="gC47N2" name="ZeketeHeader.h" compile="0" resource="0" file="Source/DSP/Zekete/ZeketeHeader.h"/>
         </GROUP>

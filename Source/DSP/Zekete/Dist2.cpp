@@ -39,8 +39,17 @@ void Dist2::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& filter : filters)
         filter.prepare(spec);
 
-    *filters[before].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.f, 0.3f, 4.f);
-    *filters[after].state  = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.f, 0.3f, 1.f / 4.f);
+    *filters[before].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.f, 0.3f, 2.f);
+    *filters[after].state  = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.f, 0.3f, 1.f / 2.f);
+
+    float cutoff = 200.f;
+    const float cutoffStep = 25.f;
+    for (auto& filter : allPassFilters)
+    {
+        filter.prepare(spec);
+        *filter.state = *juce::dsp::IIR::Coefficients<float>::makeAllPass(spec.sampleRate, cutoff);
+        cutoff += cutoffStep;
+    }
 }
 
 void Dist2::process(juce::dsp::ProcessContextReplacing<float>& context)
@@ -55,6 +64,7 @@ void Dist2::process(juce::dsp::ProcessContextReplacing<float>& context)
     gainOut.setGainLinear(intensityOut);
     //DBG("In: " << intensityIn << ", out: " << intensityOut);
 
+    processAllPass(context);
     filters[before].process(context);
     gainIn.process(context);
     shaper.process(context);
@@ -65,5 +75,10 @@ void Dist2::process(juce::dsp::ProcessContextReplacing<float>& context)
 void Dist2::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
     paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
+}
+void Dist2::processAllPass(juce::dsp::ProcessContextReplacing<float>& context)
+{
+    for (auto& filter : allPassFilters)
+        filter.process(context);
 }
 } // namespace xynth

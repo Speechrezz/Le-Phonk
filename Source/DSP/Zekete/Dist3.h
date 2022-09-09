@@ -27,15 +27,18 @@ public:
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;
 
 private:
-    juce::dsp::WaveShaper<float> shaper;
-    juce::dsp::Gain<float> gainIn, gainOut;
+    void processAllPass(juce::dsp::ProcessContextReplacing<float>& context, int idx);
+
+    juce::dsp::Gain<float> gainOut;
+    juce::NormalisableRange<float> range;
 
     std::array<juce::dsp::ProcessorDuplicator<
         juce::dsp::IIR::Filter<float>,
-        juce::dsp::IIR::Coefficients<float>>, 2> filters;
+        juce::dsp::IIR::Coefficients<float>>, 200> allPassFilters;
 
     std::atomic<float>* paramAtomic{ nullptr };
 
-    enum FiltersEnum { before, after };
+    int prevIdx{ 0 };
+
 };
 } // namespace xynth

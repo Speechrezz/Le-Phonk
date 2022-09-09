@@ -14,49 +14,52 @@ namespace xynth
 {
 Dist3::Dist3()
 {
-    shaper.functionToUse = [](float x)
-    {
-        return x; //std::tanh(x);
-    };
+    range.setSkewForCentre(0.2f);
 }
 void Dist3::prepare(const juce::dsp::ProcessSpec& spec)
 {
-    gainIn.prepare(spec);
-    gainIn.setRampDurationSeconds(0.005);
+    float cutoff = 200.f;
+    const float cutoffStep = 3.f;
+    for (auto& filter : allPassFilters)
+    {
+        filter.prepare(spec);
+        *filter.state = *juce::dsp::IIR::Coefficients<float>::makeAllPass(spec.sampleRate, cutoff);
+        cutoff += cutoffStep;
+    }
 
     gainOut.prepare(spec);
-    gainOut.setRampDurationSeconds(0.005);
-
-    shaper.prepare(spec);
-
-    for (auto& filter : filters)
-        filter.prepare(spec);
-
-    *filters[before].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 555.f, 1.2f, 4.f);
-    *filters[after].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 555.f, 1.2f, 1.f / 4.f);
+    gainOut.setRampDurationSeconds(0.01);
+    gainOut.setGainLinear(1.f);
 }
 
 void Dist3::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
-    float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, ZEKETE_MAX_DB);
-    const float intensityIn = juce::Decibels::decibelsToGain(dB);
-    gainIn.setGainLinear(intensityIn);
+    float param = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
+    param = range.convertFrom0to1(param);
+    const int idx = int(juce::jmap(param, 1.f, float(allPassFilters.size())));
+    
+    // Gain smoothing when moving slider to mitigate popping sounds
+    gainOut.setGainLinear(float(idx == prevIdx));
 
-    const float avgGain = 0.22f;
-    const float intensityOut = avgGain / distort(intensityIn * avgGain);
-    gainOut.setGainLinear(intensityOut);
-    //DBG("In: " << intensityIn << ", out: " << intensityOut);
-
-    filters[before].process(context);
-    gainIn.process(context);
-    shaper.process(context);
+    processAllPass(context, prevIdx);
     gainOut.process(context);
-    filters[after].process(context);
+
+    if (!gainOut.isSmoothing())
+        prevIdx = idx;
 }
 
 void Dist3::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
     paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
+}
+void Dist3::processAllPass(juce::dsp::ProcessContextReplacing<float>& context, int idx)
+{
+    jassert(idx >= 0 && idx <= allPassFilters.size());
+
+    for (int i = 0; i < idx; ++i)
+        allPassFilters[i].process(context);
+
+    /*for (int i = idx; i < allPassFilters.size(); ++i)
+        allPassFilters[i].reset();*/
 }
 } // namespace xynth
