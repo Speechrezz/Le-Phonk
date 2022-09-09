@@ -28,6 +28,7 @@ private:
     std::atomic<float>* gainAtomic{ nullptr };
 
     float sample{ 0.f };
+    std::atomic<float>* selectAtomic{ nullptr };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistGraph)
 };

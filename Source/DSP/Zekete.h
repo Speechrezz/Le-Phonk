@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Zekete/ZeketeHeader.h"
 
 namespace xynth
 {
@@ -26,15 +27,13 @@ public:
     void setAtomics(juce::AudioProcessorValueTreeState& treeState);
 
 private:
-    juce::dsp::WaveShaper<float> shaper;
-    juce::dsp::Gain<float> gainIn, gainOut;
+    Dist1 dist1;
+    Dist2 dist2;
+    Dist3 dist3;
+    std::atomic<float>* selectAtomic {nullptr};
 
-    std::array<juce::dsp::ProcessorDuplicator<
-        juce::dsp::IIR::Filter<float>,
-        juce::dsp::IIR::Coefficients<float>>, 2> filters;
+public:
+    std::array<DistTemplate*, 3> distArray{ &dist1, &dist2, &dist3 };
 
-    std::atomic<float>* paramAtomic{ nullptr };
-
-    enum FiltersEnum{ before, after };
 };
 } // namespace xynth

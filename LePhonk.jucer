@@ -37,6 +37,18 @@
         <FILE id="Y1RGlo" name="RingBuffer.h" compile="0" resource="0" file="Source/Common/RingBuffer.h"/>
       </GROUP>
       <GROUP id="{A9A414F8-F009-37A7-F694-EAEDFAC45030}" name="DSP">
+        <GROUP id="{E4486414-5156-EAF7-040C-D4E15401A791}" name="Zekete">
+          <FILE id="OqBaUj" name="Dist1.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist1.cpp"/>
+          <FILE id="x8LEN6" name="Dist1.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist1.h"/>
+          <FILE id="am4BaC" name="Dist2.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist2.cpp"/>
+          <FILE id="ONXiy5" name="Dist2.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist2.h"/>
+          <FILE id="c8JGFz" name="Dist3.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist3.cpp"/>
+          <FILE id="md0m2t" name="Dist3.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist3.h"/>
+          <FILE id="vzro0b" name="DistTemplate.cpp" compile="1" resource="0"
+                file="Source/DSP/Zekete/DistTemplate.cpp"/>
+          <FILE id="FU5QIm" name="DistTemplate.h" compile="0" resource="0" file="Source/DSP/Zekete/DistTemplate.h"/>
+          <FILE id="gC47N2" name="ZeketeHeader.h" compile="0" resource="0" file="Source/DSP/Zekete/ZeketeHeader.h"/>
+        </GROUP>
         <FILE id="S1lT3C" name="Fonz.cpp" compile="1" resource="0" file="Source/DSP/Fonz.cpp"/>
         <FILE id="wgT5m8" name="Fonz.h" compile="0" resource="0" file="Source/DSP/Fonz.h"/>
         <FILE id="sE2QUX" name="OTT.cpp" compile="1" resource="0" file="Source/DSP/OTT.cpp"/>

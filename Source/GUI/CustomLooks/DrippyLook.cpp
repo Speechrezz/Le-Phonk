@@ -40,7 +40,7 @@ void DrippyLook::drawDistGraphBackground(Graphics& g, Rectangle<float> area, flo
     else if (hold >= 0)
         --hold;
     else
-        prevAmp *= 0.97f;
+        prevAmp *= 0.96f;
 
     g.setOpacity(prevAmp * 0.8f);
     g.drawImageWithin(danGraphImage, area.getX(), area.getY(), area.getWidth(), area.getHeight(), juce::RectanglePlacement::fillDestination);

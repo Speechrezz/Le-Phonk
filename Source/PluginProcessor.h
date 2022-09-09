@@ -58,6 +58,8 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    inline float zeketeDistort(float sample, int idx) { return zekete.distArray[idx]->distort(sample); }
+
     juce::StringArray distTypes{ "Dist 1", "Dist 2", "Dist 3" };
 
     juce::AudioProcessorValueTreeState treeState;
