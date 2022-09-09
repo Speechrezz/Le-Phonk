@@ -19,10 +19,9 @@
 #include "Fonz/FonzLayout.h"
 #include "Header/BypassGain.h"
 #include "Header/SkinSelect.h"
+#include "Header/LogoButton.h"
+#include "About/AboutOverlay.h"
 
-//==============================================================================
-/*
-*/
 class WindowLayout : public juce::Component
 {
 public:
@@ -39,6 +38,8 @@ private:
     FonzLayout   fonzLayout;
     BypassGain   bypassGain;
     SkinSelect   skinSelect;
+    LogoButton   logoButton;
+    AboutOverlay aboutOverlay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WindowLayout)
 };

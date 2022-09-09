@@ -12,7 +12,7 @@
 #include "WindowLayout.h"
 
 WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), 
-    fonzLayout(g), bypassGain(g), skinSelect(g)
+    fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
@@ -21,6 +21,10 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
     addAndMakeVisible(fonzLayout);
     addAndMakeVisible(bypassGain);
     addAndMakeVisible(skinSelect);
+    addAndMakeVisible(logoButton);
+    addChildComponent(aboutOverlay);
+
+    guiData.showAbout = [this]() { aboutOverlay.setVisible(true); };
 }
 
 WindowLayout::~WindowLayout()
@@ -51,4 +55,8 @@ void WindowLayout::resized()
 
     skinSelect.setBounds(headerRect.removeFromRight(114)
         .withTrimmedTop(8).withSizeKeepingCentre(114, 30));
+
+    logoButton.setBounds(headerRect.removeFromLeft(154).withTrimmedTop(10).translated(-8, 0));
+
+    aboutOverlay.setBounds(getLocalBounds());
 }

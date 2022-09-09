@@ -51,6 +51,13 @@
         <FILE id="VYCOLh" name="Zekete.h" compile="0" resource="0" file="Source/DSP/Zekete.h"/>
       </GROUP>
       <GROUP id="{69A35449-46DD-630F-FB48-80D356D167E5}" name="GUI">
+        <GROUP id="{79746800-8686-8C21-EF85-844EE30B652B}" name="About">
+          <FILE id="f4ddGb" name="AboutOverlay.cpp" compile="1" resource="0"
+                file="Source/GUI/About/AboutOverlay.cpp"/>
+          <FILE id="jyTyb3" name="AboutOverlay.h" compile="0" resource="0" file="Source/GUI/About/AboutOverlay.h"/>
+          <FILE id="fucA0d" name="AboutWindow.cpp" compile="1" resource="0" file="Source/GUI/About/AboutWindow.cpp"/>
+          <FILE id="YoNHgc" name="AboutWindow.h" compile="0" resource="0" file="Source/GUI/About/AboutWindow.h"/>
+        </GROUP>
         <GROUP id="{95F78D68-E3ED-B26C-A000-74F12488291B}" name="CustomLooks">
           <FILE id="hA6Aom" name="CustomLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/CustomLook.cpp"/>
           <FILE id="f0vDI9" name="CustomLook.h" compile="0" resource="0" file="Source/GUI/CustomLooks/CustomLook.h"/>
@@ -71,6 +78,8 @@
           <FILE id="EobosC" name="BypassButton.h" compile="0" resource="0" file="Source/GUI/Header/BypassButton.h"/>
           <FILE id="bNjbpO" name="BypassGain.cpp" compile="1" resource="0" file="Source/GUI/Header/BypassGain.cpp"/>
           <FILE id="PmqRt2" name="BypassGain.h" compile="0" resource="0" file="Source/GUI/Header/BypassGain.h"/>
+          <FILE id="J4onrU" name="LogoButton.cpp" compile="1" resource="0" file="Source/GUI/Header/LogoButton.cpp"/>
+          <FILE id="aKdqcP" name="LogoButton.h" compile="0" resource="0" file="Source/GUI/Header/LogoButton.h"/>
           <FILE id="jLnDR6" name="SkinSelect.cpp" compile="1" resource="0" file="Source/GUI/Header/SkinSelect.cpp"/>
           <FILE id="QxJ6O0" name="SkinSelect.h" compile="0" resource="0" file="Source/GUI/Header/SkinSelect.h"/>
         </GROUP>
