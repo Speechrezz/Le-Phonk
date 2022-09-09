@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    AboutWindow.h
-    Created: 8 Sep 2022 5:08:23pm
+    WebsiteButton.h
+    Created: 8 Sep 2022 6:12:03pm
     Author:  thesp
 
   ==============================================================================
@@ -12,20 +12,18 @@
 
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
-#include "WebsiteButton.h"
 
-class AboutWindow  : public juce::Component
+class WebsiteButton  : public juce::TextButton
 {
 public:
-    AboutWindow(xynth::GuiData&);
-    ~AboutWindow() override;
+    WebsiteButton(xynth::GuiData&);
+    ~WebsiteButton() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
     xynth::GuiData& guiData;
-    WebsiteButton siteButton;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AboutWindow)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WebsiteButton)
 };

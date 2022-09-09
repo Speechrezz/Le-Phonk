@@ -27,7 +27,7 @@ void AboutOverlay::paint (juce::Graphics& g)
 
 void AboutOverlay::resized()
 {
-    auto rect = getLocalBounds().reduced(40, 200);
+    auto rect = getLocalBounds().reduced(40, 190);
     aboutWindow.setBounds(rect);
 }
 

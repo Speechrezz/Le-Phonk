@@ -249,6 +249,11 @@ void CustomLook::drawPopupMenuBackground(Graphics& g, int width, int height)
     g.drawRoundedRectangle(rect, 4.f, 2.f);
 }
 
+const juce::Font CustomLook::getCustomFontRegular()
+{
+    static auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::MontserratRegular_ttf, BinaryData::MontserratRegular_ttfSize);
+    return juce::Font(typeface).withHeight(21.f);
+}
 const juce::Font CustomLook::getCustomFontMedium()
 {
     static auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::MuseoModernoMedium_ttf, BinaryData::MuseoModernoMedium_ttfSize);

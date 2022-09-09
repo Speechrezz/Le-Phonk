@@ -65,6 +65,7 @@ public:
     virtual Colour getNeutral1() { return Colours::grey;  };
     virtual Colour getBase1()    { return Colours::black; };
 
+    virtual const juce::Font getCustomFontRegular();
     virtual const juce::Font getCustomFontMedium();
     virtual const juce::Font getCustomFontSemiBold();
     virtual const juce::Font getCustomFontBold();

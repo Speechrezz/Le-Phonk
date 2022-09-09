@@ -11,8 +11,9 @@
 #include <JuceHeader.h>
 #include "AboutWindow.h"
 
-AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g)
+AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g)
 {
+    addAndMakeVisible(siteButton);
 }
 
 AboutWindow::~AboutWindow()
@@ -33,18 +34,30 @@ void AboutWindow::paint (juce::Graphics& g)
     g.setFont(lnf.getCustomFontSemiBold());
     g.drawText("About us", rect.removeFromTop(60.f), juce::Justification::centred);
 
+    g.drawLine(30.f, rect.getY(), rect.getWidth() - 30.f, rect.getY(), 2.f);
+
     rect.removeFromTop(48.f);
     auto textRect = rect.reduced(20.f, 0.f);
     g.setColour(lnf.getNeutral1().brighter(1.f));
-    g.setFont(lnf.getCustomFontMedium().withHeight(22.f));
-    g.drawMultiLineText("Skybreak was born on Janurary 17th, 2019 and died on saturday. "
+    g.setFont(lnf.getCustomFontRegular());
+    g.drawMultiLineText("        Skybreak was born on Janurary 17th, 2019 and died on saturday. "
         "Did you know: he originally developed the first lephonk plugin? from paper "
         "skys brain, skybreak made a version then sharks made a version the speechrezz "
-        "made the best version and sharks was so fucking sad. nobody rly cared lol. "
-        "Welcome to lephonk, the drippiest plugin on the market!",
-        textRect.getX(), textRect.getY(), textRect.getWidth(), juce::Justification::centred);
+        "made the best version and sharks was so fucking sad. nobody rly cared lol.",
+        textRect.getX(), textRect.getY(), textRect.getWidth());
+
+    g.drawMultiLineText("Welcome to Le Phonk, the drippiest plugin on the market!",
+        textRect.getX(), textRect.getY() + 212.f, textRect.getWidth(), juce::Justification::centred);
+
+    auto versionRect = rect.reduced(20.f);
+    juce::String version = JucePlugin_VersionString;
+    g.setOpacity(0.6f);
+    g.drawText("v" + version, versionRect.removeFromBottom(32), juce::Justification::bottomRight);
 }
 
 void AboutWindow::resized()
 {
+    auto rect = getLocalBounds().reduced(20);
+
+    siteButton.setBounds(rect.removeFromBottom(32).withSizeKeepingCentre(170, 32));
 }

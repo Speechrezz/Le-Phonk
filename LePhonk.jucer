@@ -11,14 +11,10 @@
         <FILE id="WFH8se" name="skyKnob.png" compile="0" resource="1" file="Res/Drippy/skyKnob.png"/>
       </GROUP>
       <GROUP id="{07B2E8D6-7C51-DE1D-14AA-1DCEA89F0C8C}" name="Fonts">
-        <FILE id="Lppiz6" name="MuseoModerno-Black.ttf" compile="0" resource="1"
-              file="Res/Fonts/MuseoModerno-Black.ttf"/>
+        <FILE id="ol45IP" name="Montserrat-Regular.ttf" compile="0" resource="1"
+              file="Res/Fonts/Montserrat-Regular.ttf"/>
         <FILE id="rAx9Yd" name="MuseoModerno-Bold.ttf" compile="0" resource="1"
               file="Res/Fonts/MuseoModerno-Bold.ttf"/>
-        <FILE id="QGXwS6" name="MuseoModerno-ExtraBold.ttf" compile="0" resource="1"
-              file="Res/Fonts/MuseoModerno-ExtraBold.ttf"/>
-        <FILE id="HVTneo" name="MuseoModerno-ExtraLight.ttf" compile="0" resource="1"
-              file="Res/Fonts/MuseoModerno-ExtraLight.ttf"/>
         <FILE id="MWgVOm" name="MuseoModerno-Light.ttf" compile="0" resource="1"
               file="Res/Fonts/MuseoModerno-Light.ttf"/>
         <FILE id="wCdYTG" name="MuseoModerno-Medium.ttf" compile="0" resource="1"
@@ -57,6 +53,9 @@
           <FILE id="jyTyb3" name="AboutOverlay.h" compile="0" resource="0" file="Source/GUI/About/AboutOverlay.h"/>
           <FILE id="fucA0d" name="AboutWindow.cpp" compile="1" resource="0" file="Source/GUI/About/AboutWindow.cpp"/>
           <FILE id="YoNHgc" name="AboutWindow.h" compile="0" resource="0" file="Source/GUI/About/AboutWindow.h"/>
+          <FILE id="psb6nI" name="WebsiteButton.cpp" compile="1" resource="0"
+                file="Source/GUI/About/WebsiteButton.cpp"/>
+          <FILE id="GP6nFL" name="WebsiteButton.h" compile="0" resource="0" file="Source/GUI/About/WebsiteButton.h"/>
         </GROUP>
         <GROUP id="{95F78D68-E3ED-B26C-A000-74F12488291B}" name="CustomLooks">
           <FILE id="hA6Aom" name="CustomLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/CustomLook.cpp"/>
