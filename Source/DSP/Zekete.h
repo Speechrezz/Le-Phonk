@@ -30,10 +30,12 @@ private:
     Dist1 dist1;
     Dist2 dist2;
     Dist3 dist3;
+    WDYMBitcrush bitcrusher;
+    WDYMRect rectifier;
     std::atomic<float>* selectAtomic {nullptr};
 
 public:
-    std::array<DistTemplate*, 3> distArray{ &dist1, &dist2, &dist3 };
+    std::array<DistTemplate*, 5> distArray{ &dist1, &dist2, &dist3, &bitcrusher, &rectifier };
 
 };
 } // namespace xynth

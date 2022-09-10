@@ -14,3 +14,5 @@
 #include "Dist1.h"
 #include "Dist2.h"
 #include "Dist3.h"
+#include "Bitcrush.h"
+#include "Rectify.h"
