@@ -23,13 +23,16 @@ void Dist3::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& filter : allPassFilters)
     {
         filter.prepare(spec);
-        *filter.state = *juce::dsp::IIR::Coefficients<float>::makeAllPass(spec.sampleRate, cutoff);
+        //*filter.state = *juce::dsp::IIR::Coefficients<float>::makeAllPass(spec.sampleRate, cutoff);
+        filter.updateParameters(cutoff);
         cutoff += cutoffStep;
     }
 
     gainOut.prepare(spec);
     gainOut.setRampDurationSeconds(0.01);
     gainOut.setGainLinear(1.f);
+
+    inter.prepare(spec);
 }
 
 void Dist3::process(juce::dsp::ProcessContextReplacing<float>& context)
@@ -56,8 +59,12 @@ void Dist3::processAllPass(juce::dsp::ProcessContextReplacing<float>& context, i
 {
     jassert(idx >= 0 && idx <= allPassFilters.size());
 
+    inter.interleave(context);
+
     for (int i = 0; i < idx; ++i)
-        allPassFilters[i].process(context);
+        allPassFilters[i].process(inter.getInterleavedAudio());
+
+    inter.deinterleave(context);
 
     /*for (int i = idx; i < allPassFilters.size(); ++i)
         allPassFilters[i].reset();*/

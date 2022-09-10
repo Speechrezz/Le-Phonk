@@ -37,6 +37,14 @@
         <FILE id="Y1RGlo" name="RingBuffer.h" compile="0" resource="0" file="Source/Common/RingBuffer.h"/>
       </GROUP>
       <GROUP id="{A9A414F8-F009-37A7-F694-EAEDFAC45030}" name="DSP">
+        <GROUP id="{D9899DC8-9342-3A32-2CE9-BEBD902F32C9}" name="Utils">
+          <FILE id="Vc0HOw" name="InterleavedAudio.cpp" compile="1" resource="0"
+                file="Source/DSP/Utils/InterleavedAudio.cpp"/>
+          <FILE id="iPKQg4" name="InterleavedAudio.h" compile="0" resource="0"
+                file="Source/DSP/Utils/InterleavedAudio.h"/>
+          <FILE id="BAQypy" name="SIMDFilter.cpp" compile="1" resource="0" file="Source/DSP/Utils/SIMDFilter.cpp"/>
+          <FILE id="nLUDiY" name="SIMDFilter.h" compile="0" resource="0" file="Source/DSP/Utils/SIMDFilter.h"/>
+        </GROUP>
         <GROUP id="{E4486414-5156-EAF7-040C-D4E15401A791}" name="Zekete">
           <FILE id="OqBaUj" name="Dist1.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist1.cpp"/>
           <FILE id="x8LEN6" name="Dist1.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist1.h"/>

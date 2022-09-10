@@ -12,7 +12,6 @@
 #include "DistGraph.h"
 #include "../../Common/Constants.h"
 
-//==============================================================================
 DistGraph::DistGraph(xynth::GuiData& g) : guiData(g)
 {
     startTimerHz(60);
@@ -48,6 +47,8 @@ void DistGraph::paint (juce::Graphics& g)
 
     // Draw background path
     juce::Path p;
+    p.startNewSubPath(-maxGain, -1.f);
+    p.startNewSubPath( maxGain,  1.f);
     p.startNewSubPath(-maxGain, -ap.zeketeDistort(-maxGain, idx));
     for (float pos = -maxGain; pos <= maxGain; pos += stepSize)
         p.lineTo(pos, -ap.zeketeDistort(pos, idx));
