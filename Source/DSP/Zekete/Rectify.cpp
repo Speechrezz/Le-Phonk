@@ -22,7 +22,7 @@ namespace xynth
                 int tensionBase = 10;
                 float vf = 0.7f;
                 float vb = -12.f;
-                float tanh1 = 0.7f;
+                float tanh1 = 0.6f;
             } diode;
             float dry = x;
             float s = tanh(x) * (diode.paramMax * param + 1);
@@ -40,7 +40,8 @@ namespace xynth
             x = std::min(x, 1.f);
 
             if (param < 0.5) {
-                x = (param * x) + (0.5 - param) * dry;
+                param *= 2;
+                x = (param * x) + (1 - param) * dry;
             }
 
             return x;
