@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="hRZUqN" name="LePhonk" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Zekete Inc."
-              pluginFormats="buildStandalone,buildVST3">
+              pluginFormats="buildStandalone,buildVST3" displaySplashScreen="1">
   <MAINGROUP id="b44zzt" name="LePhonk">
     <GROUP id="{E1A5876A-A34C-223E-AF5D-64B8F5D5B7FA}" name="Res">
       <GROUP id="{DEBDC2BA-8924-E707-CA53-D427479F3797}" name="Drippy">
@@ -38,6 +38,9 @@
       </GROUP>
       <GROUP id="{A9A414F8-F009-37A7-F694-EAEDFAC45030}" name="DSP">
         <GROUP id="{E4486414-5156-EAF7-040C-D4E15401A791}" name="Zekete">
+          <FILE id="RscrdV" name="Rectify.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Rectify.cpp"/>
+          <FILE id="QGDaxy" name="WDYMShaper.h" compile="0" resource="0" file="Source/DSP/Zekete/WDYMShaper.h"/>
+          <FILE id="Te1O9L" name="Rectify.h" compile="0" resource="0" file="Source/DSP/Zekete/Rectify.h"/>
           <FILE id="OqBaUj" name="Dist1.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist1.cpp"/>
           <FILE id="x8LEN6" name="Dist1.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist1.h"/>
           <FILE id="am4BaC" name="Dist2.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist2.cpp"/>
@@ -45,6 +48,8 @@
           <FILE id="c8JGFz" name="Dist3.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Dist3.cpp"/>
           <FILE id="md0m2t" name="Dist3.h" compile="0" resource="0" file="Source/DSP/Zekete/Dist3.h"/>
           <FILE id="FU5QIm" name="DistTemplate.h" compile="0" resource="0" file="Source/DSP/Zekete/DistTemplate.h"/>
+          <FILE id="YR2C9a" name="Bitcrush.cpp" compile="1" resource="0" file="Source/DSP/Zekete/Bitcrush.cpp"/>
+          <FILE id="uUn7bY" name="Bitcrush.h" compile="0" resource="0" file="Source/DSP/Zekete/Bitcrush.h"/>
           <FILE id="gC47N2" name="ZeketeHeader.h" compile="0" resource="0" file="Source/DSP/Zekete/ZeketeHeader.h"/>
         </GROUP>
         <FILE id="S1lT3C" name="Fonz.cpp" compile="1" resource="0" file="Source/DSP/Fonz.cpp"/>

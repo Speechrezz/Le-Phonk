@@ -43,11 +43,13 @@ void DistGraph::paint (juce::Graphics& g)
     sample = newSample > sample ? newSample : sample * 0.92f;
 
     // Maximum points on x-axis
-    const float maxGain = std::pow(gain, 0.6f);
+    const float maxGain = 1;
     const float stepSize = maxGain / 200.f;
 
     // Draw background path
     juce::Path p;
+    p.startNewSubPath(-maxGain, -1.f);
+    p.startNewSubPath(maxGain, 1.f);
     p.startNewSubPath(-maxGain, -ap.zeketeDistort(-maxGain, idx));
     for (float pos = -maxGain; pos <= maxGain; pos += stepSize)
         p.lineTo(pos, -ap.zeketeDistort(pos, idx));

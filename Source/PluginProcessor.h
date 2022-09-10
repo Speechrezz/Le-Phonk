@@ -60,7 +60,7 @@ public:
 
     inline float zeketeDistort(float sample, int idx) { return zekete.distArray[idx]->distort(sample); }
 
-    juce::StringArray distTypes{ "Dist 1", "Dist 2", "Dist 3" };
+    juce::StringArray distTypes{ "Dist 1", "Dist 2", "Dist 3", "WDYM Crusher", "WDYM Rectifier"};
 
     juce::AudioProcessorValueTreeState treeState;
     xynth::RingBuffer ringBuffer;
