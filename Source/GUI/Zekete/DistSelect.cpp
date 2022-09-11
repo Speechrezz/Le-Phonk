@@ -13,34 +13,40 @@
 
 DistSelect::DistSelect(xynth::GuiData& g) : guiData(g)
 {
-    dropDown.addItemList(guiData.audioProcessor.distTypes, 1);
-    dropDown.setJustificationType(juce::Justification::centred);
-    dropDown.setScrollWheelEnabled(true);
+    addItemList(guiData.audioProcessor.distTypes, 1);
+    setJustificationType(juce::Justification::centred);
+    setScrollWheelEnabled(true);
 
-    dropDownAttach = std::make_unique<cbAttach>(g.audioProcessor.treeState, DIST_SELECT_ID, dropDown);
-
-    addAndMakeVisible(dropDown);
-}
-
-DistSelect::~DistSelect()
-{
-}
-
-void DistSelect::paint (juce::Graphics& g)
-{
-}
-
-void DistSelect::resized()
-{
-    dropDown.setBounds(getLocalBounds());
+    dropDownAttach = std::make_unique<cbAttach>(g.audioProcessor.treeState, DIST_SELECT_ID, *this);
 }
 
 void DistSelect::mouseEnter(const juce::MouseEvent& e)
 {
-    dropDown.repaint();
+    repaint();
 }
 
 void DistSelect::mouseExit(const juce::MouseEvent& e)
 {
-    dropDown.repaint();
+    repaint();
+}
+
+void DistSelect::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& mw)
+{
+    const int curItem = getSelectedItemIndex();
+    const int maxIdx = getNumItems() - 1;
+    const float threshold = 0.35f;
+    mwMovement += mw.deltaY;
+
+    if (mwMovement > threshold)
+    {
+        setSelectedItemIndex(std::max(curItem - 1, 0));
+        mwMovement = 0.f;
+    }
+    else if (mwMovement < -threshold)
+    {
+        setSelectedItemIndex(std::min(curItem + 1, maxIdx));
+        mwMovement = 0.f;
+    }
+    
+    //juce::ComboBox::mouseWheelMove(e, mw);
 }

@@ -2,7 +2,8 @@
 
 <JUCERPROJECT id="hRZUqN" name="LePhonk" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Zekete Inc."
-              pluginFormats="buildStandalone,buildVST3">
+              pluginFormats="buildStandalone,buildVST3" companyWebsite="https://www.xynthaudio.com/"
+              version="1.0.1">
   <MAINGROUP id="b44zzt" name="LePhonk">
     <GROUP id="{E1A5876A-A34C-223E-AF5D-64B8F5D5B7FA}" name="Res">
       <GROUP id="{DEBDC2BA-8924-E707-CA53-D427479F3797}" name="Drippy">

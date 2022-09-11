@@ -24,7 +24,7 @@ void Zekete::prepare(const juce::dsp::ProcessSpec& spec)
 
     // Mixer
     mixer.prepare(spec);
-    mixer.setMixingRule(juce::dsp::DryWetMixingRule::linear);
+    mixer.setMixingRule(juce::dsp::DryWetMixingRule::sin3dB);
 }
 void Zekete::process(juce::dsp::ProcessContextReplacing<float>& context)
 {

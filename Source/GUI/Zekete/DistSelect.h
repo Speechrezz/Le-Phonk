@@ -13,28 +13,23 @@
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
 
-class DistSelect  : public juce::Component
+class DistSelect  : public juce::ComboBox
 {
 public:
     DistSelect(xynth::GuiData&);
-    ~DistSelect() override;
-
-    void paint (juce::Graphics&) override;
-    void resized() override;
 
     void mouseEnter(const juce::MouseEvent& e) override;
     void mouseExit (const juce::MouseEvent& e) override;
 
-private:
-    using cbAttach = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+    void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& mw) override;
 
+private:
     xynth::GuiData& guiData;
 
-    juce::StringArray distNames{ "Hell", "Juice", "Drippy" };
-    juce::ComboBox dropDown;
+    using cbAttach = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     std::unique_ptr<cbAttach> dropDownAttach;
 
-    juce::NotificationType notif{ juce::NotificationType::dontSendNotification };
+    float mwMovement{ 0.f };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistSelect)
 };
