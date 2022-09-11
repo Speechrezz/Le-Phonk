@@ -19,7 +19,10 @@ ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSe
     slider.slider.setSliderStyle(juce::Slider::LinearHorizontal);
     slider.slider.setSliderSnapsToMousePosition(false);
 
+    mix.init(treeState, ZEKETE_MIX_ID);
+
     addAndMakeVisible(slider.slider);
+    addAndMakeVisible(mix.slider);
     addAndMakeVisible(distGraph);
     addAndMakeVisible(distSelect);
 }
@@ -48,4 +51,8 @@ void ZeketeLayout::resized()
     slider.slider.setBounds(rect.removeFromBottom(16).reduced(23, 0));
     rect.removeFromBottom(26);
     distSelect.setBounds(rect.removeFromBottom(32).reduced(29, 0));
+
+    rect.removeFromTop(11);
+    rect.removeFromLeft(26);
+    mix.slider.setBounds(rect.removeFromTop(25).withWidth(25));
 }

@@ -33,5 +33,6 @@ void BypassGain::resized()
 
     bypassButton.setBounds(rect.removeFromRight(20));
     rect.removeFromRight(9);
+    DBG(rect.getHeight() << ", " << rect.getWidth());
     gain.slider.setBounds(rect);
 }

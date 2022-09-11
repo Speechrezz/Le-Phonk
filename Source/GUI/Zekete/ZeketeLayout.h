@@ -28,6 +28,7 @@ public:
 private:
     xynth::GuiData& guiData;
     xynth::FullSlider slider;
+    xynth::FullSlider mix;
     DistGraph distGraph;
     DistSelect distSelect;
 

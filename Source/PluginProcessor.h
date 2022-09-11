@@ -61,7 +61,7 @@ public:
     inline float zeketeDistort(int idx, float sample, float param) { return zekete.distArray[idx]->distort(sample, param); }
     inline float zeketeXAxis  (int idx, float param) { return zekete.distArray[idx]->xAxis(param); }
 
-    juce::StringArray distTypes{ "1. Ungh", "2. Beef", "3. Tub of gravy", "4. Woah haha", "5. Glumbis", "6. Scrimbly"};
+    juce::StringArray distTypes{ "1. Ungh", "2. Beef", "3. Tub of gravy", "4. Woah haha", "5. glumbis", "6. Scrimbly"};
 
     juce::AudioProcessorValueTreeState treeState;
     xynth::RingBuffer ringBuffer;

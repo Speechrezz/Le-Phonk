@@ -45,7 +45,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout LePhonkAudioProcessor::creat
     params.push_back(std::make_unique<juce::AudioParameterFloat>(GAIN_ID,   GAIN_NAME,    GAIN_MIN, GAIN_MAX, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterBool> (ENABLE_ID, ENABLE_NAME,  true));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat> (ZEKETE_MIX_ID,  ZEKETE_MIX_NAME,  0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat> (ZEKETE_MIX_ID,  ZEKETE_MIX_NAME,  0.f, 100.f, 100.f));
     params.push_back(std::make_unique<juce::AudioParameterChoice>(DIST_SELECT_ID, DIST_SELECT_NAME, distTypes, 0));
 
     return { params.begin(), params.end() };
