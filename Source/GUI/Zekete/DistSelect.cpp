@@ -15,6 +15,7 @@ DistSelect::DistSelect(xynth::GuiData& g) : guiData(g)
 {
     dropDown.addItemList(guiData.audioProcessor.distTypes, 1);
     dropDown.setJustificationType(juce::Justification::centred);
+    dropDown.setScrollWheelEnabled(true);
 
     dropDownAttach = std::make_unique<cbAttach>(g.audioProcessor.treeState, DIST_SELECT_ID, dropDown);
 

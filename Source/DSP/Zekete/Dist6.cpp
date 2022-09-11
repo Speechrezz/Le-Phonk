@@ -1,32 +1,27 @@
 /*
   ==============================================================================
 
-    Dist2.cpp
-    Created: 9 Sep 2022 9:39:35am
+    Dist6.cpp
+    Created: 10 Sep 2022 9:39:35am
     Author:  thesp
 
   ==============================================================================
 */
 
-#include "Dist2.h"
+#include "Dist6.h"
 
 namespace xynth
 {
-Dist2::Dist2()
+Dist6::Dist6()
 {
     shaper.functionToUse = [](float x)
     {
-        //return 0.95f * std::tanh(x) + 0.05f * std::sin(x * 3.1416f);
-        //return std::tanh(2.f * x * std::abs(x));
-        const float sign = std::copysign(1.f, x);
-        x = std::abs(x);
-        if (x > 0.5f)
-            x = 0.5f + (x - 0.5f) / (1.f + std::pow((x - 0.5f) * 2.f, 2.f));
-
-        return sign * x * 1.3333333f;
+        x = 0.25f * (x + 1.f);
+        float y = 4.f * std::abs(x - std::floor(x + 0.5f)) - 1.f;
+        return y;
     };
 }
-void Dist2::prepare(const juce::dsp::ProcessSpec& spec)
+void Dist6::prepare(const juce::dsp::ProcessSpec& spec)
 {
     gainIn.prepare(spec);
     gainIn.setRampDurationSeconds(0.005);
@@ -39,11 +34,12 @@ void Dist2::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& filter : filters)
         filter.prepare(spec);
 
-    *filters[before].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.f, 0.3f, 2.f);
-    *filters[after].state  = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.f, 0.3f, 1.f / 2.f);
+    *filters[before1].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 150.f, 0.4f, 3.f);
+    *filters[before2].state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf (spec.sampleRate, 15000.f, 0.5f, 0.6f);
+    *filters[after].state   = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 150.f, 0.4f, 1.f / 3.f);
 
     float cutoff = 200.f;
-    const float cutoffStep = 25.f;
+    const float cutoffStep = 50.f;
     for (auto& filter : allPassFilters)
     {
         filter.prepare(spec);
@@ -52,31 +48,32 @@ void Dist2::prepare(const juce::dsp::ProcessSpec& spec)
     }
 }
 
-void Dist2::process(juce::dsp::ProcessContextReplacing<float>& context)
+void Dist6::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
-    float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, ZEKETE_MAX_DB);
+    float param = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
+    float dB = juce::jmap(param, 0.f, ZEKETE_MAX_DB);
     const float intensityIn = juce::Decibels::decibelsToGain(dB);
     gainIn.setGainLinear(intensityIn);
 
-    const float avgGain = 0.15f;
-    const float intensityOut = avgGain / shaper.functionToUse(intensityIn * avgGain);
+    const float avgGain = 0.18f;
+    const float intensityOut = avgGain / std::min(intensityIn * avgGain, 1.f);
     gainOut.setGainLinear(intensityOut);
     //DBG("In: " << intensityIn << ", out: " << intensityOut);
 
     processAllPass(context);
-    filters[before].process(context);
+    filters[before1].process(context);
+    filters[before2].process(context);
     gainIn.process(context);
     shaper.process(context);
     gainOut.process(context);
     filters[after].process(context);
 }
 
-void Dist2::setAtomics(juce::AudioProcessorValueTreeState& treeState)
+void Dist6::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
     paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
 }
-void Dist2::processAllPass(juce::dsp::ProcessContextReplacing<float>& context)
+void Dist6::processAllPass(juce::dsp::ProcessContextReplacing<float>& context)
 {
     for (auto& filter : allPassFilters)
         filter.process(context);

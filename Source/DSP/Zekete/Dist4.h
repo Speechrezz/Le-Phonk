@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    Dist1.h
-    Created: 9 Sep 2022 9:39:35am
+    Dist4.h
+    Created: 10 Sep 2022 9:39:35am
     Author:  thesp
 
   ==============================================================================
@@ -14,11 +14,11 @@
 
 namespace xynth
 {
-class Dist1 : public DistTemplate
+class Dist4 : public DistTemplate
 {
 public:
-    Dist1();
-    ~Dist1() = default;
+    Dist4();
+    ~Dist4() = default;
 
     void prepare(const juce::dsp::ProcessSpec& spec) override;
     void process(juce::dsp::ProcessContextReplacing<float>& context) override;

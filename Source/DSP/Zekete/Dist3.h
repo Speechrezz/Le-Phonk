@@ -24,16 +24,22 @@ public:
 
     void prepare(const juce::dsp::ProcessSpec& spec) override;
     void process(juce::dsp::ProcessContextReplacing<float>& context) override;
-    inline float distort(float x) override 
+    inline float distort(float x, float param = 0.f) override
     { 
-        float param = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-        x -= param;
-        if (x < -1) {
-            x = -(x + 1) - 1;
-        }
-        x += param;
-        return x;
+        float multX1 = x * (1.f + param * 27.f);
+        float multX2 = x * (2.f + param * 10.f);
+        float y = 0.4f * (std::abs(x) + 0.5f) * std::sin(multX1);
+        y += 0.5f * x;
+        y += 0.3f * std::sin(multX2 * std::sin(x * 8.7f));
+
+        return juce::jmap(param, x, y);
     }
+
+    inline float xAxis(float param) override
+    { 
+        return juce::mapToLog10(param, 1.f, 0.5f);
+    }
+
 
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;
 

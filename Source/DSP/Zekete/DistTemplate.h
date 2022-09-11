@@ -38,8 +38,16 @@ public:
     /// Should contain a copy of your distortion equation.
     /// </summary>
     /// <param name="sample">-> input sample</param>
+    /// <param name="param">-> slider position</param>
     /// <returns>Distorted sample</returns>
-    virtual inline float distort(float sample) { return sample; }
+    virtual inline float distort(float sample, float param = 0.f) { return sample; }
+    
+    /// <summary>
+    /// Optional function, which is used to determine the x-axis bounds of the graph.
+    /// </summary>
+    /// <param name="param">-> knob position (0 to 1)</param>
+    /// <returns>New x-axis limit</returns>
+    virtual inline float xAxis(float param) { return 1.f; }
 
     /// <summary>
     /// This method will save any pointers to audio parameters.

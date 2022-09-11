@@ -22,14 +22,17 @@ public:
 
     void prepare(const juce::dsp::ProcessSpec& spec) override;
     void process(juce::dsp::ProcessContextReplacing<float>& context) override;
-    inline float distort(float x) override 
+    inline float distort(float sample, float param = 0.f) override
     { 
-        const float sign = std::copysign(1.f, x);
-        x = std::abs(x);
-        if (x > 0.5f)
-            x = 0.5f + (x - 0.5f) / (1.f + std::pow((x - 0.5f) * 2.f, 2.f));
+        const float dB = juce::jmap(param, 0.f, ZEKETE_MAX_DB);
+        const float gain = juce::Decibels::decibelsToGain(dB);
 
-        return sign * x * 1.3333333f;
+        return shaper.functionToUse(sample * gain);
+    }
+
+    inline float xAxis(float param) override
+    {
+        return juce::mapToLog10(param, 1.f, 0.3f);
     }
 
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;

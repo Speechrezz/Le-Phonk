@@ -14,3 +14,6 @@
 #include "Dist1.h"
 #include "Dist2.h"
 #include "Dist3.h"
+#include "Dist4.h"
+#include "Dist5.h"
+#include "Dist6.h"

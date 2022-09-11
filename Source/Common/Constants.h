@@ -4,6 +4,9 @@
 #define ZEKETE_NAME "Zekete"
 #define ZEKETE_MAX_DB 36.f
 
+#define ZEKETE_MIX_ID "zeketeMix"
+#define ZEKETE_MIX_NAME "Zekete Dry/Wet"
+
 #define OTT_ID "ott"
 #define OTT_NAME "Le Ottz"
 

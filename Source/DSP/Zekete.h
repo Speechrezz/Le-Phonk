@@ -30,10 +30,13 @@ private:
     Dist1 dist1;
     Dist2 dist2;
     Dist3 dist3;
+    Dist4 dist4;
+    Dist5 dist5;
+    Dist6 dist6;
     std::atomic<float>* selectAtomic {nullptr};
 
 public:
-    std::array<DistTemplate*, 3> distArray{ &dist1, &dist2, &dist3 };
+    std::array<DistTemplate*, 6> distArray{ &dist1, &dist2, &dist3, &dist4, &dist5, &dist6 };
 
 };
 } // namespace xynth

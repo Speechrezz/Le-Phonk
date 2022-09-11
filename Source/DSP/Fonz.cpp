@@ -38,9 +38,13 @@ void Fonz::prepare(const juce::dsp::ProcessSpec& spec)
 void Fonz::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
     float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, 18.f);
-    gainIn.setGainDecibels(dB);
-    gainOut.setGainDecibels(dB * -0.9f);
+    dB = juce::jmap(dB, 0.f, 36.f);
+    const float intensityIn = juce::Decibels::decibelsToGain(dB);
+    gainIn.setGainLinear(intensityIn);
+
+    const float avgGain = 0.15f;
+    const float intensityOut = avgGain / shaper.functionToUse(intensityIn * avgGain);
+    gainOut.setGainLinear(intensityOut);
 
     gainIn.process(context);
     shaper.process(context);

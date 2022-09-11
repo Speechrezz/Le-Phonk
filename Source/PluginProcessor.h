@@ -58,9 +58,10 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    inline float zeketeDistort(float sample, int idx) { return zekete.distArray[idx]->distort(sample); }
+    inline float zeketeDistort(int idx, float sample, float param) { return zekete.distArray[idx]->distort(sample, param); }
+    inline float zeketeXAxis  (int idx, float param) { return zekete.distArray[idx]->xAxis(param); }
 
-    juce::StringArray distTypes{ "Dist 1", "Dist 2", "Dist 3" };
+    juce::StringArray distTypes{ "1. Ungh", "2. Beef", "3. Tub of gravy", "4. Woah haha", "5. Glumbis", "6. Scrimbly"};
 
     juce::AudioProcessorValueTreeState treeState;
     xynth::RingBuffer ringBuffer;

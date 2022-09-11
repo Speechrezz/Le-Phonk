@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    Dist1.h
-    Created: 9 Sep 2022 9:39:35am
+    Dist6.h
+    Created: 10 Sep 2022 9:39:35am
     Author:  thesp
 
   ==============================================================================
@@ -14,11 +14,11 @@
 
 namespace xynth
 {
-class Dist1 : public DistTemplate
+class Dist6 : public DistTemplate
 {
 public:
-    Dist1();
-    ~Dist1() = default;
+    Dist6();
+    ~Dist6() = default;
 
     void prepare(const juce::dsp::ProcessSpec& spec) override;
     void process(juce::dsp::ProcessContextReplacing<float>& context) override;
@@ -38,15 +38,21 @@ public:
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;
 
 private:
+    void processAllPass(juce::dsp::ProcessContextReplacing<float>& context);
+
     juce::dsp::WaveShaper<float> shaper;
     juce::dsp::Gain<float> gainIn, gainOut;
 
     std::array<juce::dsp::ProcessorDuplicator<
         juce::dsp::IIR::Filter<float>,
-        juce::dsp::IIR::Coefficients<float>>, 2> filters;
+        juce::dsp::IIR::Coefficients<float>>, 3> filters;
+
+    std::array<juce::dsp::ProcessorDuplicator<
+        juce::dsp::IIR::Filter<float>,
+        juce::dsp::IIR::Coefficients<float>>, 3> allPassFilters;
 
     std::atomic<float>* paramAtomic{ nullptr };
 
-    enum FiltersEnum { before, after };
+    enum FiltersEnum { before1, before2, after };
 };
 } // namespace xynth

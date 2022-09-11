@@ -1,25 +1,26 @@
 /*
   ==============================================================================
 
-    Dist1.cpp
-    Created: 9 Sep 2022 9:39:35am
+    Dist4.cpp
+    Created: 10 Sep 2022 9:39:35am
     Author:  thesp
 
   ==============================================================================
 */
 
-#include "Dist1.h"
+#include "Dist4.h"
 
 namespace xynth
 {
-Dist1::Dist1()
+Dist4::Dist4()
 {
     shaper.functionToUse = [](float x)
     {
-        return std::tanh(x);
+        float y = 1.f / (std::abs(x) + 1.f) * std::sin(x * juce::MathConstants<float>::halfPi);
+        return y + std::tanh(x * 0.2f);
     };
 }
-void Dist1::prepare(const juce::dsp::ProcessSpec& spec)
+void Dist4::prepare(const juce::dsp::ProcessSpec& spec)
 {
     gainIn.prepare(spec);
     gainIn.setRampDurationSeconds(0.005);
@@ -32,19 +33,19 @@ void Dist1::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& filter : filters)
         filter.prepare(spec);
 
-    *filters[before].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 555.f, 1.2f, 4.f);
-    *filters[after].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 555.f, 1.2f, 1.f / 4.f);
+    *filters[before].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 100.f, 0.3f, 2.f);
+    *filters[after].state  = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 100.f, 0.3f, 1.f / 2.f);
 }
 
-void Dist1::process(juce::dsp::ProcessContextReplacing<float>& context)
+void Dist4::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
-    float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, ZEKETE_MAX_DB);
+    float param = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
+    float dB = juce::jmap(param, 0.f, ZEKETE_MAX_DB);
     const float intensityIn = juce::Decibels::decibelsToGain(dB);
     gainIn.setGainLinear(intensityIn);
 
     const float avgGain = 0.2f;
-    const float intensityOut = avgGain / shaper.functionToUse(intensityIn * avgGain);
+    const float intensityOut = juce::mapToLog10(param, 0.6f, 0.2f);
     gainOut.setGainLinear(intensityOut);
     //DBG("In: " << intensityIn << ", out: " << intensityOut);
 
@@ -55,7 +56,7 @@ void Dist1::process(juce::dsp::ProcessContextReplacing<float>& context)
     filters[after].process(context);
 }
 
-void Dist1::setAtomics(juce::AudioProcessorValueTreeState& treeState)
+void Dist4::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
     paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
 }
