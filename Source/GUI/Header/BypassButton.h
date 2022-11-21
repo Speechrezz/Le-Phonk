@@ -18,9 +18,7 @@ class BypassButton  : public juce::ToggleButton
 {
 public:
     BypassButton(xynth::GuiData&);
-    ~BypassButton() override;
-
-    void resized() override;
+    ~BypassButton() = default;
 
 private:
     xynth::GuiData& guiData;

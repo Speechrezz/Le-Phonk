@@ -11,9 +11,10 @@
 #include <JuceHeader.h>
 #include "AboutOverlay.h"
 
-AboutOverlay::AboutOverlay(xynth::GuiData& g) : guiData(g), aboutWindow(g)
+AboutOverlay::AboutOverlay(xynth::GuiData& g) : guiData(g), aboutWindow(g), serverCheck(g)
 {
     addAndMakeVisible(aboutWindow);
+    serverCheck.checkForUpdates();
 }
 
 AboutOverlay::~AboutOverlay()
@@ -33,7 +34,6 @@ void AboutOverlay::resized()
 
 void AboutOverlay::mouseDown(const juce::MouseEvent& e)
 {
-    
     if (!aboutWindow.isMouseOverOrDragging())
         setVisible(false);
 }

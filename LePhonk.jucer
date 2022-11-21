@@ -73,6 +73,10 @@
       </GROUP>
       <GROUP id="{69A35449-46DD-630F-FB48-80D356D167E5}" name="GUI">
         <GROUP id="{79746800-8686-8C21-EF85-844EE30B652B}" name="About">
+          <GROUP id="{493C1871-1B18-3E2D-CD08-4C0991BB60ED}" name="UpdateCheck">
+            <FILE id="rZNojN" name="ServerCheck.cpp" compile="1" resource="0" file="Source/GUI/About/UpdateCheck/ServerCheck.cpp"/>
+            <FILE id="lLayvO" name="ServerCheck.h" compile="0" resource="0" file="Source/GUI/About/UpdateCheck/ServerCheck.h"/>
+          </GROUP>
           <FILE id="f4ddGb" name="AboutOverlay.cpp" compile="1" resource="0"
                 file="Source/GUI/About/AboutOverlay.cpp"/>
           <FILE id="jyTyb3" name="AboutOverlay.h" compile="0" resource="0" file="Source/GUI/About/AboutOverlay.h"/>

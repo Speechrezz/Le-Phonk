@@ -13,13 +13,4 @@
 
 BypassButton::BypassButton(xynth::GuiData& g) : guiData(g), 
     attach(g.audioProcessor.treeState, ENABLE_ID, *this)
-{
-}
-
-BypassButton::~BypassButton()
-{
-}
-
-void BypassButton::resized()
-{
-}
+{}
