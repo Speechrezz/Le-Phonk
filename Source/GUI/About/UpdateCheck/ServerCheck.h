@@ -27,6 +27,9 @@ public:
 
     void timerCallback() override;
 
+    // Returns false if update needs to be checked
+    bool checkProperties();
+
     // Called once this class determines whether or not there is an update
     std::function<void(bool)> updateCallback = [](bool) {};
 

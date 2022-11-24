@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    LogoButton.h
-    Created: 8 Sep 2022 4:59:35pm
+    UpdatesButton.h
+    Created: 8 Sep 2022 6:12:03pm
     Author:  thesp
 
   ==============================================================================
@@ -13,21 +13,18 @@
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
 
-class LogoButton  : public juce::Component
+class UpdatesButton  : public juce::TextButton
 {
 public:
-    LogoButton(xynth::GuiData&);
-    ~LogoButton() override;
+    UpdatesButton(xynth::GuiData&);
 
     void paint (juce::Graphics&) override;
-    void resized() override;
 
-    void mouseDown (const juce::MouseEvent& e) override;
     void mouseEnter(const juce::MouseEvent& e) override;
     void mouseExit (const juce::MouseEvent& e) override;
 
 private:
     xynth::GuiData& guiData;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LogoButton)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (UpdatesButton)
 };

@@ -22,9 +22,9 @@ public:
     Dist3();
     ~Dist3() = default;
 
-    void prepare(const juce::dsp::ProcessSpec& spec) override;
-    void process(juce::dsp::ProcessContextReplacing<float>& context) override;
-    inline float distort(float x, float param = 0.f) override
+    void prepare(const juce::dsp::ProcessSpec& spec) final;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) final;
+    inline float distort(float x, float param = 0.f) final
     { 
         float multX1 = x * (1.f + param * 27.f);
         float multX2 = x * (2.f + param * 10.f);
@@ -35,13 +35,13 @@ public:
         return juce::jmap(param, x, y);
     }
 
-    inline float xAxis(float param) override
+    inline float xAxis(float param) final
     { 
         return juce::mapToLog10(param, 1.f, 0.5f);
     }
 
 
-    void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;
+    void setAtomics(juce::AudioProcessorValueTreeState& treeState) final;
 
 private:
     void processAllPass(juce::dsp::ProcessContextReplacing<float>& context, int idx);

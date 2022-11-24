@@ -24,7 +24,11 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
     addAndMakeVisible(logoButton);
     addChildComponent(aboutOverlay);
 
-    guiData.showAbout = [this]() { aboutOverlay.setVisible(true); };
+    guiData.showAbout = [this]() 
+    { 
+        aboutOverlay.opened();
+        aboutOverlay.setVisible(true); 
+    };
 }
 
 WindowLayout::~WindowLayout()

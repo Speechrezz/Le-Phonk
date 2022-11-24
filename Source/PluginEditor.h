@@ -19,7 +19,6 @@ public:
     LePhonkAudioProcessorEditor (LePhonkAudioProcessor&);
     ~LePhonkAudioProcessorEditor() override;
 
-    void paint (juce::Graphics&) override;
     void resized() override;
 
     juce::SharedResourcePointer<xynth::DefaultLookAndFeel> defaultLnf;

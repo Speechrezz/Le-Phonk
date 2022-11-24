@@ -10,6 +10,9 @@
 
 #include "ServerCheck.h"
 
+#define UPDATE_CHECKED_TIME_ID ""
+#define DO_NOT_REMIND_ME_ID "DoNotRemindMe"
+
 namespace xynth
 {
 ServerCheck::ServerCheck(xynth::GuiData& g) : guiData(g)
@@ -20,8 +23,9 @@ void ServerCheck::checkForUpdates()
     if (checked) return;
     checked = true;
 
-    // Check if already checked for update today using g.properties
-    //  If already checked, don't run the async check (just return)
+    // Check if user wants to check for updates
+    if (checkProperties())
+        return;
 
     startTimerHz(20);
     checkServerFuture = std::async(std::launch::async, [this]() {checkAsync(); });
@@ -58,9 +62,7 @@ juce::String ServerCheck::getVersionFromServer()
 
             DBG("[UPDATE CHECK] Successful connection, status code = " + juce::String(statusCode));
             if (version.isString())
-            {
                 return version;
-            }
         }
     }
 
@@ -111,5 +113,11 @@ void ServerCheck::timerCallback()
         DBG("updateAtomic: " << value);
         updateCallback((bool)value);
     }
+}
+bool ServerCheck::checkProperties()
+{
+    auto* properties = guiData.properties.getUserSettings();
+
+    return properties->getBoolValue(DO_NOT_REMIND_ME_ID, false);
 }
 }

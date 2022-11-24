@@ -13,28 +13,33 @@
 
 WebsiteButton::WebsiteButton(xynth::GuiData& g) : guiData(g)
 {
-    onClick = []() { juce::URL("http://xynthaudio.com/").launchInDefaultBrowser(); };
+    onClick = []() { juce::URL("https://www.xynthaudio.com/plugins/lephonk").launchInDefaultBrowser(); };
 }
 
-WebsiteButton::~WebsiteButton()
-{
-}
 
 void WebsiteButton::paint (juce::Graphics& g)
 {
     auto rect = getLocalBounds().toFloat();
     auto& lnf = guiData.getLnf();
+    const float thickness = 1.5f;
 
-    auto bgCol = lnf.getAccent2().brighter(isMouseOver() ? 0.15f : 0.f);
-    bgCol = bgCol.darker(isMouseButtonDown() ? 0.2f : 0.f);
-    g.setColour(bgCol);
-    g.fillRoundedRectangle(rect, 6.f);
+    auto mainCol = lnf.getAccent2().brighter(isMouseOver() ? 0.15f : 0.f);
+    mainCol = mainCol.darker(isMouseButtonDown() ? 0.2f : 0.f);
+    g.setColour(mainCol);
+    g.drawRoundedRectangle(rect.reduced(thickness / 2.f), 6.f, thickness);
 
-    g.setColour(lnf.getBase1());
-    g.setFont(lnf.getCustomFontMedium().withHeight(32.f));
+    g.setFont(lnf.getCustomFontMedium().withHeight(24.f));
     g.drawText("Visit Website", rect, juce::Justification::centred);
 }
 
-void WebsiteButton::resized()
+void WebsiteButton::mouseEnter(const juce::MouseEvent& e)
 {
+    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    juce::TextButton::mouseEnter(e);
+}
+
+void WebsiteButton::mouseExit(const juce::MouseEvent& e)
+{
+    setMouseCursor(juce::MouseCursor::NormalCursor);
+    juce::TextButton::mouseExit(e);
 }

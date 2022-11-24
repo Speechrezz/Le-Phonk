@@ -59,10 +59,6 @@ LePhonkAudioProcessorEditor::~LePhonkAudioProcessorEditor()
     properties.closeFiles();
 }
 
-void LePhonkAudioProcessorEditor::paint (juce::Graphics& g)
-{
-}
-
 void LePhonkAudioProcessorEditor::resized()
 {
     // Calculate, store and apply window scale

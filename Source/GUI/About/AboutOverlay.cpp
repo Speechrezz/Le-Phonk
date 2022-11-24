@@ -14,7 +14,10 @@
 AboutOverlay::AboutOverlay(xynth::GuiData& g) : guiData(g), aboutWindow(g), serverCheck(g)
 {
     addAndMakeVisible(aboutWindow);
-    serverCheck.checkForUpdates();
+    serverCheck.updateCallback = [this](bool isUpdateAvailable)
+    {
+        DBG("Update callback");
+    };
 }
 
 AboutOverlay::~AboutOverlay()
@@ -28,6 +31,7 @@ void AboutOverlay::paint (juce::Graphics& g)
 
 void AboutOverlay::resized()
 {
+    serverCheck.checkForUpdates();
     auto rect = getLocalBounds().reduced(40, 190);
     aboutWindow.setBounds(rect);
 }
@@ -36,4 +40,9 @@ void AboutOverlay::mouseDown(const juce::MouseEvent& e)
 {
     if (!aboutWindow.isMouseOverOrDragging())
         setVisible(false);
+}
+
+void AboutOverlay::opened()
+{
+    aboutWindow.setState(AboutWindow::main);
 }

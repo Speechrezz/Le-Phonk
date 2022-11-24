@@ -25,6 +25,9 @@ public:
     void resized() override;
     void mouseDown(const juce::MouseEvent& e) override;
 
+    // Called when about menu is just opened
+    void opened();
+
 private:
     xynth::GuiData& guiData;
     AboutWindow aboutWindow;

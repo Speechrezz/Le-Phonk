@@ -17,10 +17,11 @@ class WebsiteButton  : public juce::TextButton
 {
 public:
     WebsiteButton(xynth::GuiData&);
-    ~WebsiteButton() override;
 
     void paint (juce::Graphics&) override;
-    void resized() override;
+
+    void mouseEnter(const juce::MouseEvent& e) override;
+    void mouseExit (const juce::MouseEvent& e) override;
 
 private:
     xynth::GuiData& guiData;

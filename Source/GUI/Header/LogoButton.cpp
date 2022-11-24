@@ -32,3 +32,15 @@ void LogoButton::mouseDown(const juce::MouseEvent& e)
 {
     guiData.showAbout();
 }
+
+void LogoButton::mouseEnter(const juce::MouseEvent& e)
+{
+    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    juce::Component::mouseEnter(e);
+}
+
+void LogoButton::mouseExit(const juce::MouseEvent& e)
+{
+    setMouseCursor(juce::MouseCursor::NormalCursor);
+    juce::Component::mouseExit(e);
+}

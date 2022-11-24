@@ -20,9 +20,9 @@ public:
     Dist2();
     ~Dist2() = default;
 
-    void prepare(const juce::dsp::ProcessSpec& spec) override;
-    void process(juce::dsp::ProcessContextReplacing<float>& context) override;
-    inline float distort(float sample, float param = 0.f) override
+    void prepare(const juce::dsp::ProcessSpec& spec) final;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) final;
+    inline float distort(float sample, float param = 0.f) final
     { 
         const float dB = juce::jmap(param, 0.f, ZEKETE_MAX_DB);
         const float gain = juce::Decibels::decibelsToGain(dB);
@@ -30,12 +30,12 @@ public:
         return shaper.functionToUse(sample * gain);
     }
 
-    inline float xAxis(float param) override
+    inline float xAxis(float param) final
     {
         return juce::mapToLog10(param, 1.f, 0.3f);
     }
 
-    void setAtomics(juce::AudioProcessorValueTreeState& treeState) override;
+    void setAtomics(juce::AudioProcessorValueTreeState& treeState) final;
 
 private:
     void processAllPass(juce::dsp::ProcessContextReplacing<float>& context);
