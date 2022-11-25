@@ -14,7 +14,8 @@
 #include "../Utils/GuiData.h"
 #include "WebsiteButton.h"
 #include "UpdatesButton.h"
-#include "BackButton.h"
+#include "UpdateCheck/BackButton.h"
+#include "UpdateCheck/UpdateChecker.h"
 
 class AboutWindow  : public juce::Component
 {
@@ -28,13 +29,17 @@ public:
     enum States{ main, updates };
 
 private:
-    void paintBackground(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf);
-    static void paintMain(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf);
-    static void paintUpdates(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf);
+    void initPaintFunctions();
+
+    typedef std::function<void(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)> PaintFunction;
+
+    PaintFunction paintBackground;
+    PaintFunction paintMain;
+    PaintFunction paintUpdates;
 
     int state = main;
 
-    std::array<std::function<void(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)>, 2> paintStates { paintMain, paintUpdates };
+    std::array<PaintFunction, 2> paintStates { paintMain, paintUpdates };
 
     xynth::GuiData& guiData;
     WebsiteButton siteButton;
@@ -42,6 +47,8 @@ private:
     BackButton backButton;
 
     juce::Image xynthLogo;
+
+    xynth::UpdateChecker updateChecker;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AboutWindow)
 };

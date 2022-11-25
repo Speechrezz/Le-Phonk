@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
+#include "../../Utils/GuiData.h"
 
 class BackButton : public juce::TextButton
 {

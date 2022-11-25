@@ -15,11 +15,11 @@
 
 namespace xynth
 {
-class ServerCheck : public juce::Timer
+class UpdateChecker : public juce::Timer
 {
 public:
-    ServerCheck(xynth::GuiData&);
-    ~ServerCheck() = default;
+    UpdateChecker(xynth::GuiData&);
+    ~UpdateChecker() = default;
 
     void checkForUpdates();
     void checkAsync();
@@ -33,6 +33,11 @@ public:
     // Called once this class determines whether or not there is an update
     std::function<void(bool)> updateCallback = [](bool) {};
 
+    inline int getUpdateState() const { return updateAtomic.load(std::memory_order_relaxed); };
+    inline juce::String getLatestVersion() const { return latestVersion; };
+
+    enum UpdateStates { checkingUpdate = -1, noUpdate, updateAvailable };
+
 private:
     // Returns true if there is a newer version
     bool versionComparison(juce::String& newestVersion);
@@ -45,5 +50,7 @@ private:
     std::future<void> checkServerFuture;
     std::atomic<int> updateAtomic = -1;
 
+    juce::String latestVersion = "null";
+    std::mutex updatesMutex;
 };
 }

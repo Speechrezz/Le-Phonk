@@ -11,13 +11,9 @@
 #include <JuceHeader.h>
 #include "AboutOverlay.h"
 
-AboutOverlay::AboutOverlay(xynth::GuiData& g) : guiData(g), aboutWindow(g), serverCheck(g)
+AboutOverlay::AboutOverlay(xynth::GuiData& g) : guiData(g), aboutWindow(g)
 {
     addAndMakeVisible(aboutWindow);
-    serverCheck.updateCallback = [this](bool isUpdateAvailable)
-    {
-        DBG("Update callback");
-    };
 }
 
 AboutOverlay::~AboutOverlay()
@@ -31,7 +27,6 @@ void AboutOverlay::paint (juce::Graphics& g)
 
 void AboutOverlay::resized()
 {
-    serverCheck.checkForUpdates();
     auto rect = getLocalBounds().reduced(40, 190);
     aboutWindow.setBounds(rect);
 }

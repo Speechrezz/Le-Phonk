@@ -11,8 +11,10 @@
 #include <JuceHeader.h>
 #include "AboutWindow.h"
 
-AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), updatesButton(g), backButton(g)
+AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), updatesButton(g), backButton(g), updateChecker(g)
 {
+    initPaintFunctions();
+
     addAndMakeVisible(siteButton);
     addAndMakeVisible(updatesButton);
     addChildComponent(backButton);
@@ -22,11 +24,18 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), updates
     updatesButton.onClick = [this]() {setState(updates); };
 
     backButton.onClick = [this]() {setState(main); };
+
+    updateChecker.updateCallback = [this](bool isUpdateAvailable)
+    {
+        DBG("Update callback");
+        repaint();
+    };
 }
 
 void AboutWindow::setState(const int newState)
 {
     state = newState;
+    DBG("setState: " << newState);
 
     switch (state)
     {
@@ -39,10 +48,94 @@ void AboutWindow::setState(const int newState)
         siteButton.setVisible(false);
         updatesButton.setVisible(false);
         backButton.setVisible(true);
+        updateChecker.checkForUpdates();
         break;
     }
 
     repaint();
+}
+
+void AboutWindow::initPaintFunctions()
+{
+    paintBackground = [this](juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)
+    {
+        g.setColour(lnf.getBase1().darker());
+        g.fillRoundedRectangle(rect, 8.f);
+        g.setColour(lnf.getNeutral1());
+        g.drawRoundedRectangle(rect.reduced(1.f), 8.f, 2.f);
+
+        const int width = 32;
+        g.setOpacity(0.9f);
+        g.drawImageWithin(xynthLogo, rect.getWidth() - width - 32, 0, width, 60, juce::RectanglePlacement::xLeft);
+    };
+
+    paintMain = [this](juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)
+    {
+        g.setColour(lnf.getAccent2());
+        g.setFont(lnf.getCustomFontSemiBold());
+        g.drawText("About Us", rect.removeFromTop(60.f), juce::Justification::centred);
+
+        g.drawLine(30.f, rect.getY(), rect.getWidth() - 30.f, rect.getY(), 2.f);
+
+        rect.removeFromTop(48.f);
+        auto textRect = rect.reduced(20.f, 0.f);
+        g.setColour(lnf.getNeutral1().brighter(1.f));
+        g.setFont(lnf.getCustomFontRegular());
+        g.drawMultiLineText("    Skybreak was born on Janurary 17th, 2019 and died on saturday. "
+            "Did you know: he originally developed the first lephonk plugin? from paper "
+            "skys brain, skybreak made a version then sharks made a version the speechrezz "
+            "made the best version and sharks was so fucking sad. nobody rly cared lol.",
+            textRect.getX(), textRect.getY(), textRect.getWidth());
+
+        g.drawMultiLineText("Welcome to Le Phonk, the drippiest plugin on the market!",
+            textRect.getX(), textRect.getY() + 212.f, textRect.getWidth(), juce::Justification::centred);
+
+        auto versionRect = rect.reduced(20.f);
+        juce::String version = JucePlugin_VersionString;
+        g.setOpacity(0.6f);
+        g.drawText("v" + version, versionRect.withTrimmedBottom(42).removeFromBottom(32), juce::Justification::bottomRight);
+    };
+
+    paintUpdates = [this](juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)
+    {
+        g.setColour(lnf.getAccent2());
+        g.setFont(lnf.getCustomFontSemiBold());
+        g.drawText("Updates", rect.removeFromTop(60.f), juce::Justification::centred);
+
+        g.drawLine(30.f, rect.getY(), rect.getWidth() - 30.f, rect.getY(), 2.f);
+
+        const int updateState = updateChecker.getUpdateState();
+        juce::String updateTitleText = "null";
+        juce::String updateVersionText = "";
+        switch (updateState)
+        {
+        case xynth::UpdateChecker::UpdateStates::checkingUpdate:
+            updateTitleText = "Checking for updates...";
+            break;
+
+        case xynth::UpdateChecker::UpdateStates::noUpdate:
+            updateTitleText = "You are up to date!";
+            updateVersionText = "v" + updateChecker.getLatestVersion();
+            break;
+
+        case xynth::UpdateChecker::UpdateStates::updateAvailable:
+            updateTitleText = "New update available!";
+            updateVersionText = "Latest: v" + updateChecker.getLatestVersion();
+            break;
+        }
+
+        rect.removeFromTop(74.f);
+        g.setColour(lnf.getNeutral1().brighter(1.f));
+        g.setFont(lnf.getCustomFontMedium().withHeight(32.f));
+        g.drawText(updateTitleText, rect.removeFromTop(32.f), juce::Justification::centred);
+
+        rect.removeFromTop(4.f);
+        g.setColour(lnf.getNeutral1().brighter(.4f));
+        g.setFont(lnf.getCustomFontRegular().withHeight(20.f));
+        g.drawText(updateVersionText, rect.removeFromTop(20.f), juce::Justification::centred);
+    };
+
+    paintStates = { paintMain, paintUpdates };
 }
 
 void AboutWindow::paint (juce::Graphics& g)
@@ -54,56 +147,10 @@ void AboutWindow::paint (juce::Graphics& g)
     paintStates[state](g, rect, lnf);
 }
 
-void AboutWindow::paintBackground(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)
-{
-    g.setColour(lnf.getBase1().darker());
-    g.fillRoundedRectangle(rect, 8.f);
-    g.setColour(lnf.getNeutral1());
-    g.drawRoundedRectangle(rect.reduced(1.f), 8.f, 2.f);
-
-    const int width = 32;
-    g.setOpacity(0.9f);
-    g.drawImageWithin(xynthLogo, rect.getWidth() - width - 32, 0, width, 60, juce::RectanglePlacement::xLeft);
-}
-
-void AboutWindow::paintMain(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)
-{
-    g.setColour(lnf.getAccent2());
-    g.setFont(lnf.getCustomFontSemiBold());
-    g.drawText("About Us", rect.removeFromTop(60.f), juce::Justification::centred);
-
-    g.drawLine(30.f, rect.getY(), rect.getWidth() - 30.f, rect.getY(), 2.f);
-
-    rect.removeFromTop(48.f);
-    auto textRect = rect.reduced(20.f, 0.f);
-    g.setColour(lnf.getNeutral1().brighter(1.f));
-    g.setFont(lnf.getCustomFontRegular());
-    g.drawMultiLineText("    Skybreak was born on Janurary 17th, 2019 and died on saturday. "
-        "Did you know: he originally developed the first lephonk plugin? from paper "
-        "skys brain, skybreak made a version then sharks made a version the speechrezz "
-        "made the best version and sharks was so fucking sad. nobody rly cared lol.",
-        textRect.getX(), textRect.getY(), textRect.getWidth());
-
-    g.drawMultiLineText("Welcome to Le Phonk, the drippiest plugin on the market!",
-        textRect.getX(), textRect.getY() + 212.f, textRect.getWidth(), juce::Justification::centred);
-
-    auto versionRect = rect.reduced(20.f);
-    juce::String version = JucePlugin_VersionString;
-    g.setOpacity(0.6f);
-    g.drawText("v" + version, versionRect.withTrimmedBottom(42).removeFromBottom(32), juce::Justification::bottomRight);
-}
-
-void AboutWindow::paintUpdates(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)
-{
-    g.setColour(lnf.getAccent2());
-    g.setFont(lnf.getCustomFontSemiBold());
-    g.drawText("Updates", rect.removeFromTop(60.f), juce::Justification::centred);
-
-    g.drawLine(30.f, rect.getY(), rect.getWidth() - 30.f, rect.getY(), 2.f);
-}
-
 void AboutWindow::resized()
 {
+    //serverCheck.checkForUpdates();
+
     auto rect = getLocalBounds().reduced(20);
 
     siteButton   .setBounds(rect.removeFromLeft (120).removeFromBottom(32));

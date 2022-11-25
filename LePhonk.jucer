@@ -76,16 +76,17 @@
       <GROUP id="{69A35449-46DD-630F-FB48-80D356D167E5}" name="GUI">
         <GROUP id="{79746800-8686-8C21-EF85-844EE30B652B}" name="About">
           <GROUP id="{493C1871-1B18-3E2D-CD08-4C0991BB60ED}" name="UpdateCheck">
-            <FILE id="rZNojN" name="ServerCheck.cpp" compile="1" resource="0" file="Source/GUI/About/UpdateCheck/ServerCheck.cpp"/>
-            <FILE id="lLayvO" name="ServerCheck.h" compile="0" resource="0" file="Source/GUI/About/UpdateCheck/ServerCheck.h"/>
+            <FILE id="v0q0p8" name="BackButton.cpp" compile="1" resource="0" file="Source/GUI/About/UpdateCheck/BackButton.cpp"/>
+            <FILE id="JiiGOJ" name="BackButton.h" compile="0" resource="0" file="Source/GUI/About/UpdateCheck/BackButton.h"/>
+            <FILE id="ddS2Gp" name="UpdateChecker.cpp" compile="1" resource="0"
+                  file="Source/GUI/About/UpdateCheck/UpdateChecker.cpp"/>
+            <FILE id="sj4Khq" name="UpdateChecker.h" compile="0" resource="0" file="Source/GUI/About/UpdateCheck/UpdateChecker.h"/>
           </GROUP>
           <FILE id="f4ddGb" name="AboutOverlay.cpp" compile="1" resource="0"
                 file="Source/GUI/About/AboutOverlay.cpp"/>
           <FILE id="jyTyb3" name="AboutOverlay.h" compile="0" resource="0" file="Source/GUI/About/AboutOverlay.h"/>
           <FILE id="fucA0d" name="AboutWindow.cpp" compile="1" resource="0" file="Source/GUI/About/AboutWindow.cpp"/>
           <FILE id="YoNHgc" name="AboutWindow.h" compile="0" resource="0" file="Source/GUI/About/AboutWindow.h"/>
-          <FILE id="m2iXEH" name="BackButton.cpp" compile="1" resource="0" file="Source/GUI/About/BackButton.cpp"/>
-          <FILE id="BZt7la" name="BackButton.h" compile="0" resource="0" file="Source/GUI/About/BackButton.h"/>
           <FILE id="b3IKAG" name="UpdatesButton.cpp" compile="1" resource="0"
                 file="Source/GUI/About/UpdatesButton.cpp"/>
           <FILE id="VnOMli" name="UpdatesButton.h" compile="0" resource="0" file="Source/GUI/About/UpdatesButton.h"/>

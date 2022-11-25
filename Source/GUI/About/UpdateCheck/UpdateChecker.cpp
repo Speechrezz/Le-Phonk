@@ -1,27 +1,29 @@
 /*
   ==============================================================================
 
-    ServerCheck.cpp
+    UpdateChecker.cpp
     Created: 20 Nov 2022 6:15:37pm
     Author:  thesp
 
   ==============================================================================
 */
 
-#include "ServerCheck.h"
+#include "UpdateChecker.h"
 
 #define UPDATE_CHECKED_TIME_ID ""
 #define DO_NOT_REMIND_ME_ID "DoNotRemindMe"
 
 namespace xynth
 {
-ServerCheck::ServerCheck(xynth::GuiData& g) : guiData(g)
+UpdateChecker::UpdateChecker(xynth::GuiData& g) : guiData(g)
 {}
 
-void ServerCheck::checkForUpdates()
+void UpdateChecker::checkForUpdates()
 {
-    if (checked) return;
-    checked = true;
+    //if (checked) return;
+    //checked = true;
+
+    updateAtomic.store(checkingUpdate);
 
     // Check if user wants to check for updates
     if (checkProperties())
@@ -31,7 +33,7 @@ void ServerCheck::checkForUpdates()
     checkServerFuture = std::async(std::launch::async, [this]() {checkAsync(); });
 }
 
-void ServerCheck::checkAsync()
+void UpdateChecker::checkAsync()
 {
     // Retrieve newest version from server
     juce::String version = getVersionFromServer();
@@ -42,7 +44,7 @@ void ServerCheck::checkAsync()
     updateAtomic.store((int)updateAvailable, std::memory_order_relaxed);
 }
 
-juce::String ServerCheck::getVersionFromServer()
+juce::String UpdateChecker::getVersionFromServer()
 {
     juce::StringPairArray responseHeaders;
     int statusCode = 0;
@@ -62,7 +64,11 @@ juce::String ServerCheck::getVersionFromServer()
 
             DBG("[UPDATE CHECK] Successful connection, status code = " + juce::String(statusCode));
             if (version.isString())
+            {
+                std::lock_guard<std::mutex> lock(updatesMutex);
+                latestVersion = version;
                 return version;
+            }
         }
     }
 
@@ -70,7 +76,7 @@ juce::String ServerCheck::getVersionFromServer()
     return "";
 }
 
-bool ServerCheck::versionComparison(juce::String& newestVersion)
+bool UpdateChecker::versionComparison(juce::String& newestVersion)
 {
     const int currentSum = converVersionToSum(JucePlugin_VersionString);
     const int newestSum  = converVersionToSum(newestVersion);
@@ -78,7 +84,7 @@ bool ServerCheck::versionComparison(juce::String& newestVersion)
     return newestSum > currentSum;
 }
 
-int ServerCheck::converVersionToSum(juce::String version)
+int UpdateChecker::converVersionToSum(juce::String version)
 {
     int weight = 1;
     int sum = 0;
@@ -103,7 +109,7 @@ int ServerCheck::converVersionToSum(juce::String version)
     return sum;
 }
 
-void ServerCheck::timerCallback()
+void UpdateChecker::timerCallback()
 {
     // Checks for async to finish
     const int value = updateAtomic.load(std::memory_order_relaxed);
@@ -114,7 +120,7 @@ void ServerCheck::timerCallback()
         updateCallback((bool)value);
     }
 }
-bool ServerCheck::checkProperties()
+bool UpdateChecker::checkProperties()
 {
     auto* properties = guiData.properties.getUserSettings();
 
