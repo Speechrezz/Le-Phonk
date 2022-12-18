@@ -11,13 +11,15 @@
 #include <JuceHeader.h>
 #include "AboutWindow.h"
 
-AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), updatesButton(g), backButton(g), updateChecker(g)
+AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), 
+    updatesButton(g), backButton(g), updateChecker(g), downloadButton(g)
 {
     initPaintFunctions();
 
     addAndMakeVisible(siteButton);
     addAndMakeVisible(updatesButton);
     addChildComponent(backButton);
+    addChildComponent(downloadButton);
 
     xynthLogo = juce::ImageCache::getFromMemory(BinaryData::xynthLogo_png, BinaryData::xynthLogo_pngSize);
 
@@ -30,9 +32,12 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), updates
         DBG("Update callback");
         repaint();
     };
+
+    downloadButton.setText("Latest Download");
+    downloadButton.onClick = []() { juce::URL("https://app.gumroad.com/library").launchInDefaultBrowser(); };
 }
 
-void AboutWindow::setState(const int newState)
+void AboutWindow::setState(const StatesEnum newState)
 {
     state = newState;
     DBG("setState: " << newState);
@@ -40,14 +45,16 @@ void AboutWindow::setState(const int newState)
     switch (state)
     {
     case main:
-        siteButton.setVisible(true);
-        updatesButton.setVisible(true);
-        backButton.setVisible(false);
+        siteButton    .setVisible(true);
+        updatesButton .setVisible(true);
+        backButton    .setVisible(false);
+        downloadButton.setVisible(false);
         break;
     case updates:
-        siteButton.setVisible(false);
-        updatesButton.setVisible(false);
-        backButton.setVisible(true);
+        siteButton    .setVisible(false);
+        updatesButton .setVisible(false);
+        backButton    .setVisible(true);
+        downloadButton.setVisible(true);
         updateChecker.checkForUpdates();
         break;
     }
@@ -113,14 +120,20 @@ void AboutWindow::initPaintFunctions()
             updateTitleText = "Checking for updates...";
             break;
 
-        case xynth::UpdateChecker::UpdateStates::noUpdate:
+        case xynth::UpdateChecker::UpdateStates::noUpdateAvailable:
             updateTitleText = "You are up to date!";
             updateVersionText = "v" + updateChecker.getLatestVersion();
             break;
 
         case xynth::UpdateChecker::UpdateStates::updateAvailable:
             updateTitleText = "New update available!";
-            updateVersionText = "Latest: v" + updateChecker.getLatestVersion();
+            updateVersionText = "v" + juce::String(JucePlugin_VersionString) +
+                " -> v" + updateChecker.getLatestVersion();
+            break;
+
+        case xynth::UpdateChecker::UpdateStates::updateError:
+            updateTitleText = "Something went wrong.";
+            updateVersionText = "Error: " + updateChecker.getLatestVersion();
             break;
         }
 
@@ -151,10 +164,13 @@ void AboutWindow::resized()
 {
     //serverCheck.checkForUpdates();
 
-    auto rect = getLocalBounds().reduced(20);
+    auto mainRect = getLocalBounds().reduced(20);
+    auto updatesRect = mainRect;
+    updatesRect.removeFromTop(252);
 
-    siteButton   .setBounds(rect.removeFromLeft (120).removeFromBottom(32));
-    updatesButton.setBounds(rect.removeFromRight(124).removeFromBottom(32));
-    backButton   .setBounds(juce::Rectangle<int>(32, 0, 18, 60).withSizeKeepingCentre(18, 36));
+    siteButton    .setBounds(mainRect.removeFromLeft (120).removeFromBottom(32));
+    updatesButton .setBounds(mainRect.removeFromRight(124).removeFromBottom(32));
+    downloadButton.setBounds(updatesRect.removeFromTop(32).withSizeKeepingCentre(150, 32));
+    backButton    .setBounds(juce::Rectangle<int>(32, 0, 18, 60).withSizeKeepingCentre(18, 36));
 }
 

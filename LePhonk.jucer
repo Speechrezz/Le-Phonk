@@ -87,6 +87,8 @@
           <FILE id="jyTyb3" name="AboutOverlay.h" compile="0" resource="0" file="Source/GUI/About/AboutOverlay.h"/>
           <FILE id="fucA0d" name="AboutWindow.cpp" compile="1" resource="0" file="Source/GUI/About/AboutWindow.cpp"/>
           <FILE id="YoNHgc" name="AboutWindow.h" compile="0" resource="0" file="Source/GUI/About/AboutWindow.h"/>
+          <FILE id="h1c7kA" name="TextButton.cpp" compile="1" resource="0" file="Source/GUI/About/TextButton.cpp"/>
+          <FILE id="AIicxB" name="TextButton.h" compile="0" resource="0" file="Source/GUI/About/TextButton.h"/>
           <FILE id="b3IKAG" name="UpdatesButton.cpp" compile="1" resource="0"
                 file="Source/GUI/About/UpdatesButton.cpp"/>
           <FILE id="VnOMli" name="UpdatesButton.h" compile="0" resource="0" file="Source/GUI/About/UpdatesButton.h"/>

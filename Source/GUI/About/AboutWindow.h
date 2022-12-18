@@ -16,6 +16,7 @@
 #include "UpdatesButton.h"
 #include "UpdateCheck/BackButton.h"
 #include "UpdateCheck/UpdateChecker.h"
+#include "TextButton.h"
 
 class AboutWindow  : public juce::Component
 {
@@ -25,8 +26,8 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
 
-    void setState(const int newState);
-    enum States{ main, updates };
+    enum StatesEnum{ main, updates };
+    void setState(const StatesEnum newState);
 
 private:
     void initPaintFunctions();
@@ -37,13 +38,14 @@ private:
     PaintFunction paintMain;
     PaintFunction paintUpdates;
 
-    int state = main;
+    StatesEnum state = main;
 
     std::array<PaintFunction, 2> paintStates { paintMain, paintUpdates };
 
     xynth::GuiData& guiData;
     WebsiteButton siteButton;
     UpdatesButton updatesButton;
+    xynth::TextButton downloadButton;
     BackButton backButton;
 
     juce::Image xynthLogo;

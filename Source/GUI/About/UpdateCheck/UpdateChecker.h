@@ -30,13 +30,14 @@ public:
     // Returns false if update needs to be checked
     bool checkProperties();
 
-    // Called once this class determines whether or not there is an update
+    // Called once this class determines whether or not there is an update.
+    // Input parameter (bool): false if there is NO update, true if there IS.
     std::function<void(bool)> updateCallback = [](bool) {};
 
-    inline int getUpdateState() const { return updateAtomic.load(std::memory_order_relaxed); };
+    inline int getUpdateState() const { return updateState; };
     inline juce::String getLatestVersion() const { return latestVersion; };
 
-    enum UpdateStates { checkingUpdate = -1, noUpdate, updateAvailable };
+    enum UpdateStates { invalidState = -1, noUpdateAvailable, updateAvailable, checkingUpdate, updateError };
 
 private:
     // Returns true if there is a newer version
@@ -48,7 +49,7 @@ private:
     bool checked = false;
 
     std::future<void> checkServerFuture;
-    std::atomic<int> updateAtomic = -1;
+    int updateState = invalidState;
 
     juce::String latestVersion = "null";
     std::mutex updatesMutex;

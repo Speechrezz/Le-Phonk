@@ -23,7 +23,7 @@ void UpdateChecker::checkForUpdates()
     //if (checked) return;
     //checked = true;
 
-    updateAtomic.store(checkingUpdate);
+    updateState = checkingUpdate;
 
     // Check if user wants to check for updates
     if (checkProperties())
@@ -39,9 +39,18 @@ void UpdateChecker::checkAsync()
     juce::String version = getVersionFromServer();
     DBG("[UPDATE CHECK] Newest version: " << version);
 
-    // Check if update is available
-    const bool updateAvailable = versionComparison(version);
-    updateAtomic.store((int)updateAvailable, std::memory_order_relaxed);
+    if (version == "Error")
+    {
+        std::lock_guard<std::mutex> lock(updatesMutex);
+        updateState = updateError;
+    }
+    else
+    {
+        // Check if update is available
+        const bool isUpdateAvailable = versionComparison(version);
+        std::lock_guard<std::mutex> lock(updatesMutex);
+        updateState = (int)isUpdateAvailable;
+    }
 }
 
 juce::String UpdateChecker::getVersionFromServer()
@@ -53,14 +62,14 @@ juce::String UpdateChecker::getVersionFromServer()
 
     if (auto stream = url
         .createInputStream(juce::URL::InputStreamOptions(juce::URL::ParameterHandling::inAddress)
-            .withConnectionTimeoutMs(10000)
+            .withConnectionTimeoutMs(2000)
             .withResponseHeaders(&responseHeaders)
             .withStatusCode(&statusCode)))
     {
-        if (statusCode != 0)
+        if (statusCode == 200)
         {
             auto resultJSON = juce::JSON::fromString(stream->readEntireStreamAsString());
-            const auto version = resultJSON["version"];
+            const auto& version = resultJSON["version"];
 
             DBG("[UPDATE CHECK] Successful connection, status code = " + juce::String(statusCode));
             if (version.isString())
@@ -69,11 +78,20 @@ juce::String UpdateChecker::getVersionFromServer()
                 latestVersion = version;
                 return version;
             }
+            else
+            {
+                DBG("[UPDATE CHECK] Error reading JSON");
+                std::lock_guard<std::mutex> lock(updatesMutex);
+                latestVersion = juce::String(statusCode) + " - JSON error";
+                return "Error";
+            }
         }
     }
 
-    DBG("[UPDATE CHECK] Failed to connect, status code = " + juce::String(statusCode));
-    return "";
+    DBG("[UPDATE CHECK] FAILED to connect, status code = " + juce::String(statusCode));
+    std::lock_guard<std::mutex> lock(updatesMutex);
+    latestVersion = juce::String(statusCode);
+    return "Error";
 }
 
 bool UpdateChecker::versionComparison(juce::String& newestVersion)
@@ -112,12 +130,11 @@ int UpdateChecker::converVersionToSum(juce::String version)
 void UpdateChecker::timerCallback()
 {
     // Checks for async to finish
-    const int value = updateAtomic.load(std::memory_order_relaxed);
-    if (value != -1)
+    if (updateState != -1)
     {
         stopTimer();
-        DBG("updateAtomic: " << value);
-        updateCallback((bool)value);
+        DBG("updateState: " << updateState);
+        updateCallback(updateState == updateAvailable);
     }
 }
 bool UpdateChecker::checkProperties()
