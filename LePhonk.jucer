@@ -89,12 +89,6 @@
           <FILE id="YoNHgc" name="AboutWindow.h" compile="0" resource="0" file="Source/GUI/About/AboutWindow.h"/>
           <FILE id="h1c7kA" name="TextButton.cpp" compile="1" resource="0" file="Source/GUI/About/TextButton.cpp"/>
           <FILE id="AIicxB" name="TextButton.h" compile="0" resource="0" file="Source/GUI/About/TextButton.h"/>
-          <FILE id="b3IKAG" name="UpdatesButton.cpp" compile="1" resource="0"
-                file="Source/GUI/About/UpdatesButton.cpp"/>
-          <FILE id="VnOMli" name="UpdatesButton.h" compile="0" resource="0" file="Source/GUI/About/UpdatesButton.h"/>
-          <FILE id="psb6nI" name="WebsiteButton.cpp" compile="1" resource="0"
-                file="Source/GUI/About/WebsiteButton.cpp"/>
-          <FILE id="GP6nFL" name="WebsiteButton.h" compile="0" resource="0" file="Source/GUI/About/WebsiteButton.h"/>
         </GROUP>
         <GROUP id="{95F78D68-E3ED-B26C-A000-74F12488291B}" name="CustomLooks">
           <FILE id="hA6Aom" name="CustomLook.cpp" compile="1" resource="0" file="Source/GUI/CustomLooks/CustomLook.cpp"/>

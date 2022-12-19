@@ -23,7 +23,16 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
 
     xynthLogo = juce::ImageCache::getFromMemory(BinaryData::xynthLogo_png, BinaryData::xynthLogo_pngSize);
 
+    siteButton.setText("Visit Website");
+    siteButton.setFillIn(false);
+    siteButton.onClick = []() { juce::URL("https://www.xynthaudio.com/plugins/lephonk").launchInDefaultBrowser(); };
+
+    updatesButton.setText("Check Updates");
     updatesButton.onClick = [this]() {setState(updates); };
+
+    downloadButton.setText("Latest Download");
+    downloadButton.setFillIn(false);
+    downloadButton.onClick = []() { juce::URL("https://app.gumroad.com/library").launchInDefaultBrowser(); };
 
     backButton.onClick = [this]() {setState(main); };
 
@@ -32,9 +41,6 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
         DBG("Update callback");
         repaint();
     };
-
-    downloadButton.setText("Latest Download");
-    downloadButton.onClick = []() { juce::URL("https://app.gumroad.com/library").launchInDefaultBrowser(); };
 }
 
 void AboutWindow::setState(const StatesEnum newState)

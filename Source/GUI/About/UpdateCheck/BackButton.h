@@ -13,19 +13,22 @@
 #include <JuceHeader.h>
 #include "../../Utils/GuiData.h"
 
+namespace xynth 
+{
 class BackButton : public juce::TextButton
 {
 public:
     BackButton(xynth::GuiData&);
 
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override;
 
     void mouseEnter(const juce::MouseEvent& e) override;
-    void mouseExit (const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
 
 private:
     xynth::GuiData& guiData;
     std::unique_ptr<juce::Drawable> backArrow;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BackButton)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BackButton)
 };
+} // namespace xynth

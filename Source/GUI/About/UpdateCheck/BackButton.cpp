@@ -11,12 +11,14 @@
 #include <JuceHeader.h>
 #include "BackButton.h"
 
+namespace xynth 
+{
 BackButton::BackButton(xynth::GuiData& g) : guiData(g)
 {
     backArrow = juce::Drawable::createFromImageData(BinaryData::backArrow_svg, BinaryData::backArrow_svgSize);
 }
 
-void BackButton::paint (juce::Graphics& g)
+void BackButton::paint(juce::Graphics& g)
 {
     auto rect = getLocalBounds().toFloat();
     auto& lnf = guiData.getLnf();
@@ -42,3 +44,4 @@ void BackButton::mouseExit(const juce::MouseEvent& e)
     setMouseCursor(juce::MouseCursor::NormalCursor);
     juce::TextButton::mouseExit(e);
 }
+} // namespace xynth

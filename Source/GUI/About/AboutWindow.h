@@ -12,8 +12,6 @@
 
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
-#include "WebsiteButton.h"
-#include "UpdatesButton.h"
 #include "UpdateCheck/BackButton.h"
 #include "UpdateCheck/UpdateChecker.h"
 #include "TextButton.h"
@@ -43,10 +41,8 @@ private:
     std::array<PaintFunction, 2> paintStates { paintMain, paintUpdates };
 
     xynth::GuiData& guiData;
-    WebsiteButton siteButton;
-    UpdatesButton updatesButton;
-    xynth::TextButton downloadButton;
-    BackButton backButton;
+    xynth::TextButton siteButton, updatesButton, downloadButton;
+    xynth::BackButton backButton;
 
     juce::Image xynthLogo;
 

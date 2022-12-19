@@ -22,11 +22,18 @@ void TextButton::paint(juce::Graphics& g)
     auto& lnf = guiData.getLnf();
     const float thickness = 1.5f;
 
-    auto mainCol = lnf.getAccent2().brighter(isMouseOver() ? 0.15f : 0.f);
-    mainCol = mainCol.darker(isMouseButtonDown() ? 0.2f : 0.f);
-    g.setColour(mainCol);
-    g.drawRoundedRectangle(rect.reduced(thickness / 2.f), 6.f, thickness);
+    // Background
+    auto mainColor = lnf.getAccent2().brighter(isMouseOver() ? 0.15f : 0.f);
+    mainColor = mainColor.darker(isMouseButtonDown() ? 0.2f : 0.f);
+    g.setColour(mainColor);
+    if (fillInButton)
+        g.fillRoundedRectangle(rect, 6.f);
+    else
+        g.drawRoundedRectangle(rect.reduced(thickness / 2.f), 6.f, thickness);
 
+    // Text
+    if (fillInButton) 
+        g.setColour(lnf.getBase1());
     g.setFont(lnf.getCustomFontMedium().withHeight(24.f));
     g.drawText(buttonText, rect, juce::Justification::centred);
 }
