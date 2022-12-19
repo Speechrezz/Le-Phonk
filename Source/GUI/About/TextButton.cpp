@@ -32,9 +32,13 @@ void TextButton::paint(juce::Graphics& g)
         g.drawRoundedRectangle(rect.reduced(thickness / 2.f), 6.f, thickness);
 
     // Text
-    if (fillInButton) 
+    if (fillInButton)
+    {
         g.setColour(lnf.getBase1());
-    g.setFont(lnf.getCustomFontMedium().withHeight(24.f));
+        g.setFont(lnf.getCustomFontMedium().withHeight(24.f));
+    }
+    else
+        g.setFont(lnf.getCustomFontRegular2().withHeight(24.f));
     g.drawText(buttonText, rect, juce::Justification::centred);
 }
 

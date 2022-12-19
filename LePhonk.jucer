@@ -87,6 +87,10 @@
           <FILE id="jyTyb3" name="AboutOverlay.h" compile="0" resource="0" file="Source/GUI/About/AboutOverlay.h"/>
           <FILE id="fucA0d" name="AboutWindow.cpp" compile="1" resource="0" file="Source/GUI/About/AboutWindow.cpp"/>
           <FILE id="YoNHgc" name="AboutWindow.h" compile="0" resource="0" file="Source/GUI/About/AboutWindow.h"/>
+          <FILE id="nGBzD4" name="CheckmarkButton.cpp" compile="1" resource="0"
+                file="Source/GUI/About/CheckmarkButton.cpp"/>
+          <FILE id="ABC9Z9" name="CheckmarkButton.h" compile="0" resource="0"
+                file="Source/GUI/About/CheckmarkButton.h"/>
           <FILE id="h1c7kA" name="TextButton.cpp" compile="1" resource="0" file="Source/GUI/About/TextButton.cpp"/>
           <FILE id="AIicxB" name="TextButton.h" compile="0" resource="0" file="Source/GUI/About/TextButton.h"/>
         </GROUP>

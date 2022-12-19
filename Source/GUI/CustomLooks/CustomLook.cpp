@@ -254,6 +254,11 @@ const juce::Font CustomLook::getCustomFontRegular()
     static auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::MontserratRegular_ttf, BinaryData::MontserratRegular_ttfSize);
     return juce::Font(typeface).withHeight(21.f);
 }
+const juce::Font CustomLook::getCustomFontRegular2()
+{
+    static auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::MuseoModernoRegular_ttf, BinaryData::MuseoModernoRegular_ttfSize);
+    return juce::Font(typeface).withHeight(21.f);
+}
 const juce::Font CustomLook::getCustomFontMedium()
 {
     static auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::MuseoModernoMedium_ttf, BinaryData::MuseoModernoMedium_ttfSize);

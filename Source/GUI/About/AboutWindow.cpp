@@ -12,7 +12,7 @@
 #include "AboutWindow.h"
 
 AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g), 
-    updatesButton(g), backButton(g), updateChecker(g), downloadButton(g)
+    updatesButton(g), backButton(g), updateChecker(g), downloadButton(g), notifyUpdatesButton(g)
 {
     initPaintFunctions();
 
@@ -20,6 +20,7 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
     addAndMakeVisible(updatesButton);
     addChildComponent(backButton);
     addChildComponent(downloadButton);
+    addChildComponent(notifyUpdatesButton);
 
     xynthLogo = juce::ImageCache::getFromMemory(BinaryData::xynthLogo_png, BinaryData::xynthLogo_pngSize);
 
@@ -33,6 +34,13 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
     downloadButton.setText("Latest Download");
     downloadButton.setFillIn(false);
     downloadButton.onClick = []() { juce::URL("https://app.gumroad.com/library").launchInDefaultBrowser(); };
+
+    notifyUpdatesButton.setText("Don't notify me about updates");
+    notifyUpdatesButton.onClick = [this]()
+    {
+        DBG((notifyUpdatesButton.getToggleState() ? "true" : "false"));
+        updateChecker.setNotifyUpdatesSetting(notifyUpdatesButton.getToggleState());
+    };
 
     backButton.onClick = [this]() {setState(main); };
 
@@ -55,12 +63,15 @@ void AboutWindow::setState(const StatesEnum newState)
         updatesButton .setVisible(true);
         backButton    .setVisible(false);
         downloadButton.setVisible(false);
+        notifyUpdatesButton.setVisible(false);
         break;
+
     case updates:
         siteButton    .setVisible(false);
         updatesButton .setVisible(false);
         backButton    .setVisible(true);
         downloadButton.setVisible(true);
+        notifyUpdatesButton.setVisible(true);
         updateChecker.checkForUpdates();
         break;
     }
@@ -168,6 +179,7 @@ void AboutWindow::paint (juce::Graphics& g)
 
 void AboutWindow::resized()
 {
+    if (!isInitialized) initialized();
     //serverCheck.checkForUpdates();
 
     auto mainRect = getLocalBounds().reduced(20);
@@ -178,5 +190,14 @@ void AboutWindow::resized()
     updatesButton .setBounds(mainRect.removeFromRight(124).removeFromBottom(32));
     downloadButton.setBounds(updatesRect.removeFromTop(32).withSizeKeepingCentre(150, 32));
     backButton    .setBounds(juce::Rectangle<int>(32, 0, 18, 60).withSizeKeepingCentre(18, 36));
+    updatesRect.removeFromBottom(12);
+    notifyUpdatesButton.setBounds(updatesRect.removeFromBottom(32).withSizeKeepingCentre(242, 32));
+
 }
 
+void AboutWindow::initialized()
+{
+    notifyUpdatesButton.setToggleState(updateChecker.getNotifyUpdatesSetting(), false);
+
+    isInitialized = true;
+}

@@ -15,6 +15,7 @@
 #include "UpdateCheck/BackButton.h"
 #include "UpdateCheck/UpdateChecker.h"
 #include "TextButton.h"
+#include "CheckmarkButton.h"
 
 class AboutWindow  : public juce::Component
 {
@@ -30,6 +31,9 @@ public:
 private:
     void initPaintFunctions();
 
+    void initialized();
+    bool isInitialized = false;
+
     typedef std::function<void(juce::Graphics& g, juce::Rectangle<float>& rect, juce::CustomLook& lnf)> PaintFunction;
 
     PaintFunction paintBackground;
@@ -43,6 +47,7 @@ private:
     xynth::GuiData& guiData;
     xynth::TextButton siteButton, updatesButton, downloadButton;
     xynth::BackButton backButton;
+    xynth::CheckmarkButton notifyUpdatesButton;
 
     juce::Image xynthLogo;
 

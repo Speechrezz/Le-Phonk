@@ -11,7 +11,7 @@
 #include "UpdateChecker.h"
 
 #define UPDATE_CHECKED_TIME_ID ""
-#define DO_NOT_REMIND_ME_ID "DoNotRemindMe"
+#define NOTIFY_UPDATES_ID "NotifyUpdates"
 
 namespace xynth
 {
@@ -20,14 +20,9 @@ UpdateChecker::UpdateChecker(xynth::GuiData& g) : guiData(g)
 
 void UpdateChecker::checkForUpdates()
 {
-    //if (checked) return;
-    //checked = true;
+    // Check if user wants to check for updates
 
     updateState = checkingUpdate;
-
-    // Check if user wants to check for updates
-    if (checkProperties())
-        return;
 
     startTimerHz(20);
     checkServerFuture = std::async(std::launch::async, [this]() {checkAsync(); });
@@ -49,7 +44,7 @@ void UpdateChecker::checkAsync()
         // Check if update is available
         const bool isUpdateAvailable = versionComparison(version);
         std::lock_guard<std::mutex> lock(updatesMutex);
-        updateState = (int)isUpdateAvailable;
+        updateState = (UpdateStates)isUpdateAvailable;
     }
 }
 
@@ -137,10 +132,17 @@ void UpdateChecker::timerCallback()
         updateCallback(updateState == updateAvailable);
     }
 }
-bool UpdateChecker::checkProperties()
+
+void UpdateChecker::setNotifyUpdatesSetting(const bool newSetting)
 {
     auto* properties = guiData.properties.getUserSettings();
+    properties->setValue(NOTIFY_UPDATES_ID, newSetting);
+    properties->saveIfNeeded();
+}
 
-    return properties->getBoolValue(DO_NOT_REMIND_ME_ID, false);
+bool UpdateChecker::getNotifyUpdatesSetting() const
+{
+    auto* properties = guiData.properties.getUserSettings();
+    return properties->getBoolValue(NOTIFY_UPDATES_ID);
 }
 }
