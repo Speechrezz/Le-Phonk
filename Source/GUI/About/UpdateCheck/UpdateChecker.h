@@ -21,6 +21,7 @@ public:
     UpdateChecker(xynth::GuiData&);
     ~UpdateChecker() = default;
 
+    void startupUpdateCheck();
     void checkForUpdates();
     void checkAsync();
     juce::String getVersionFromServer();
@@ -35,7 +36,14 @@ public:
     inline juce::String getLatestVersion() const { return latestVersion; };
 
     void setNotifyUpdatesSetting(const bool newSetting);
+    // Returns true if user does NOT want to be notified for updates
+    // (checkmark is ticked)
     bool getNotifyUpdatesSetting() const;
+
+    juce::int64 getLastUpdateTime() const;
+    void setLastUpdateTime(const juce::int64 newTime);
+    // Returns true if update needs to be checked
+    bool checkLastUpdateTime();
 
     enum UpdateStates { invalidState = -1, noUpdateAvailable, updateAvailable, checkingUpdate, updateError };
 
@@ -51,5 +59,7 @@ private:
 
     juce::String latestVersion = "null";
     std::mutex updatesMutex;
+
+    bool startupHasBeenChecked = true;
 };
 }

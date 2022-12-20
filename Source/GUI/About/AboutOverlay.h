@@ -26,6 +26,7 @@ public:
 
     // Called when about menu is just opened
     void opened();
+    void openUpdatesMenu();
 
 private:
     xynth::GuiData& guiData;

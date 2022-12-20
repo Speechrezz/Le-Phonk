@@ -27,10 +27,6 @@ ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSe
     addAndMakeVisible(distSelect);
 }
 
-ZeketeLayout::~ZeketeLayout()
-{
-}
-
 void ZeketeLayout::paint (juce::Graphics& g)
 {
     auto& look = guiData.getLnf();

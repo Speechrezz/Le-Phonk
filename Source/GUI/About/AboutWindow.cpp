@@ -29,7 +29,11 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
     siteButton.onClick = []() { juce::URL("https://www.xynthaudio.com/plugins/lephonk").launchInDefaultBrowser(); };
 
     updatesButton.setText("Check Updates");
-    updatesButton.onClick = [this]() {setState(updates); };
+    updatesButton.onClick = [this]() 
+    {
+        setState(updates); 
+        updateChecker.checkForUpdates(); 
+    };
 
     downloadButton.setText("Latest Download");
     downloadButton.setFillIn(false);
@@ -38,7 +42,6 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
     notifyUpdatesButton.setText("Don't notify me about updates");
     notifyUpdatesButton.onClick = [this]()
     {
-        DBG((notifyUpdatesButton.getToggleState() ? "true" : "false"));
         updateChecker.setNotifyUpdatesSetting(notifyUpdatesButton.getToggleState());
     };
 
@@ -46,7 +49,6 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
 
     updateChecker.updateCallback = [this](bool isUpdateAvailable)
     {
-        DBG("Update callback");
         repaint();
     };
 }
@@ -54,7 +56,6 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
 void AboutWindow::setState(const StatesEnum newState)
 {
     state = newState;
-    DBG("setState: " << newState);
 
     switch (state)
     {
@@ -72,7 +73,6 @@ void AboutWindow::setState(const StatesEnum newState)
         backButton    .setVisible(true);
         downloadButton.setVisible(true);
         notifyUpdatesButton.setVisible(true);
-        updateChecker.checkForUpdates();
         break;
     }
 
@@ -89,7 +89,7 @@ void AboutWindow::initPaintFunctions()
         g.drawRoundedRectangle(rect.reduced(1.f), 8.f, 2.f);
 
         const int width = 32;
-        g.setOpacity(0.9f);
+        g.setOpacity(0.8f);
         g.drawImageWithin(xynthLogo, rect.getWidth() - width - 32, 0, width, 60, juce::RectanglePlacement::xLeft);
     };
 
@@ -180,7 +180,6 @@ void AboutWindow::paint (juce::Graphics& g)
 void AboutWindow::resized()
 {
     if (!isInitialized) initialized();
-    //serverCheck.checkForUpdates();
 
     auto mainRect = getLocalBounds().reduced(20);
     auto updatesRect = mainRect;
@@ -198,6 +197,7 @@ void AboutWindow::resized()
 void AboutWindow::initialized()
 {
     notifyUpdatesButton.setToggleState(updateChecker.getNotifyUpdatesSetting(), false);
+    updateChecker.startupUpdateCheck();
 
     isInitialized = true;
 }

@@ -41,3 +41,8 @@ void AboutOverlay::opened()
 {
     aboutWindow.setState(AboutWindow::main);
 }
+
+void AboutOverlay::openUpdatesMenu()
+{
+    aboutWindow.setState(AboutWindow::updates);
+}

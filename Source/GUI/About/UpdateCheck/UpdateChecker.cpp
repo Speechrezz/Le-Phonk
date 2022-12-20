@@ -12,16 +12,25 @@
 
 #define UPDATE_CHECKED_TIME_ID ""
 #define NOTIFY_UPDATES_ID "NotifyUpdates"
+#define LAST_UPDATE_TIME_ID "LastUpdateTime"
 
 namespace xynth
 {
 UpdateChecker::UpdateChecker(xynth::GuiData& g) : guiData(g)
 {}
 
+void UpdateChecker::startupUpdateCheck()
+{
+    if (getNotifyUpdatesSetting()) return;
+    if (!checkLastUpdateTime()) return;
+
+    startupHasBeenChecked = false;
+    checkForUpdates();
+}
+
 void UpdateChecker::checkForUpdates()
 {
-    // Check if user wants to check for updates
-
+    if (updateState == checkingUpdate) return;
     updateState = checkingUpdate;
 
     startTimerHz(20);
@@ -125,11 +134,17 @@ int UpdateChecker::converVersionToSum(juce::String version)
 void UpdateChecker::timerCallback()
 {
     // Checks for async to finish
-    if (updateState != -1)
+    if (updateState != checkingUpdate)
     {
         stopTimer();
-        DBG("updateState: " << updateState);
         updateCallback(updateState == updateAvailable);
+
+        if (startupHasBeenChecked) return;
+        if (updateState == updateAvailable)
+        {
+            guiData.showUpdates();
+            startupHasBeenChecked = true;
+        }
     }
 }
 
@@ -145,4 +160,32 @@ bool UpdateChecker::getNotifyUpdatesSetting() const
     auto* properties = guiData.properties.getUserSettings();
     return properties->getBoolValue(NOTIFY_UPDATES_ID);
 }
+
+juce::int64 UpdateChecker::getLastUpdateTime() const
+{
+    auto* properties = guiData.properties.getUserSettings();
+    return properties->getValue(LAST_UPDATE_TIME_ID, "0").getLargeIntValue();
 }
+
+void UpdateChecker::setLastUpdateTime(const juce::int64 newTime)
+{
+    auto* properties = guiData.properties.getUserSettings();
+    properties->setValue(LAST_UPDATE_TIME_ID, newTime);
+    properties->saveIfNeeded();
+}
+
+bool UpdateChecker::checkLastUpdateTime()
+{
+    const auto lastTime = getLastUpdateTime();
+    const auto currentTime = juce::Time::currentTimeMillis();
+    const juce::int64 timeThreshold = 16LL * 60LL * 60LL * 1000LL; // 16 hours
+
+    const auto timeDifference = currentTime - lastTime;
+    if (timeDifference >= timeThreshold)
+    {
+        setLastUpdateTime(currentTime);
+        return true;
+    }
+    return false;
+}
+} // namespace xynth

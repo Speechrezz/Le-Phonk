@@ -20,6 +20,10 @@ BackButton::BackButton(xynth::GuiData& g) : guiData(g)
 
 void BackButton::paint(juce::Graphics& g)
 {
+    const auto newColour = guiData.getLnf().getAccent2();
+    backArrow->replaceColour(previousColour, newColour);
+    previousColour = newColour;
+
     auto rect = getLocalBounds().toFloat();
     auto& lnf = guiData.getLnf();
 

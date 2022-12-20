@@ -63,6 +63,7 @@ struct GuiData
 
     juce::CustomLook& getLnf() { return *defaultLnf.lnf; }
     std::function<void()> showAbout;
+    std::function<void()> showUpdates;
 
 private:
     enum skinEnum { hell, juice, drippy };

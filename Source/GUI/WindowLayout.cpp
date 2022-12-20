@@ -29,6 +29,12 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
         aboutOverlay.opened();
         aboutOverlay.setVisible(true); 
     };
+
+    guiData.showUpdates = [this]()
+    {
+        aboutOverlay.openUpdatesMenu();
+        aboutOverlay.setVisible(true);
+    };
 }
 
 WindowLayout::~WindowLayout()

@@ -29,6 +29,8 @@ private:
     xynth::GuiData& guiData;
     std::unique_ptr<juce::Drawable> backArrow;
 
+    juce::Colour previousColour = juce::Colours::white;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BackButton)
 };
 } // namespace xynth

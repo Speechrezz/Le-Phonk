@@ -20,10 +20,6 @@ FonzLayout::FonzLayout(xynth::GuiData& g) : guiData(g)
     addAndMakeVisible(slider.slider);
 }
 
-FonzLayout::~FonzLayout()
-{
-}
-
 void FonzLayout::paint (juce::Graphics& g)
 {
     auto rect = getLocalBounds();
