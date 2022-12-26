@@ -15,29 +15,27 @@ namespace xynth
 {
 TooltipLabel::TooltipLabel(xynth::GuiData& g) : guiData(g)
 {
-    //setAlwaysOnTop(true);
+    setAlwaysOnTop(true);
 }
 
 void TooltipLabel::paint(juce::Graphics& g)
 {
     auto& lnf = guiData.getLnf();
 
+    auto bgRect = getLocalBounds().toFloat();
     g.setColour(lnf.getBase1());
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 4.f);
+    g.fillRoundedRectangle(bgRect, 4.f);
 
-    const auto text = prefixText + ": " + valueText; // + juce::String(parentSlider.getValue());
-    g.setColour(lnf.getNeutral1().brighter(.8f));
-    g.drawText(text, getLocalBounds(), juce::Justification::centred, false);
+    g.setColour(lnf.getNeutral1().brighter(1.f));
+    g.drawText(tooltipText, getLocalBounds(), juce::Justification::centred, false);
+
+    g.setColour(lnf.getAccent2());
+    g.drawRoundedRectangle(bgRect.reduced(0.25f), 4.f, 1.f);
 }
 
-void TooltipLabel::resized()
-{
-}
-
-void TooltipLabel::showTooltip(juce::Point<int> screenPosition, const juce::String& newPrefixText)
+void TooltipLabel::showTooltip(juce::Point<int> screenPosition)
 {
     setVisible(true);
-    prefixText = newPrefixText;
 
     juce::Rectangle<int> rect(screenPosition, screenPosition);
     rect.expand(50, 0);
@@ -46,9 +44,9 @@ void TooltipLabel::showTooltip(juce::Point<int> screenPosition, const juce::Stri
     repaint();
 }
 
-void TooltipLabel::updateTooltipValue(const juce::String& newValue)
+void TooltipLabel::updateTooltipText(const juce::String& newText)
 {
-    valueText = newValue;
+    tooltipText = newText;
     repaint();
 }
 

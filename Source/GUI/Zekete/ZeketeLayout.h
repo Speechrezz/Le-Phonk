@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
 #include "../Utils/FullSlider.h"
+#include "../Utils/TooltipSlider.h"
 #include "DistGraph.h"
 #include "DistSelect.h"
 
@@ -28,7 +29,7 @@ public:
 private:
     xynth::GuiData& guiData;
     xynth::FullSlider slider;
-    xynth::FullSlider mix;
+    xynth::TooltipSlider mixSlider;
     DistGraph distGraph;
     DistSelect distSelect;
 

@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "ZeketeLayout.h"
 
-ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSelect(g)
+ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSelect(g), mixSlider(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
@@ -19,18 +19,20 @@ ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSe
     slider.slider.setSliderStyle(juce::Slider::LinearHorizontal);
     slider.slider.setSliderSnapsToMousePosition(false);
 
-    mix.init(treeState, ZEKETE_MIX_ID);
+    mixSlider.assignParameter(ZEKETE_MIX_ID);
+    mixSlider.setName("Mix");
+    mixSlider.setPostfix("%");
 
     addAndMakeVisible(slider.slider);
-    addAndMakeVisible(mix.slider);
+    addAndMakeVisible(mixSlider);
     addAndMakeVisible(distGraph);
     addAndMakeVisible(distSelect);
 }
 
 void ZeketeLayout::paint (juce::Graphics& g)
 {
-    mix.slider.setColour(juce::Slider::rotarySliderFillColourId,    guiData.getLnf().getNeutral1());
-    mix.slider.setColour(juce::Slider::rotarySliderOutlineColourId, guiData.getLnf().getAccent2());
+    mixSlider.setColour(juce::Slider::rotarySliderFillColourId, guiData.getLnf().getNeutral1());
+    mixSlider.setColour(juce::Slider::rotarySliderOutlineColourId, guiData.getLnf().getAccent2());
 
     auto& look = guiData.getLnf();
     auto rect = getLocalBounds();
@@ -53,5 +55,5 @@ void ZeketeLayout::resized()
 
     rect.removeFromTop(11);
     rect.removeFromLeft(26);
-    mix.slider.setBounds(rect.removeFromTop(25).withWidth(25));
+    mixSlider.setBounds(rect.removeFromTop(25).withWidth(25));
 }

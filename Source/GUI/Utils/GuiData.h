@@ -66,8 +66,8 @@ struct GuiData
     std::function<void()> showUpdates;
 
     // Global tooltip functions
-    std::function<void(juce::Component*, const juce::String& prefixText)> showTooltip;
-    std::function<void(const juce::String& newValue)> updateTooltipValue;
+    std::function<void(juce::Component*)> showTooltip;
+    std::function<void(const juce::String& newText)> updateTooltipText;
     std::function<void()> hideTooltip;
 
 private:

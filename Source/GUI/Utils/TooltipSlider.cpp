@@ -21,15 +21,15 @@ TooltipSlider::TooltipSlider(xynth::GuiData& g) : guiData(g)
 
 void TooltipSlider::mouseEnter(const juce::MouseEvent& e)
 {
-    guiData.showTooltip(this, name);
-    guiData.updateTooltipValue(juce::String(getValue(), 2));
     juce::Slider::mouseEnter(e);
+    guiData.showTooltip(this);
+    valueChanged();
 }
 
 void TooltipSlider::mouseExit(const juce::MouseEvent& e)
 {
-    guiData.hideTooltip();
     juce::Slider::mouseExit(e);
+    guiData.hideTooltip();
 }
 
 void TooltipSlider::assignParameter(const juce::String& paramID)
@@ -37,15 +37,12 @@ void TooltipSlider::assignParameter(const juce::String& paramID)
     attach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(guiData.audioProcessor.treeState, paramID, *this);
 }
 
-void TooltipSlider::setName(const juce::String& newName)
-{
-    name = newName;
-}
-
 void TooltipSlider::valueChanged()
 {
-    if (isMouseOverOrDragging())
-        guiData.updateTooltipValue(juce::String(getValue(), 2));
+    if (!isMouseOverOrDragging()) return;
+
+    auto tooltipText = name + ": " + juce::String(getValue(), 1) + postfix;
+    guiData.updateTooltipText(tooltipText);
 }
 
 void TooltipSlider::resized()

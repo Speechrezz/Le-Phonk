@@ -12,7 +12,7 @@
 #include "WindowLayout.h"
 
 WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), 
-    fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g), tooltip(g), tooltipSlider(g)
+    fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g), tooltip(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
@@ -24,9 +24,8 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
     addAndMakeVisible(logoButton);
     addChildComponent(aboutOverlay);
     addChildComponent(tooltip);
-    addAndMakeVisible(tooltipSlider);
-    tooltipSlider.setName("test");
 
+    // --Show about/updates page--
     guiData.showAbout = [this]() 
     { 
         aboutOverlay.opened();
@@ -39,20 +38,20 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
         aboutOverlay.setVisible(true);
     };
 
-    // Tooltip stuff
-    guiData.showTooltip = [this](juce::Component* component, const juce::String& prefixText)
+    // --Tooltip stuff--
+    guiData.showTooltip = [this](juce::Component* component)
     {
         auto componentPosition = component->getScreenPosition();
         auto relativePosition = componentPosition - getScreenPosition();
         const auto scale = getTransform().getScaleFactor();
         relativePosition /= scale;
         relativePosition.addXY(component->getWidth() / 2, component->getHeight() + 2);
-        tooltip.showTooltip(relativePosition, prefixText);
+        tooltip.showTooltip(relativePosition);
     };
 
-    guiData.updateTooltipValue = [this](const juce::String& valueText)
+    guiData.updateTooltipText = [this](const juce::String& newText)
     {
-        tooltip.updateTooltipValue(valueText);
+        tooltip.updateTooltipText(newText);
     };
 
     guiData.hideTooltip = [this]()
@@ -91,6 +90,4 @@ void WindowLayout::resized()
     logoButton.setBounds(headerRect.removeFromLeft(154).withTrimmedTop(10).translated(-8, 0));
 
     aboutOverlay.setBounds(getLocalBounds());
-
-    tooltipSlider.setBounds(100, 100, 24, 24);
 }

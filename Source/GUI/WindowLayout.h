@@ -15,7 +15,6 @@
 #include "Utils/FullSlider.h"
 #include "Utils/GuiData.h"
 #include "Utils/TooltipLabel.h"
-#include "Utils/TooltipSlider.h"
 #include "Zekete/ZeketeLayout.h"
 #include "Ottz/OttzLayout.h"
 #include "Fonz/FonzLayout.h"
@@ -36,7 +35,6 @@ public:
 private:
     xynth::GuiData& guiData;
     xynth::TooltipLabel tooltip;
-    xynth::TooltipSlider tooltipSlider;
     ZeketeLayout zeketeLayout;
     OttzLayout   ottzLayout;
     FonzLayout   fonzLayout;

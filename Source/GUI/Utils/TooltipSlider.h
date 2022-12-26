@@ -25,14 +25,15 @@ public:
     void mouseExit (const juce::MouseEvent& e) override;
 
     void assignParameter(const juce::String& paramID);
-    void setName(const juce::String& newName) override;
+    void setName(const juce::String& newName) override { name = newName; }
+    void setPostfix(const juce::String& newPostfix) { postfix = newPostfix; }
     void valueChanged() override;
 
     void resized() override;
 
 private:
     xynth::GuiData& guiData;
-    juce::String name;
+    juce::String name, postfix;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attach;
 

@@ -15,6 +15,7 @@ BypassGain::BypassGain(xynth::GuiData& g) : guiData(g), bypassButton(g, ENABLE_I
 {
     gainSlider.assignParameter(GAIN_ID);
     gainSlider.setName("Gain");
+    gainSlider.setPostfix("dB");
 
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(bypassButton);

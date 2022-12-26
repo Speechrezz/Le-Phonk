@@ -22,16 +22,15 @@ public:
     ~TooltipLabel() = default;
 
     void paint(juce::Graphics&) override;
-    void resized() override;
 
-    void showTooltip(juce::Point<int> screenPosition, const juce::String& prefixText);
-    void updateTooltipValue(const juce::String& newValue);
+    void showTooltip(juce::Point<int> screenPosition);
+    void updateTooltipText(const juce::String& newText);
     void hideTooltip();
 
 private:
     xynth::GuiData& guiData;
 
-    juce::String prefixText, valueText;
+    juce::String tooltipText;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TooltipLabel)
 };
