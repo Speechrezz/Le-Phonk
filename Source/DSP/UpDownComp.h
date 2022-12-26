@@ -42,6 +42,13 @@ public:
     void update(float downThresh, float downRatio, float upThresh, float upRatio, 
         float attack, float decay, float gain);
 
+    /// <summary>
+    /// Updates time-based parameters
+    /// </summary>
+    /// <param name="attack">- Attack time (in ms)</param>
+    /// <param name="decay">- Decay time (in ms)</param>
+    void updateTimes(const float attack, const float decay);
+
     float processSample(int channel, float sample);
 
 private:

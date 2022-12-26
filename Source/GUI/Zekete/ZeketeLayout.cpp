@@ -29,6 +29,9 @@ ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSe
 
 void ZeketeLayout::paint (juce::Graphics& g)
 {
+    mix.slider.setColour(juce::Slider::rotarySliderFillColourId,    guiData.getLnf().getNeutral1());
+    mix.slider.setColour(juce::Slider::rotarySliderOutlineColourId, guiData.getLnf().getAccent2());
+
     auto& look = guiData.getLnf();
     auto rect = getLocalBounds();
     look.drawSectionBackground(g, rect);

@@ -8,6 +8,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Common/Ranges.h"
+#include "Common/ParameterText.h"
 
 //==============================================================================
 LePhonkAudioProcessor::LePhonkAudioProcessor()
@@ -37,13 +39,20 @@ LePhonkAudioProcessor::~LePhonkAudioProcessor()
 
 juce::AudioProcessorValueTreeState::ParameterLayout LePhonkAudioProcessor::createParameterLayout()
 {
+    constexpr auto genericParam = juce::AudioProcessorParameter::genericParameter;
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_ID,    OTT_NAME,     0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(FONZ_ID,   FONZ_NAME,    0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(ZEKETE_ID, ZEKETE_NAME,  0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(GAIN_ID,   GAIN_NAME,    GAIN_MIN, GAIN_MAX, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterBool> (ENABLE_ID, ENABLE_NAME,  true));
+    const auto ottTimeRange = xynth::createRange(10.f, 1000.f, 100.f);
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_ID,    OTT_NAME,    0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(FONZ_ID,   FONZ_NAME,   0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(ZEKETE_ID, ZEKETE_NAME, 0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(GAIN_ID,   GAIN_NAME,   GAIN_MIN, GAIN_MAX, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterBool> (ENABLE_ID, ENABLE_NAME, true));
+    params.push_back(std::make_unique<juce::AudioParameterBool> (OTT_ENABLE_ID, OTT_ENABLE_NAME, true));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_TIME_ID, OTT_TIME_NAME, ottTimeRange, 100.f,
+        juce::String(), genericParam, xynth::valueAsText));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat> (ZEKETE_MIX_ID,  ZEKETE_MIX_NAME,  0.f, 100.f, 100.f));
     params.push_back(std::make_unique<juce::AudioParameterChoice>(DIST_SELECT_ID, DIST_SELECT_NAME, distTypes, 0));

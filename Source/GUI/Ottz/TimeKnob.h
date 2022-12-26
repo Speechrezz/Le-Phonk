@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    BypassGain.h
-    Created: 7 Sep 2022 10:45:40am
+    TimeKnob.h
+    Created: 25 Dec 2022 9:25:11am
     Author:  thesp
 
   ==============================================================================
@@ -13,23 +13,24 @@
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
 #include "../Utils/FullSlider.h"
-#include "../Utils/TooltipSlider.h"
-#include "BypassButton.h"
+#include "../Utils/DualLabel.h"
 
-class BypassGain : public juce::Component
+namespace xynth
+{
+class TimeKnob : public juce::Component
 {
 public:
-    BypassGain(xynth::GuiData&);
-    ~BypassGain() = default;
+    TimeKnob(xynth::GuiData&);
+    ~TimeKnob() = default;
 
     void paint(juce::Graphics&) override;
     void resized() override;
 
 private:
     xynth::GuiData& guiData;
-    xynth::BypassButton bypassButton;
-    //xynth::FullSlider gain;
-    xynth::TooltipSlider gainSlider;
+    xynth::FullSlider timeKnob;
+    xynth::DualLabel label;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BypassGain)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TimeKnob)
 };
+} // namespace xynth

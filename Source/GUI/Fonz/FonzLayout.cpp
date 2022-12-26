@@ -22,6 +22,9 @@ FonzLayout::FonzLayout(xynth::GuiData& g) : guiData(g)
 
 void FonzLayout::paint (juce::Graphics& g)
 {
+    slider.slider.setColour(juce::Slider::rotarySliderFillColourId,    guiData.getLnf().getNeutral1());
+    slider.slider.setColour(juce::Slider::rotarySliderOutlineColourId, guiData.getLnf().getAccent1());
+
     auto rect = getLocalBounds();
     auto textRect = rect.removeFromTop(41);
     guiData.getLnf().drawSectionBackground(g, rect);

@@ -10,6 +10,12 @@
 #define OTT_ID "ott"
 #define OTT_NAME "Le Ottz"
 
+#define OTT_TIME_ID "ottTime"
+#define OTT_TIME_NAME "Le Ottz Time"
+
+#define OTT_ENABLE_ID "ottEnable"
+#define OTT_ENABLE_NAME "Le Ottz Enabled"
+
 #define FONZ_ID "fonz"
 #define FONZ_NAME "Le Fonz"
 

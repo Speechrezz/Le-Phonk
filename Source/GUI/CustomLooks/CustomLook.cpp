@@ -71,8 +71,8 @@ void CustomLook::drawRotarySlider(juce::Graphics& g, int x, int y, int width, in
 
     radius = juce::jmin(width / 2, height / 2) - thickness * 0.5f;
 
-    const auto bgColour = getNeutral1();
-    const auto mainColour = isLarge ? getAccent1() : getAccent2();
+    const auto bgColour   = slider.findColour(Slider::rotarySliderFillColourId);
+    const auto mainColour = slider.findColour(Slider::rotarySliderOutlineColourId);
 
     // Draw path of the slider backgound (in darker background colour)
     juce::Path backgroundArc;
@@ -138,7 +138,9 @@ void CustomLook::drawToggleButton(Graphics& g, ToggleButton& button,
     auto rect = button.getLocalBounds().toFloat();
 
     // Draw background
-    auto bgColour = button.getToggleState() ? getAccent2() : getNeutral1();
+    const auto onColour  = button.findColour(ToggleButton::ColourIds::tickColourId);
+    const auto offColour = button.findColour(ToggleButton::ColourIds::tickDisabledColourId);
+    auto bgColour = button.getToggleState() ? onColour : offColour;
     bgColour = bgColour.brighter(shouldDrawButtonAsHighlighted ? 0.1f : 0.f);
     bgColour = bgColour.darker(shouldDrawButtonAsDown ? 0.2f : 0.f);
     g.setColour(bgColour);

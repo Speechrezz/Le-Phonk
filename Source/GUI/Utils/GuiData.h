@@ -65,6 +65,11 @@ struct GuiData
     std::function<void()> showAbout;
     std::function<void()> showUpdates;
 
+    // Global tooltip functions
+    std::function<void(juce::Component*, const juce::String& prefixText)> showTooltip;
+    std::function<void(const juce::String& newValue)> updateTooltipValue;
+    std::function<void()> hideTooltip;
+
 private:
     enum skinEnum { hell, juice, drippy };
 

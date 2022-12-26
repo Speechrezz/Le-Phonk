@@ -27,9 +27,10 @@ public:
     void process(juce::dsp::ProcessContextReplacing<float>& context);
 
 private:
+    // Processes the two filters to create 24dB/oct slope
     void processFilter(juce::dsp::ProcessContextReplacing<float>& context, const int filter);
 
-    std::atomic<float>* mixAtomic{ nullptr };
+    std::atomic<float>* mixAtomic { nullptr }, * timeAtomic{ nullptr }, * enableAtomic{ nullptr };
 
     std::array<UpDownComp, 3> comps;
     std::array<juce::AudioBuffer<float>, 3> buffers;

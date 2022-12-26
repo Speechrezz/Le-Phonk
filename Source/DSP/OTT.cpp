@@ -13,14 +13,16 @@
 
 #define HIGH_CROSS 2500.f
 #define LOW_CROSS 88.3f
-#define Q 0.7071
+#define Q 0.7071 // = 1/root(2)
 
 namespace xynth
 {
 
 void OTT::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
-    mixAtomic = treeState.getRawParameterValue(OTT_ID);
+    mixAtomic    = treeState.getRawParameterValue(OTT_ID);
+    timeAtomic   = treeState.getRawParameterValue(OTT_TIME_ID);
+    enableAtomic = treeState.getRawParameterValue(OTT_ENABLE_ID);
 }
 
 void OTT::prepare(const juce::dsp::ProcessSpec& spec)
@@ -29,9 +31,9 @@ void OTT::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& comp : comps)
         comp.prepare(spec);
 
-    comps[high].update(-35.5f, 999.f, -40.8f, 4.17f, 13.5f, 132.f, 14.9f);
-    comps[mid].update (-30.2f, 66.7f, -41.8f, 4.17f, 22.4f, 282.f, 12.5f);
-    comps[low].update (-33.8f, 66.7f, -40.8f, 4.17f, 47.8f, 282.f, 14.3f);
+    comps[high].update(-35.5f, 999.f, -40.8f, 4.17f, 13.5f, 132.f, 12.7f);
+    comps[mid] .update(-30.2f, 66.7f, -41.8f, 4.17f, 22.4f, 282.f, 10.5f);
+    comps[low] .update(-33.8f, 66.7f, -40.8f, 4.17f, 47.8f, 282.f, 12.3f);
 
     // Prepare the filters
     for (auto& filters : filtersArray)
@@ -39,10 +41,10 @@ void OTT::prepare(const juce::dsp::ProcessSpec& spec)
         for (auto& filter : filters)
             filter.prepare(spec);
 
-        *filters[lowLowpass].state   = *juce::dsp::IIR::Coefficients<float>::makeLowPass (spec.sampleRate, LOW_CROSS,  Q);
+        *filters[lowLowpass]  .state = *juce::dsp::IIR::Coefficients<float>::makeLowPass (spec.sampleRate, LOW_CROSS,  Q);
 
-        *filters[midHighpass].state  = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, LOW_CROSS,  Q);
-        *filters[midLowpass].state   = *juce::dsp::IIR::Coefficients<float>::makeLowPass (spec.sampleRate, HIGH_CROSS, Q);
+        *filters[midHighpass] .state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, LOW_CROSS,  Q);
+        *filters[midLowpass]  .state = *juce::dsp::IIR::Coefficients<float>::makeLowPass (spec.sampleRate, HIGH_CROSS, Q);
 
         *filters[highHighpass].state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, HIGH_CROSS, Q);
     }
@@ -60,8 +62,17 @@ void OTT::prepare(const juce::dsp::ProcessSpec& spec)
 
 void OTT::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
+    // Check if enabled
+    const float enabled = (bool)enableAtomic->load(std::memory_order_relaxed);
+    if (!enabled) return;
+
     // Setup basics
-    const float mix = mixAtomic->load(std::memory_order_relaxed);
+    const float mix  = mixAtomic ->load(std::memory_order_relaxed);
+    const float time = timeAtomic->load(std::memory_order_relaxed) / 100.f;
+
+    comps[high].updateTimes(13.5f * time, 132.f * time);
+    comps[mid] .updateTimes(22.4f * time, 282.f * time);
+    comps[low] .updateTimes(47.8f * time, 282.f * time);
 
     const auto& inputBlock = context.getInputBlock();
     auto& outputBlock = context.getOutputBlock();

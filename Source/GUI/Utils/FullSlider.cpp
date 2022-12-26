@@ -16,7 +16,6 @@ FullSlider::FullSlider()
 {
     slider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     slider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-    slider.setTextBoxIsEditable(true);
 }
 
 void FullSlider::init(juce::AudioProcessorValueTreeState& treeState, juce::String paramID)

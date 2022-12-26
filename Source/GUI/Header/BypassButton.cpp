@@ -11,6 +11,9 @@
 #include <JuceHeader.h>
 #include "BypassButton.h"
 
-BypassButton::BypassButton(xynth::GuiData& g) : guiData(g), 
-    attach(g.audioProcessor.treeState, ENABLE_ID, *this)
+namespace xynth
+{
+BypassButton::BypassButton(xynth::GuiData& g, juce::String parameterId) : guiData(g),
+    attach(g.audioProcessor.treeState, parameterId, *this)
 {}
+} // namespace xynth

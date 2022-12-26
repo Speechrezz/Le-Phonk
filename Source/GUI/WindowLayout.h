@@ -14,6 +14,8 @@
 #include "../Common/Constants.h"
 #include "Utils/FullSlider.h"
 #include "Utils/GuiData.h"
+#include "Utils/TooltipLabel.h"
+#include "Utils/TooltipSlider.h"
 #include "Zekete/ZeketeLayout.h"
 #include "Ottz/OttzLayout.h"
 #include "Fonz/FonzLayout.h"
@@ -26,13 +28,15 @@ class WindowLayout : public juce::Component
 {
 public:
     WindowLayout(xynth::GuiData&);
-    ~WindowLayout() override;
+    ~WindowLayout() = default;
 
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
     xynth::GuiData& guiData;
+    xynth::TooltipLabel tooltip;
+    xynth::TooltipSlider tooltipSlider;
     ZeketeLayout zeketeLayout;
     OttzLayout   ottzLayout;
     FonzLayout   fonzLayout;

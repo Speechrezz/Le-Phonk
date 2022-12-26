@@ -11,20 +11,22 @@
 #include <JuceHeader.h>
 #include "BypassGain.h"
 
-BypassGain::BypassGain(xynth::GuiData& g) : guiData(g), bypassButton(g)
+BypassGain::BypassGain(xynth::GuiData& g) : guiData(g), bypassButton(g, ENABLE_ID), gainSlider(g)
 {
-    gain.init(g.audioProcessor.treeState, GAIN_ID);
+    gainSlider.assignParameter(GAIN_ID);
+    gainSlider.setName("Gain");
 
-    addAndMakeVisible(gain.slider);
+    addAndMakeVisible(gainSlider);
     addAndMakeVisible(bypassButton);
 }
 
-BypassGain::~BypassGain()
+void BypassGain::paint(juce::Graphics& g)
 {
-}
+    gainSlider.setColour(juce::Slider::rotarySliderFillColourId,    guiData.getLnf().getNeutral1());
+    gainSlider.setColour(juce::Slider::rotarySliderOutlineColourId, guiData.getLnf().getAccent2());
 
-void BypassGain::paint (juce::Graphics& g)
-{
+    bypassButton.setColour(juce::ToggleButton::ColourIds::tickColourId, guiData.getLnf().getAccent2());
+    bypassButton.setColour(juce::ToggleButton::ColourIds::tickDisabledColourId, guiData.getLnf().getNeutral1());
 }
 
 void BypassGain::resized()
@@ -33,5 +35,6 @@ void BypassGain::resized()
 
     bypassButton.setBounds(rect.removeFromRight(20));
     rect.removeFromRight(9);
-    gain.slider.setBounds(rect);
+    gainSlider.setBounds(rect);
+    rect.translate(0, rect.getHeight() / 2);
 }

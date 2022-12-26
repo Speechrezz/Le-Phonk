@@ -12,7 +12,7 @@
 #include "WindowLayout.h"
 
 WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), 
-    fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g)
+    fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g), tooltip(g), tooltipSlider(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
@@ -23,6 +23,9 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
     addAndMakeVisible(skinSelect);
     addAndMakeVisible(logoButton);
     addChildComponent(aboutOverlay);
+    addChildComponent(tooltip);
+    addAndMakeVisible(tooltipSlider);
+    tooltipSlider.setName("test");
 
     guiData.showAbout = [this]() 
     { 
@@ -35,16 +38,35 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
         aboutOverlay.openUpdatesMenu();
         aboutOverlay.setVisible(true);
     };
-}
 
-WindowLayout::~WindowLayout()
-{
+    // Tooltip stuff
+    guiData.showTooltip = [this](juce::Component* component, const juce::String& prefixText)
+    {
+        auto componentPosition = component->getScreenPosition();
+        auto relativePosition = componentPosition - getScreenPosition();
+        const auto scale = getTransform().getScaleFactor();
+        relativePosition /= scale;
+        relativePosition.addXY(component->getWidth() / 2, component->getHeight() + 2);
+        tooltip.showTooltip(relativePosition, prefixText);
+    };
+
+    guiData.updateTooltipValue = [this](const juce::String& valueText)
+    {
+        tooltip.updateTooltipValue(valueText);
+    };
+
+    guiData.hideTooltip = [this]()
+    {
+        tooltip.hideTooltip();
+    };
 }
 
 void WindowLayout::paint (juce::Graphics& g)
 {
     auto rect = getLocalBounds();
-    g.drawImageWithin(guiData.getLnf().getBackgroundImage(), rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), juce::RectanglePlacement::fillDestination);
+
+    g.drawImageWithin(guiData.getLnf().getBackgroundImage(), rect.getX(), rect.getY(), 
+        rect.getWidth(), rect.getHeight(), juce::RectanglePlacement::fillDestination);
 }
 
 void WindowLayout::resized()
@@ -69,4 +91,6 @@ void WindowLayout::resized()
     logoButton.setBounds(headerRect.removeFromLeft(154).withTrimmedTop(10).translated(-8, 0));
 
     aboutOverlay.setBounds(getLocalBounds());
+
+    tooltipSlider.setBounds(100, 100, 24, 24);
 }

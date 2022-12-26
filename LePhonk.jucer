@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="hRZUqN" name="LePhonk" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Zekete Inc."
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Xynth Audio"
               pluginFormats="buildStandalone,buildVST3" companyWebsite="https://www.xynthaudio.com/"
               version="1.0.2">
   <MAINGROUP id="b44zzt" name="LePhonk">
@@ -36,6 +36,11 @@
     <GROUP id="{3E49C20C-D9BE-4D74-032E-3F83EB62E981}" name="Source">
       <GROUP id="{B992F30C-E01C-523F-8E8D-82D74F7B5F4F}" name="Common">
         <FILE id="zVNLZL" name="Constants.h" compile="0" resource="0" file="Source/Common/Constants.h"/>
+        <FILE id="RdJMrs" name="ParameterText.cpp" compile="1" resource="0"
+              file="Source/Common/ParameterText.cpp"/>
+        <FILE id="Op9v6Y" name="ParameterText.h" compile="0" resource="0" file="Source/Common/ParameterText.h"/>
+        <FILE id="L9Lmbf" name="Ranges.cpp" compile="1" resource="0" file="Source/Common/Ranges.cpp"/>
+        <FILE id="XgHojW" name="Ranges.h" compile="0" resource="0" file="Source/Common/Ranges.h"/>
         <FILE id="cGeQ6i" name="RingBuffer.cpp" compile="1" resource="0" file="Source/Common/RingBuffer.cpp"/>
         <FILE id="Y1RGlo" name="RingBuffer.h" compile="0" resource="0" file="Source/Common/RingBuffer.h"/>
       </GROUP>
@@ -122,11 +127,21 @@
         <GROUP id="{7497AE49-928B-B22F-0B54-086E5CA94409}" name="Ottz">
           <FILE id="QHr7bS" name="OttzLayout.cpp" compile="1" resource="0" file="Source/GUI/Ottz/OttzLayout.cpp"/>
           <FILE id="ULr9X3" name="OttzLayout.h" compile="0" resource="0" file="Source/GUI/Ottz/OttzLayout.h"/>
+          <FILE id="D1KAqw" name="TimeKnob.cpp" compile="1" resource="0" file="Source/GUI/Ottz/TimeKnob.cpp"/>
+          <FILE id="vCtLUZ" name="TimeKnob.h" compile="0" resource="0" file="Source/GUI/Ottz/TimeKnob.h"/>
         </GROUP>
         <GROUP id="{C45996B4-6EDA-02A3-1FC1-23CBB35D97A8}" name="Utils">
+          <FILE id="Cs2tRL" name="DualLabel.cpp" compile="1" resource="0" file="Source/GUI/Utils/DualLabel.cpp"/>
+          <FILE id="F1Mg5e" name="DualLabel.h" compile="0" resource="0" file="Source/GUI/Utils/DualLabel.h"/>
           <FILE id="pZBHas" name="FullSlider.cpp" compile="1" resource="0" file="Source/GUI/Utils/FullSlider.cpp"/>
           <FILE id="JxH2E4" name="FullSlider.h" compile="0" resource="0" file="Source/GUI/Utils/FullSlider.h"/>
           <FILE id="kMfcp7" name="GuiData.h" compile="0" resource="0" file="Source/GUI/Utils/GuiData.h"/>
+          <FILE id="ZcUXoC" name="TooltipLabel.cpp" compile="1" resource="0"
+                file="Source/GUI/Utils/TooltipLabel.cpp"/>
+          <FILE id="adqaeF" name="TooltipLabel.h" compile="0" resource="0" file="Source/GUI/Utils/TooltipLabel.h"/>
+          <FILE id="ZkC35A" name="TooltipSlider.cpp" compile="1" resource="0"
+                file="Source/GUI/Utils/TooltipSlider.cpp"/>
+          <FILE id="wnM3gg" name="TooltipSlider.h" compile="0" resource="0" file="Source/GUI/Utils/TooltipSlider.h"/>
         </GROUP>
         <GROUP id="{F45831FC-53F5-55B3-EA18-72357E5F4192}" name="Zekete">
           <FILE id="fLBxep" name="DistGraph.cpp" compile="1" resource="0" file="Source/GUI/Zekete/DistGraph.cpp"/>

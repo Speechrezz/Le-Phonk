@@ -61,6 +61,15 @@ void UpDownComp::update(float downThresh, float downRatio, float upThresh, float
     outGain = juce::Decibels::decibelsToGain(gain);
 }
 
+void UpDownComp::updateTimes(const float attack, const float decay)
+{
+    envelope.setAttackTime(attack * 0.5f);
+    envelope.setReleaseTime(decay);
+
+    spikeRemoverEnv.setAttackTime(decay * 2.f);
+    spikeRemoverEnv.setReleaseTime(decay);
+}
+
 float UpDownComp::processSample(int channel, float sample)
 {
     const auto env = envelope.processSample(channel, sample);

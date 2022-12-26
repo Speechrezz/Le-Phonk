@@ -37,7 +37,7 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
 
     downloadButton.setText("Latest Download");
     downloadButton.setFillIn(false);
-    downloadButton.onClick = []() { juce::URL("https://app.gumroad.com/library").launchInDefaultBrowser(); };
+    downloadButton.onClick = []() { juce::URL("https://www.xynthaudio.com/plugins/lephonk/download").launchInDefaultBrowser(); };
 
     notifyUpdatesButton.setText("Don't notify me about updates");
     notifyUpdatesButton.onClick = [this]()
