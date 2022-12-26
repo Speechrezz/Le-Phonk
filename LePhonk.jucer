@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="hRZUqN" name="LePhonk" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Xynth Audio"
-              pluginFormats="buildStandalone,buildVST3" companyWebsite="https://www.xynthaudio.com/"
+              pluginFormats="buildAU,buildStandalone,buildVST3" companyWebsite="https://www.xynthaudio.com/"
               version="1.0.2">
   <MAINGROUP id="b44zzt" name="LePhonk">
     <GROUP id="{E1A5876A-A34C-223E-AF5D-64B8F5D5B7FA}" name="Res">
@@ -188,6 +188,27 @@
         <MODULEPATH id="juce_gui_extra" path="../../modules"/>
       </MODULEPATHS>
     </VS2022>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_utils" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_dsp" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="G:\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="G:\JUCE\modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
