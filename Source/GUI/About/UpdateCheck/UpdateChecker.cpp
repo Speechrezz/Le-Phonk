@@ -140,11 +140,10 @@ void UpdateChecker::timerCallback()
         updateCallback(updateState == updateAvailable);
 
         if (startupHasBeenChecked) return;
+        startupHasBeenChecked = true;
+
         if (updateState == updateAvailable)
-        {
             guiData.showUpdates();
-            startupHasBeenChecked = true;
-        }
     }
 }
 
