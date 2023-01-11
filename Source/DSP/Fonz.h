@@ -29,7 +29,7 @@ private:
     juce::dsp::WaveShaper<float> shaper;
     juce::dsp::Gain<float> gainIn, gainOut;
 
-    std::atomic<float>* paramAtomic{ nullptr };
+    std::atomic<float>* paramAtomic{ nullptr }, *enableAtomic{ nullptr };
 
 };
 } // namespace xynth

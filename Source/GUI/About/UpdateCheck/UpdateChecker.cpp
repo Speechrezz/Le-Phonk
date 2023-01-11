@@ -10,7 +10,6 @@
 
 #include "UpdateChecker.h"
 
-#define UPDATE_CHECKED_TIME_ID ""
 #define NOTIFY_UPDATES_ID "NotifyUpdates"
 #define LAST_UPDATE_TIME_ID "LastUpdateTime"
 

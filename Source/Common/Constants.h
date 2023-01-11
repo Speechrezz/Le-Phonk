@@ -19,6 +19,9 @@
 #define FONZ_ID "fonz"
 #define FONZ_NAME "Le Fonz"
 
+#define FONZ_ENABLE_ID "fonzEnable"
+#define FONZ_ENABLE_NAME "Le Fonz Enabled"
+
 #define ENABLE_ID "enable"
 #define ENABLE_NAME "Enabled"
 

@@ -25,6 +25,7 @@ Fonz::Fonz()
         return x / (1 + x * x * limitSqr);
     };
 }
+
 void Fonz::prepare(const juce::dsp::ProcessSpec& spec)
 {
     gainIn.prepare(spec);
@@ -35,8 +36,13 @@ void Fonz::prepare(const juce::dsp::ProcessSpec& spec)
 
     shaper.prepare(spec);
 }
+
 void Fonz::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
+    // Check if enabled
+    const float enabled = (bool)enableAtomic->load(std::memory_order_relaxed);
+    if (!enabled) return;
+
     float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
     dB = juce::jmap(dB, 0.f, 36.f);
     const float intensityIn = juce::Decibels::decibelsToGain(dB);
@@ -50,8 +56,10 @@ void Fonz::process(juce::dsp::ProcessContextReplacing<float>& context)
     shaper.process(context);
     gainOut.process(context);
 }
+
 void Fonz::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
-    paramAtomic = treeState.getRawParameterValue(FONZ_ID);
+    paramAtomic  = treeState.getRawParameterValue(FONZ_ID);
+    enableAtomic = treeState.getRawParameterValue(FONZ_ENABLE_ID);
 }
 } // namespace xynth

@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
 #include "../Utils/FullSlider.h"
+#include "../Header/BypassButton.h"
 
 class FonzLayout  : public juce::Component
 {
@@ -26,6 +27,7 @@ public:
 private:
     xynth::GuiData& guiData;
     xynth::FullSlider slider;
+    xynth::BypassButton toggleButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FonzLayout)
 };
