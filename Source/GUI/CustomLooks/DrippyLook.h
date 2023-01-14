@@ -36,11 +36,9 @@ public:
     Colour getBase1() override;
 
 private:
-    Image bgImage;
-    Image danGraphImage;
-    Image skyKnobImage;
-    Image peteKnobImage;
+    Image bgImage, danGraphImage, ottKnobImage, fonzKnobImage;
 
+    juce::Random random;
 
     float prevAmp{ 0.f };
     int hold{ 0 };

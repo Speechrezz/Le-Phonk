@@ -9,7 +9,7 @@
 */
 
 #include "UpDownComp.h"
-#include "../Common/Constants.h"
+#include "../../Common/Constants.h"
 
 constexpr float loudnessCutoff = 0.000015849f; // -96 dB
 

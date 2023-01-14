@@ -15,6 +15,7 @@
 #include "../Utils/FullSlider.h"
 #include "../Header/BypassButton.h"
 #include "TimeKnob.h"
+#include "MultiplierSlider.h"
 
 class OttzLayout  : public juce::Component
 {
@@ -30,6 +31,7 @@ private:
     xynth::FullSlider slider;
     xynth::TimeKnob timeKnob;
     xynth::BypassButton toggleButton;
+    xynth::MultiplierSlider multiplierSlider;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OttzLayout)
 };

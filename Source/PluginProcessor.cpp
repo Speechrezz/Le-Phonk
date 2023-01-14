@@ -50,7 +50,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout LePhonkAudioProcessor::creat
     params.push_back(std::make_unique<juce::AudioParameterFloat>(GAIN_ID,   GAIN_NAME,   GAIN_MIN, GAIN_MAX, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterBool> (ENABLE_ID, ENABLE_NAME, true));
 
-    params.push_back(std::make_unique<juce::AudioParameterBool> ( OTT_ENABLE_ID,  OTT_ENABLE_NAME, true));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_MULT_ID, OTT_MULT_NAME, 1.f, OTT_MULT_AMOUNT, 1.f));
+    params.push_back(std::make_unique<juce::AudioParameterBool> (OTT_ENABLE_ID, OTT_ENABLE_NAME, true));
     params.push_back(std::make_unique<juce::AudioParameterBool> (FONZ_ENABLE_ID, FONZ_ENABLE_NAME, true));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>(OTT_TIME_ID, OTT_TIME_NAME, ottTimeRange, 100.f,

@@ -11,7 +11,8 @@
 #include <JuceHeader.h>
 #include "OttzLayout.h"
 
-OttzLayout::OttzLayout(xynth::GuiData& g) : guiData(g), timeKnob(g), toggleButton(g, OTT_ENABLE_ID)
+OttzLayout::OttzLayout(xynth::GuiData& g) : 
+    guiData(g), timeKnob(g), toggleButton(g, OTT_ENABLE_ID), multiplierSlider(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 
@@ -20,6 +21,7 @@ OttzLayout::OttzLayout(xynth::GuiData& g) : guiData(g), timeKnob(g), toggleButto
     addAndMakeVisible(slider.slider);
     addAndMakeVisible(timeKnob);
     addAndMakeVisible(toggleButton);
+    addAndMakeVisible(multiplierSlider);
 }
 
 void OttzLayout::paint (juce::Graphics& g)
@@ -48,8 +50,13 @@ void OttzLayout::resized()
     auto rect = getLocalBounds();
     rect.removeFromTop(41);
     slider.slider.setBounds(rect.withSizeKeepingCentre(74, 74));
+    auto multiplierRect = rect;
+
     rect.removeFromRight(2 * rect.getWidth() / 3 - 10);
     timeKnob.setBounds(rect.withSizeKeepingCentre(64, 74));
+
+    multiplierRect.removeFromLeft(2 * multiplierRect.getWidth() / 3 - 10);
+    multiplierSlider.setBounds(multiplierRect.withSizeKeepingCentre(34, 24));
 
     juce::Rectangle<int> toggleRect(0, 0, 20, 44);
     toggleButton.setBounds(toggleRect.reduced(0, 9));

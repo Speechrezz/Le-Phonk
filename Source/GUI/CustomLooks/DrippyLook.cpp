@@ -18,8 +18,33 @@ DrippyLook::DrippyLook()
 {
     bgImage =       juce::ImageCache::getFromMemory(BinaryData::drippyBG_png, BinaryData::drippyBG_pngSize);
     danGraphImage = juce::ImageCache::getFromMemory(BinaryData::danBG_png,    BinaryData::danBG_pngSize);
-    skyKnobImage  = juce::ImageCache::getFromMemory(BinaryData::skyKnob_png,  BinaryData::skyKnob_pngSize);
-    peteKnobImage = juce::ImageCache::getFromMemory(BinaryData::peteKnob_png, BinaryData::peteKnob_pngSize);
+
+    // Randomize knob images
+    struct ImageAndSize
+    {
+        const char* imageData;
+        int imageSize;
+    };
+
+    ImageAndSize knobImageArray[] = {
+        {BinaryData::skyKnob_png,    BinaryData::skyKnob_pngSize},
+        {BinaryData::peteKnob_png,   BinaryData::peteKnob_pngSize},
+        {BinaryData::speechKnob_png, BinaryData::speechKnob_pngSize},
+        {BinaryData::sharkKnob_png,  BinaryData::sharkKnob_pngSize},
+        {BinaryData::danKnob_png,    BinaryData::danKnob_pngSize},
+    };
+
+    const int arrayLength = 5;
+    const int randomIndex1 = random.nextInt(arrayLength);
+    int randomIndex2 = random.nextInt(arrayLength - 1);
+    if (randomIndex2 >= randomIndex1) // prevent same images for both knobs
+        randomIndex2++;
+
+    const auto randomImage1 = knobImageArray[randomIndex1];
+    const auto randomImage2 = knobImageArray[randomIndex2];
+    
+    ottKnobImage  = juce::ImageCache::getFromMemory(randomImage1.imageData, randomImage1.imageSize);
+    fonzKnobImage = juce::ImageCache::getFromMemory(randomImage2.imageData, randomImage2.imageSize);
 }
 
 void DrippyLook::drawSectionBackground(Graphics& g, Rectangle<int> area)
@@ -55,7 +80,7 @@ void DrippyLook::drawRotarySlider(Graphics& g, int x, int y, int width, int heig
     float sliderPos, float rotaryStartAngle, float rotaryEndAngle, Slider& slider)
 {
     auto desc = slider.getDescription();
-    Image& knobImage = desc == OTT_NAME ? skyKnobImage : peteKnobImage;
+    Image& knobImage = desc == OTT_NAME ? ottKnobImage : fonzKnobImage;
 
     // If mouse is hovering over
     const bool highlight = slider.isMouseOverOrDragging();

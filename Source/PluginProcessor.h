@@ -10,14 +10,11 @@
 
 #include <JuceHeader.h>
 #include "Common/Constants.h"
-#include "DSP/OTT.h"
+#include "DSP/OTT/OTTwithMultiplier.h"
 #include "DSP/Fonz.h"
 #include "DSP/Zekete.h"
 #include "Common/RingBuffer.h"
 
-//==============================================================================
-/**
-*/
 class LePhonkAudioProcessor  : public juce::AudioProcessor
 {
 public:
@@ -68,7 +65,7 @@ public:
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    xynth::OTT ott;
+    xynth::OTTwithMultiplier ott;
     xynth::Fonz fonz;
     xynth::Zekete zekete;
 
