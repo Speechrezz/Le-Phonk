@@ -35,6 +35,7 @@ void OttzLayout::paint (juce::Graphics& g)
     const float alpha = toggleButton.getToggleState() ? 1.f : 0.4f;
     slider.slider.setAlpha(alpha);
     timeKnob.setAlpha(alpha);
+    multiplierSlider.setAlpha(alpha);
 
     auto rect = getLocalBounds();
     auto textRect = rect.removeFromTop(41);

@@ -32,9 +32,10 @@ DrippyLook::DrippyLook()
         {BinaryData::speechKnob_png, BinaryData::speechKnob_pngSize},
         {BinaryData::sharkKnob_png,  BinaryData::sharkKnob_pngSize},
         {BinaryData::danKnob_png,    BinaryData::danKnob_pngSize},
+        {BinaryData::exylKnob_png,   BinaryData::exylKnob_pngSize},
     };
 
-    const int arrayLength = 5;
+    const int arrayLength = 6;
     const int randomIndex1 = random.nextInt(arrayLength);
     int randomIndex2 = random.nextInt(arrayLength - 1);
     if (randomIndex2 >= randomIndex1) // prevent same images for both knobs
