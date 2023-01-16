@@ -96,6 +96,7 @@ void CustomLook::drawRotarySlider(juce::Graphics& g, int x, int y, int width, in
 void CustomLook::drawLinearSlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
     float minSliderPos, float maxSliderPos, const Slider::SliderStyle style, Slider& slider)
 {
+    DBG("sliderpos: " << sliderPos << ", " << minSliderPos);
     // If mouse is hovering over
     const bool highlight = slider.isMouseOverOrDragging();
     //const float trackWidth = highlight ? 7.f : 6.f;
@@ -123,13 +124,16 @@ void CustomLook::drawLinearSlider(Graphics& g, int x, int y, int width, int heig
     maxPoint = { kx, ky };
 
     auto thumbWidth = highlight ? 15.f : 14.f;
-
-    valueTrack.startNewSubPath(minPoint);
-    valueTrack.lineTo(maxPoint.translated(-0.2f, 0.f));
     g.setColour(getAccent2());
-    g.strokePath(valueTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
 
-    g.fillRoundedRectangle(Rectangle<float>(static_cast<float> (thumbWidth * .4f), static_cast<float> (thumbWidth)).withCentre(maxPoint), 3.f);
+    if (sliderPos > minSliderPos)
+    {
+        valueTrack.startNewSubPath(minPoint);
+        valueTrack.lineTo(maxPoint.translated(-0.2f, 0.f));
+        g.strokePath(valueTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
+    }
+
+    g.fillRoundedRectangle(Rectangle<float>(static_cast<float> (thumbWidth * .4f), static_cast<float> (thumbWidth)).withCentre(maxPoint), 2.f);
 }
 
 void CustomLook::drawToggleButton(Graphics& g, ToggleButton& button,

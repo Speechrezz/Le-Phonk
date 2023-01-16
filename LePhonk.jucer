@@ -9,6 +9,7 @@
       <GROUP id="{DEBDC2BA-8924-E707-CA53-D427479F3797}" name="Drippy">
         <FILE id="x70q8u" name="danBG.png" compile="0" resource="1" file="Res/Drippy/danBG.png"/>
         <FILE id="YVgYDb" name="danKnob.png" compile="0" resource="1" file="Res/Drippy/danKnob.png"/>
+        <FILE id="qFifBQ" name="eliKnob.png" compile="0" resource="1" file="Res/Drippy/eliKnob.png"/>
         <FILE id="hpQYut" name="exylKnob.png" compile="0" resource="1" file="Res/Drippy/exylKnob.png"/>
         <FILE id="S8OK49" name="peteKnob.png" compile="0" resource="1" file="Res/Drippy/peteKnob.png"/>
         <FILE id="kt5Eqv" name="sharkKnob.png" compile="0" resource="1" file="Res/Drippy/sharkKnob.png"/>
