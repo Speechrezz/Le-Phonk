@@ -34,9 +34,10 @@ DrippyLook::DrippyLook()
         {BinaryData::danKnob_png,    BinaryData::danKnob_pngSize},
         {BinaryData::exylKnob_png,   BinaryData::exylKnob_pngSize},
         {BinaryData::eliKnob_png,    BinaryData::eliKnob_pngSize},
+        {BinaryData::au5Knob_png,    BinaryData::au5Knob_pngSize},
     };
 
-    const int arrayLength = 7;
+    const int arrayLength = 8;
     const int randomIndex1 = random.nextInt(arrayLength);
     int randomIndex2 = random.nextInt(arrayLength - 1);
     if (randomIndex2 >= randomIndex1) // prevent same images for both knobs

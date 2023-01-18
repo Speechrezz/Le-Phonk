@@ -96,7 +96,6 @@ void CustomLook::drawRotarySlider(juce::Graphics& g, int x, int y, int width, in
 void CustomLook::drawLinearSlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
     float minSliderPos, float maxSliderPos, const Slider::SliderStyle style, Slider& slider)
 {
-    DBG("sliderpos: " << sliderPos << ", " << minSliderPos);
     // If mouse is hovering over
     const bool highlight = slider.isMouseOverOrDragging();
     //const float trackWidth = highlight ? 7.f : 6.f;
