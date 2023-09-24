@@ -73,5 +73,8 @@ private:
     std::atomic<float>* gainAtomic  { nullptr };
     float prevGain{ 0.f };
 
+    // Workaround for PluginProcessor crashing in FL's Patcher
+    std::atomic<bool> flStudioDIYSpecificationEnforcementPreparedFlag{ false };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LePhonkAudioProcessor)
 };

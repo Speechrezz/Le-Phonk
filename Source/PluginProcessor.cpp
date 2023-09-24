@@ -138,6 +138,8 @@ void LePhonkAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     fonz.prepare(spec);
 
     ringBuffer.prepare(spec);
+
+    flStudioDIYSpecificationEnforcementPreparedFlag.store(true, std::memory_order_release);
 }
 
 void LePhonkAudioProcessor::releaseResources()
@@ -174,8 +176,13 @@ bool LePhonkAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    if (!flStudioDIYSpecificationEnforcementPreparedFlag.load(std::memory_order_acquire))
+        return;
+
+    if (enableAtomic->load(std::memory_order_relaxed) == 0.f) 
+        return;
+
     juce::ScopedNoDenormals noDenormals;
-    if (enableAtomic->load(std::memory_order_relaxed) == 0.f) return;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
