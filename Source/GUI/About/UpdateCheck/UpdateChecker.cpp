@@ -61,7 +61,7 @@ juce::String UpdateChecker::getVersionFromServer()
     juce::StringPairArray responseHeaders;
     int statusCode = 0;
 
-    auto url = juce::URL("https://www.xynthaudio.com/plugins/lephonk/info");
+    auto url = juce::URL("https://www.xynth.audio/api/info/lephonk");
 
     if (auto stream = url
         .createInputStream(juce::URL::InputStreamOptions(juce::URL::ParameterHandling::inAddress)
@@ -133,6 +133,7 @@ int UpdateChecker::converVersionToSum(juce::String version)
 void UpdateChecker::timerCallback()
 {
     // Checks for async to finish
+    std::lock_guard<std::mutex> lock(updatesMutex);
     if (updateState != checkingUpdate)
     {
         stopTimer();
