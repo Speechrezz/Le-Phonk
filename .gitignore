@@ -1,3 +1,5 @@
 **/Builds
 **/JuceLibraryCode
 **/.DS_Store
+cmake-build-*
+.idea
