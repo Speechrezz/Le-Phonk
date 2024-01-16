@@ -17,6 +17,7 @@ CustomLook::CustomLook()
     // Ensures the background of popup menus is transparent
     // allows corners to be rounded
     setColour(PopupMenu::backgroundColourId, Colours::black.withAlpha(0.0f));
+    setColour(ComboBox::textColourId, getBase1());
 }
 
 void CustomLook::drawSectionBackground(Graphics& g, Rectangle<int> area)
@@ -197,7 +198,6 @@ Font CustomLook::getComboBoxFont(ComboBox& box)
 void CustomLook::positionComboBoxText(ComboBox& box, Label& label)
 {
     label.setBounds(4, 4, box.getWidth() - 30, box.getHeight() - 8);
-    label.setColour(Label::ColourIds::textColourId, getBase1());
     label.setFont(getComboBoxFont(box));
     label.setJustificationType(juce::Justification::centred);
 }
