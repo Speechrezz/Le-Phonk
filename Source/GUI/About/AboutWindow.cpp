@@ -26,7 +26,7 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
 
     siteButton.setText("Visit Website");
     siteButton.setFillIn(false);
-    siteButton.onClick = []() { juce::URL("https://www.xynthaudio.com/plugins/lephonk").launchInDefaultBrowser(); };
+    siteButton.onClick = []() { juce::URL("https://www.xynth.audio/plugins/lephonk").launchInDefaultBrowser(); };
 
     updatesButton.setText("Check Updates");
     updatesButton.onClick = [this]() 
@@ -37,7 +37,7 @@ AboutWindow::AboutWindow(xynth::GuiData& g) : guiData(g), siteButton(g),
 
     downloadButton.setText("Latest Download");
     downloadButton.setFillIn(false);
-    downloadButton.onClick = []() { juce::URL("https://www.xynthaudio.com/plugins/lephonk/download").launchInDefaultBrowser(); };
+    downloadButton.onClick = []() { juce::URL("https://www.xynth.audio/account").launchInDefaultBrowser(); };
 
     notifyUpdatesButton.setText("Don't notify me about updates");
     notifyUpdatesButton.onClick = [this]()
