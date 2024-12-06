@@ -139,7 +139,7 @@ void AboutWindow::initPaintFunctions()
 
         case xynth::UpdateChecker::UpdateStates::noUpdateAvailable:
             updateTitleText = "You are up to date!";
-            updateVersionText = "v" + updateChecker.getLatestVersion();
+            updateVersionText = "v" + juce::String(JucePlugin_VersionString);
             break;
 
         case xynth::UpdateChecker::UpdateStates::updateAvailable:

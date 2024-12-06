@@ -19,7 +19,7 @@ endif()
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(LePhonk VERSION 0.0.1)
+project(LePhonk VERSION 1.0.4)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -29,6 +29,13 @@ project(LePhonk VERSION 0.0.1)
 # find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
 # or
 add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+
+# Statically link C++ Runtime library on Windows. Dynamically linking means we have to rely on the
+# runtime library installed on the users computer. If the user has an outdated version of this library
+# crashed occur.
+if (MSVC)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 # If you are building a VST2 or AAX plugin, CMake needs to be told where to find these SDKs on your
 # system. This setup should be done before calling `juce_add_plugin`.
@@ -43,7 +50,7 @@ add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory
 # Check the readme at `docs/CMake API.md` in the JUCE repo for the full list.
 
 juce_add_plugin(LePhonk
-    VERSION 1.0.3                               # Set this if the plugin version is different to the project version
+    VERSION 1.0.4                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     COMPANY_NAME "Xynth Audio"                  # Specify the name of the plugin's author
