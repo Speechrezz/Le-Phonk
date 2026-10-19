@@ -36,7 +36,7 @@ void DistGraph::paint (juce::Graphics& g)
     // Load parameters and audio
     const int idx = int(selectAtomic->load(std::memory_order_relaxed));
     const float param = gainAtomic->load(std::memory_order_relaxed) * 0.01f;
-    const float newSample = guiData.audioProcessor.ringBuffer.readSamples();
+    const float newSample = guiData.audioProcessor.ringBuffer.readLoudestSample();
     sample = newSample > sample ? newSample : sample * 0.92f;
 
     look.drawDistGraphBackground(g, rect, std::tanh(sample * juce::mapToLog10(param, 1.f, 12.f) * 0.2f));

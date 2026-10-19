@@ -13,19 +13,26 @@
 
 namespace xynth
 {
+
 class RingBuffer
 {
 public:
     RingBuffer() = default;
     ~RingBuffer() = default;
 
+    // Call on audio thread
     void prepare(juce::dsp::ProcessSpec& spec);
-    void writeSamples(juce::dsp::AudioBlock<float>& buffer);
-    float readSamples();
+    void writeSamples(juce::dsp::AudioBlock<float>& audioBlock);
+
+    // Call on message/GUI thread
+    float readLoudestSample();
 
 private:
-    std::vector<float> buffer;
+    std::vector<float> buffer, workingBuffer;
     std::atomic<size_t> writeAtomic{ 0 };
-    size_t read{ 0 };
+
+    size_t read{ 0 }; // GUI thread
+
 };
+
 } // namespace xynth

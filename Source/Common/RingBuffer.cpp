@@ -12,62 +12,62 @@
 
 namespace xynth
 {
+
 void RingBuffer::prepare(juce::dsp::ProcessSpec& spec)
 {
-    buffer.resize(spec.sampleRate);
-    writeAtomic.store(0, std::memory_order_relaxed);
+    // TODO: This doesn't handle sample-rate changes, a race condition may occur
+
+    buffer.resize(static_cast<size_t>(spec.sampleRate));
+    workingBuffer.resize(spec.maximumBlockSize);
+
+    writeAtomic.store(0, std::memory_order_release);
     read = 0;
 }
-void RingBuffer::writeSamples(juce::dsp::AudioBlock<float>& newBuffer)
+void RingBuffer::writeSamples(juce::dsp::AudioBlock<float>& audioBlock)
 {
-    // Only works with 2 channels
-    jassert(newBuffer.getNumChannels() == 2);
-    size_t write = writeAtomic.load(std::memory_order_relaxed);
+    jassert(!buffer.empty() && !workingBuffer.empty()); // Call `prepare()`
 
-    const size_t numSamples = newBuffer.getNumSamples();
-    const size_t limit = numSamples + write;
-    auto channel1 = newBuffer.getChannelPointer(0);
-    auto channel2 = newBuffer.getChannelPointer(1);
+    const size_t numChannels = audioBlock.getNumChannels();
+    const size_t numSamples = audioBlock.getNumSamples();
 
-    // if samples fit within buffer
-    if (limit < buffer.size())
+    jassert(numChannels >= 1); // This thing better have channels
+
+    // Mono the signal
+    std::memcpy(workingBuffer.data(), audioBlock.getChannelPointer(0), sizeof(float) * numSamples);
+    if (numChannels >= 2)
     {
-        size_t i = 0;
-        for (size_t s = write; s < limit; ++s)
+        for (int i = 0; i < numSamples; ++i)
         {
-            buffer[s] = (channel1[i] + channel2[i]) * 0.5f;
-            ++i;
+            workingBuffer[i] += audioBlock.getSample(1, i);
+            workingBuffer[i] *= 0.5f;
         }
-
-        writeAtomic.store(limit % buffer.size(), std::memory_order_release);
-
-        return;
     }
-    
-    // if samples go past buffer
-    size_t i = 0;
-    for (size_t s = write; s < buffer.size(); ++s)
+
+    // Push buffer
+    size_t startIndex = writeAtomic.load(std::memory_order_acquire);
+
+    if (startIndex + numSamples <= buffer.size())
     {
-        buffer[s] = (channel1[i] + channel2[i]) * 0.5f;
-        ++i;
+        std::memcpy(buffer.data() + startIndex, workingBuffer.data(), sizeof(float) * numSamples);
     }
-
-    const size_t newLimit = limit - buffer.size();
-
-    for (size_t s = 0; s < newLimit; ++s)
+    else
     {
-        buffer[s] = (channel1[i] + channel2[i]) * 0.5f;
-        ++i;
+        const size_t initialCount = buffer.size() - startIndex;
+        const size_t remainingCount = numSamples - initialCount;
+
+        std::memcpy(buffer.data() + startIndex, workingBuffer.data(), sizeof(float) * initialCount);
+        std::memcpy(buffer.data(), workingBuffer.data() + initialCount, sizeof(float) * remainingCount);
     }
 
-    writeAtomic.store(newLimit % buffer.size(), std::memory_order_release);
-    return;
+    writeAtomic.store((startIndex + numSamples) % buffer.size(), std::memory_order_release);
 }
-float RingBuffer::readSamples()
+
+float RingBuffer::readLoudestSample()
 {
     size_t write = writeAtomic.load(std::memory_order_acquire);
 
-    if (read == write) return 0.f;
+    if (read == write)
+        return -1.f;
 
     // If read is before write
     if (read < write)
@@ -91,4 +91,5 @@ float RingBuffer::readSamples()
 
     return loudest;
 }
+
 } // namespace xynth
