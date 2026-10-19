@@ -11,31 +11,34 @@
 cmake_minimum_required(VERSION 3.15)
 
 if (APPLE)
-  # Make the fat binary
-  set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "" FORCE)
+    # Make the fat binary
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "" FORCE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum OS X deployment version" FORCE)
 endif()
 
 # The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(LePhonk VERSION 1.0.4)
+project(LePhonk VERSION 1.0.5)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
 # included JUCE directly in your source tree (perhaps as a submodule), you'll need to tell CMake to
 # include that subdirectory as part of the build.
 
-# find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
-# or
-add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
-
 # Statically link C++ Runtime library on Windows. Dynamically linking means we have to rely on the
 # runtime library installed on the users computer. If the user has an outdated version of this library
 # crashed occur.
 if (MSVC)
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "Runtime")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:Release>" CACHE STRING "Runtime")
 endif()
+
+# find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
+# or
+add_subdirectory(Libraries/JUCE)            # If you've put JUCE in a subdirectory called JUCE
+add_subdirectory(Libraries/clap-juce-extensions EXCLUDE_FROM_ALL) # CLAP support
 
 # If you are building a VST2 or AAX plugin, CMake needs to be told where to find these SDKs on your
 # system. This setup should be done before calling `juce_add_plugin`.
@@ -50,7 +53,7 @@ endif()
 # Check the readme at `docs/CMake API.md` in the JUCE repo for the full list.
 
 juce_add_plugin(LePhonk
-    VERSION 1.0.4                               # Set this if the plugin version is different to the project version
+    VERSION 1.0.5                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     COMPANY_NAME "Xynth Audio"                  # Specify the name of the plugin's author
@@ -63,10 +66,15 @@ juce_add_plugin(LePhonk
     PLUGIN_MANUFACTURER_CODE Manu               # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE Hrzu                            # A unique four-character plugin id with exactly one upper-case character
                                                 # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
+    BUNDLE_ID "com.XynthAudio.LePhonk"          # Manually set the Bundle ID, since "Xynth Audio" has a space
     FORMATS AU VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-    VST3_CATEGORIES Fx Distortion Dynamics 
+    VST3_CATEGORIES Fx Distortion Dynamics
     AU_MAIN_TYPE kAudioUnitType_Effect
     PRODUCT_NAME "LePhonk")                     # The name of the final executable, which can differ from the target name
+
+clap_juce_extensions_plugin(TARGET LePhonk
+    CLAP_ID "com.XynthAudio.LePhonk"
+    CLAP_FEATURES audio-effect distortion compressor filter)
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
 # into your build tree. This should be included with `#include <JuceHeader.h>`. The include path for
@@ -77,121 +85,11 @@ juce_add_plugin(LePhonk
 juce_generate_juce_header(LePhonk)
 
 # Create source file GLOB
+file(GLOB_RECURSE MY_SOURCES Source/*)
 
-file(GLOB MY_SOURCES
-    Res/Drippy/au5Knob.png
-    Res/Drippy/danBG.png
-    Res/Drippy/danKnob.png
-    Res/Drippy/eliKnob.png
-    Res/Drippy/exylKnob.png
-    Res/Drippy/peteKnob.png
-    Res/Drippy/sharkKnob.png
-    Res/Drippy/skyKnob.png
-    Res/Drippy/speechKnob.png
-    Res/Fonts/Montserrat-Regular.ttf
-    Res/Fonts/MuseoModerno-Bold.ttf
-    Res/Fonts/MuseoModerno-Light.ttf
-    Res/Fonts/MuseoModerno-Medium.ttf
-    Res/Fonts/MuseoModerno-Regular.ttf
-    Res/Fonts/MuseoModerno-SemiBold.ttf
-    Res/Fonts/MuseoModerno-Thin.ttf
-    Res/backArrow.svg
-    Res/drippyBG.png
-    Res/hellBG.png
-    Res/juiceBG.png
-    Res/xynthLogo.png
-    Source/Common/Constants.h
-    Source/Common/ParameterText.cpp
-    Source/Common/ParameterText.h
-    Source/Common/Ranges.cpp
-    Source/Common/Ranges.h
-    Source/Common/RingBuffer.cpp
-    Source/Common/RingBuffer.h
-    Source/DSP/OTT/OTT.cpp
-    Source/DSP/OTT/OTT.h
-    Source/DSP/OTT/OTTwithMultiplier.cpp
-    Source/DSP/OTT/OTTwithMultiplier.h
-    Source/DSP/OTT/UpDownComp.cpp
-    Source/DSP/OTT/UpDownComp.h
-    Source/DSP/Utils/InterleavedAudio.cpp
-    Source/DSP/Utils/InterleavedAudio.h
-    Source/DSP/Utils/SIMDFilter.cpp
-    Source/DSP/Utils/SIMDFilter.h
-    Source/DSP/Zekete/Dist1.cpp
-    Source/DSP/Zekete/Dist1.h
-    Source/DSP/Zekete/Dist2.cpp
-    Source/DSP/Zekete/Dist2.h
-    Source/DSP/Zekete/Dist3.cpp
-    Source/DSP/Zekete/Dist3.h
-    Source/DSP/Zekete/Dist4.cpp
-    Source/DSP/Zekete/Dist4.h
-    Source/DSP/Zekete/Dist5.cpp
-    Source/DSP/Zekete/Dist5.h
-    Source/DSP/Zekete/Dist6.cpp
-    Source/DSP/Zekete/Dist6.h
-    Source/DSP/Zekete/DistTemplate.h
-    Source/DSP/Zekete/ZeketeHeader.h
-    Source/DSP/Fonz.cpp
-    Source/DSP/Fonz.h
-    Source/DSP/Zekete.cpp
-    Source/DSP/Zekete.h
-    Source/GUI/About/UpdateCheck/BackButton.cpp
-    Source/GUI/About/UpdateCheck/BackButton.h
-    Source/GUI/About/UpdateCheck/UpdateChecker.cpp
-    Source/GUI/About/UpdateCheck/UpdateChecker.h
-    Source/GUI/About/AboutOverlay.cpp
-    Source/GUI/About/AboutOverlay.h
-    Source/GUI/About/AboutWindow.cpp
-    Source/GUI/About/AboutWindow.h
-    Source/GUI/About/CheckmarkButton.cpp
-    Source/GUI/About/CheckmarkButton.h
-    Source/GUI/About/TextButton.cpp
-    Source/GUI/About/TextButton.h
-    Source/GUI/CustomLooks/CustomLook.cpp
-    Source/GUI/CustomLooks/CustomLook.h
-    Source/GUI/CustomLooks/DrippyLook.cpp
-    Source/GUI/CustomLooks/DrippyLook.h
-    Source/GUI/CustomLooks/HellLook.cpp
-    Source/GUI/CustomLooks/HellLook.h
-    Source/GUI/CustomLooks/JuiceLook.cpp
-    Source/GUI/CustomLooks/JuiceLook.h
-    Source/GUI/Fonz/FonzLayout.cpp
-    Source/GUI/Fonz/FonzLayout.h
-    Source/GUI/Header/BypassButton.cpp
-    Source/GUI/Header/BypassButton.h
-    Source/GUI/Header/BypassGain.cpp
-    Source/GUI/Header/BypassGain.h
-    Source/GUI/Header/LogoButton.cpp
-    Source/GUI/Header/LogoButton.h
-    Source/GUI/Header/SkinSelect.cpp
-    Source/GUI/Header/SkinSelect.h
-    Source/GUI/Ottz/MultiplierSlider.cpp
-    Source/GUI/Ottz/MultiplierSlider.h
-    Source/GUI/Ottz/OttzLayout.cpp
-    Source/GUI/Ottz/OttzLayout.h
-    Source/GUI/Ottz/TimeKnob.cpp
-    Source/GUI/Ottz/TimeKnob.h
-    Source/GUI/Utils/DualLabel.cpp
-    Source/GUI/Utils/DualLabel.h
-    Source/GUI/Utils/FullSlider.cpp
-    Source/GUI/Utils/FullSlider.h
-    Source/GUI/Utils/GuiData.h
-    Source/GUI/Utils/TooltipLabel.cpp
-    Source/GUI/Utils/TooltipLabel.h
-    Source/GUI/Utils/TooltipSlider.cpp
-    Source/GUI/Utils/TooltipSlider.h
-    Source/GUI/Zekete/DistGraph.cpp
-    Source/GUI/Zekete/DistGraph.h
-    Source/GUI/Zekete/DistSelect.cpp
-    Source/GUI/Zekete/DistSelect.h
-    Source/GUI/Zekete/ZeketeLayout.cpp
-    Source/GUI/Zekete/ZeketeLayout.h
-    Source/GUI/WindowLayout.cpp
-    Source/GUI/WindowLayout.h
-    Source/PluginProcessor.cpp
-    Source/PluginProcessor.h
-    Source/PluginEditor.cpp
-    Source/PluginEditor.h)
+# JUCE repaint debugging
+
+# add_compile_definitions(JUCE_ENABLE_REPAINT_DEBUGGING)
 
 # Maintain folder structure
 
@@ -228,7 +126,7 @@ target_compile_definitions(LePhonk
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
-juce_add_binary_data(AudioPluginData BinaryData SOURCES 
+juce_add_binary_data(AudioPluginData BinaryData SOURCES
     Res/Drippy/au5Knob.png
     Res/Drippy/danBG.png
     Res/Drippy/danKnob.png

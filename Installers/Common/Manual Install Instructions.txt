@@ -1,0 +1,10 @@
+=== Manual Plugin Install Instructions ===
+
+Windows:
+- VST3: Move the .vst3 folder to `C:\Program Files\Common Files\VST3`
+- CLAP: Move the .clap file to `C:\Program Files\Common Files\CLAP`
+
+MacOS:
+- VST3: Move the .vst3 file to `Library/Audio/Plug-ins/VST3`
+- Audio Units: Move the .component file to `Library/Audio/Plug-ins/Components`
+- CLAP: Move the .clap file to `Library/Audio/Plug-ins/CLAP`

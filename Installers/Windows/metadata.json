@@ -1,0 +1,16 @@
+{
+  "Endpoint": "https://wus2.codesigning.azure.net",
+  "CodeSigningAccountName": "xynth-signing",
+  "CertificateProfileName": "app-signing",
+  "ExcludeCredentials": [
+    "ManagedIdentityCredential",
+    "WorkloadIdentityCredential",
+    "EnvironmentCredential",
+    "SharedTokenCacheCredential",
+    "VisualStudioCredential",
+    "VisualStudioCodeCredential",
+    "AzurePowerShellCredential",
+    "AzureDeveloperCliCredential",
+    "InteractiveBrowserCredential"
+  ]
+}
