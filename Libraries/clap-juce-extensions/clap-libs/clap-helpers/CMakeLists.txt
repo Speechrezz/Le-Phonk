@@ -1,23 +1,31 @@
 cmake_minimum_required(VERSION 3.17)
 cmake_policy(SET CMP0100 NEW)  # handle .hh files
 project(clap-helpers C CXX)
+include(GNUInstallDirs)
 
 option(CLAP_HELPERS_BUILD_TESTS "Build tests for the CLAP Helper" FALSE)
 option(CLAP_HELPERS_DOWNLOAD_DEPENDENCIES "Resolve CLAP Targets with CPM if not defined" FALSE)
+option(CLAP_HELPERS_DOWNLOAD_CLAP_BRANCH_IS_NEXT "If downloading, download against against 'next' branch" FALSE)
+option(CLAP_HELPERS_NO_CLAP_IS_FATAL "If there is no clap target and no download, emit a fatal error" TRUE)
 
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE include)
 
 if (NOT TARGET clap)
     if (${CLAP_HELPERS_DOWNLOAD_DEPENDENCIES})
-        message(STATUS "${PROJECT_NAME}: Downloading CLAP using CPM")
+        if (${CLAP_HELPERS_DOWNLOAD_CLAP_BRANCH_IS_NEXT})
+           set(cpmbranch "next")
+        else()
+           set(cpmbranch "main")
+        endif()
+        message(STATUS "${PROJECT_NAME}: Downloading CLAP on branch ${cpmbranch} using CPM")
 
         message(STATUS "${PROJECT_NAME}: including CPM")
         include(cmake/external/CPM.cmake)
         CPMAddPackage(
                 NAME "clap"
                 GITHUB_REPOSITORY "free-audio/clap"
-                GIT_TAG "next"
+                GIT_TAG ${cpmbranch}
                 EXCLUDE_FROM_ALL TRUE
                 DOWNLOAD_ONLY TRUE
                 SOURCE_DIR cpm/clap
@@ -25,7 +33,11 @@ if (NOT TARGET clap)
 
         add_subdirectory(${CMAKE_BINARY_DIR}/cpm/clap)
     else()
-        message(FATAL_ERROR "${PROJECT_NAME}: 'clap' is not a target. Set CLAP_HELPERS_DOWNLOAD_DEPENDENCIES or include clap before clap-helpers")
+        if (${CLAP_HELPERS_NO_CLAP_IS_FATAL})
+            message(FATAL_ERROR "${PROJECT_NAME}: 'clap' is not a target. Set CLAP_HELPERS_DOWNLOAD_DEPENDENCIES or include clap before clap-helpers")
+        else()
+            message(WARNING "${PROJECT_NAME}: 'clap' is not a target. Set CLAP_HELPERS_DOWNLOAD_DEPENDENCIES or include clap before clap-helpers. Build proceeding anyway. Good luck.")
+        endif()
     endif()
 endif()
 target_link_libraries(${PROJECT_NAME} INTERFACE clap)
@@ -86,5 +98,5 @@ if (${CLAP_HELPERS_BUILD_TESTS})
     )
 endif()
 
-install(DIRECTORY include DESTINATION ".")
-install(FILES "cmake/clap-helpers-config.cmake" DESTINATION "./lib/cmake/clap-helpers")
+install(DIRECTORY "include/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(FILES "cmake/clap-helpers-config.cmake" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clap-helpers")

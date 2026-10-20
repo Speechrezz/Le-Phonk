@@ -1,3 +1,61 @@
+# Changes in 1.2.7
+
+* [webview.h](include/clap/ext/draft/webview.h): new webview draft extensions
+* [plugin-state-converter.h](include/clap/factory/draft/plugin-state-converter.h): add missing `CLAP_ABI`
+
+# Changes in 1.2.6
+
+* [mini-curve-display.h](include/clap/ext/draft/mini-curve-display.h): third iteration, added curve stacking, curve kind and curve hints.
+
+# Changes in 1.2.5
+
+* [mini-curve-display.h](include/clap/ext/draft/mini-curve-display.h): second iteration, remove `host->cuve_changed()` and improve documentation
+* [project-location.h](include/clap/ext/draft/project-location.h): fix typo
+
+# Changes in 1.2.4
+
+* [mini-curve-display.h](include/clap/ext/draft/mini-curve-display.h): new extension to let the plugin render a mini murve to be displayed in the host's mixer, eg: EQ frequency response
+* [project-location.h](include/clap/ext/draft/project-location.h): rename the extension and second iteration on the interface
+* [surround.h](include/clap/ext/surround.h): add `CLAP_SURROUND_TSL`, `CLAP_SURROUND_TSR`, and improve documentation
+* [thread-check.h](include/clap/ext/thread-check.h): adjust documentation
+
+# Changes in 1.2.3
+
+## New draft extensions
+
+* [scratch-memory](include/clap/ext/draft/scratch-memory.h): host provided scratch memory within the process call
+* [location](include/clap/ext/draft/location.h): better info about the plugin location within the project
+* [gain-adjustment-metering](include/clap/ext/draft/gain-adjustment-metering.h): gain reduction feedback
+
+## Documention
+
+* [events.h](include/clap/events.h): clarify sysex lifetime
+* [host.h](include/clap/host.h): clarify `request_callback()`
+* [ambisonic.h](include/clap/ext/ambisonic.h): remove bad comment
+
+## Fixes
+
+* [plugin-template.c](src/plugin-template.c): fix bad assertion
+
+# Changes in 1.2.2
+
+* [thread-check.h](include/clap/ext/thread-check.h): expand the thread-doc to clarify and expand realtime
+* [latency.h](include/clap/ext/latency.h): adjust latency extension requirements
+* [undo.h](include/clap/ext/draft/undo.h): re-design the interface
+  * the plugin interfaces have been separated into 2 independent ones
+  * the plugin interfaces are optional
+  * simplification of the design
+
+# Changes in 1.2.1
+
+## New draft extensions
+
+* [undo.h](include/clap/ext/draft/undo.h): shared undo stack for the host and plugin.
+
+## Documentation
+
+* [events.h](include/clap/events.h): clarification for note on events.
+
 # Changes in 1.2.0
 
 ## New conventions

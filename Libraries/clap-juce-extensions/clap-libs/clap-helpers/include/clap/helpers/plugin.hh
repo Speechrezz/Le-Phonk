@@ -5,7 +5,6 @@
 #include <mutex>
 #include <queue>
 #include <string>
-#include <vector>
 
 #include <clap/all.h>
 
@@ -150,6 +149,32 @@ namespace clap { namespace helpers {
          return false;
       }
 
+      //--------------------------------------//
+      // clap_plugin_configurable_audio_ports //
+      //--------------------------------------//
+      virtual bool implementsConfigurableAudioPorts() const noexcept { return false; }
+      virtual bool configurableAudioPortsCanApplyConfiguration(
+         const clap_audio_port_configuration_request *requests,
+         uint32_t request_count) const noexcept {
+         return false;
+      }
+      virtual bool configurableAudioPortsApplyConfiguration(
+         const clap_audio_port_configuration_request *requests, uint32_t request_count) noexcept {
+         return false;
+      }
+
+      //----------------------//
+      // clap_plugin_surround //
+      //----------------------//
+      virtual bool implementsSurround() const noexcept { return false; }
+      virtual bool isChannelMaskSupported(uint64_t channel_mask) const noexcept { return false; }
+      virtual uint32_t getChannelMap(bool is_input,
+                                     uint32_t port_index,
+                                     uint8_t *channel_map,
+                                     uint32_t channel_map_capacity) const noexcept {
+         return 0;
+      }
+
       //--------------------//
       // clap_plugin_params //
       //--------------------//
@@ -283,12 +308,87 @@ namespace clap { namespace helpers {
       virtual bool implementsVoiceInfo() const noexcept { return false; }
       virtual bool voiceInfoGet(clap_voice_info *info) noexcept { return false; }
 
+      //------------------//
+      // clap_plugin_undo //
+      //------------------//
+      virtual bool implementsUndoDelta() const noexcept { return false; }
+      virtual void undoDeltaGetDeltaProperties(clap_undo_delta_properties_t *properties) noexcept {}
+      virtual bool undoDeltaCanUseDeltaFormatVersion(clap_id format_version) noexcept {
+         return false;
+      }
+      virtual bool
+      undoDeltaUndo(clap_id format_version, const void *delta, size_t delta_size) noexcept {
+         return false;
+      }
+      virtual bool
+      undoDeltaRedo(clap_id format_version, const void *delta, size_t delta_size) noexcept {
+         return false;
+      }
+
+      //--------------------------//
+      // clap_plugin_undo_context //
+      //--------------------------//
+      virtual bool implementsUndoContext() const noexcept { return false; }
+      virtual void undoContextSetCanUndo(bool can_undo) noexcept {}
+      virtual void undoContextSetCanRedo(bool can_redo) noexcept {}
+      virtual void undoContextSetUndoName(const char *name) noexcept {}
+      virtual void undoContextSetRedoName(const char *name) noexcept {}
+
+      //------------------------------//
+      // clap_plugin_project_location //
+      //------------------------------//
+      virtual bool implementsProjectLocation() const noexcept { return false; }
+      virtual void projectLocationSet(const clap_project_location_element *path,
+                                      uint32_t num_elements) noexcept {}
+
+      //--------------------------------------//
+      // clap_plugin_gain_adjustment_metering //
+      //--------------------------------------//
+      virtual bool implementsGainAdjustmentMetering() const noexcept { return false; }
+      virtual double gainAdjustmentMeteringGet() noexcept { return 0; }
+
+      //--------------------------------//
+      // clap_plugin_mini_curve_display //
+      //--------------------------------//
+      virtual bool implementsMiniCurveDisplay() const noexcept { return false; }
+      virtual uint32_t miniCurveDisplayGetCurveCount() const noexcept { return 0; }
+      virtual uint32_t miniCurveDisplayRender(clap_mini_curve_display_curve_data_t *curves,
+                                              uint32_t curves_size) noexcept {
+         return 0;
+      }
+      virtual void miniCurveDisplaySetObserved(bool is_observed) noexcept {}
+      virtual bool miniCurveDisplayGetAxisName(uint32_t curve_index,
+                                               char *x_name,
+                                               char *y_name,
+                                               uint32_t name_capacity) noexcept {
+         return false;
+      }
+
+      //---------------------//
+      // clap_plugin_webview //
+      //---------------------//
+      virtual bool implementsWebview() const noexcept { return false; }
+      virtual int32_t webviewGetUri(char *uri, uint32_t uriCapacity) const noexcept { return 0; }
+      virtual bool webviewGetResource(const char *path,
+                                      char *mime,
+                                      uint32_t mime_capacity,
+                                      const clap_ostream_t *data_stream) {
+         return false;
+      }
+      virtual bool webviewReceive(const void *buffer, uint32_t size) const noexcept {
+         return false;
+      }
+
       /////////////
       // Logging //
       /////////////
       void log(clap_log_severity severity, const char *msg) const noexcept;
       void hostMisbehaving(const char *msg) const noexcept;
       void hostMisbehaving(const std::string &msg) const noexcept { hostMisbehaving(msg.c_str()); }
+      void pluginMisbehaving(const char *msg) const noexcept;
+      void pluginMisbehaving(const std::string &msg) const noexcept {
+         pluginMisbehaving(msg.c_str());
+      }
 
       // Receives a copy of all the logging messages sent to the host.
       // This is useful to have the messages in both the host's logs and the plugin's logs.
@@ -303,6 +403,12 @@ namespace clap { namespace helpers {
       void ensureMainThread(const char *method) const noexcept;
       void ensureAudioThread(const char *method) const noexcept;
       void ensureParamThread(const char *method) const noexcept;
+
+      ////////////////////
+      // General Checks //
+      ////////////////////
+      void ensureIsInactive(const char *methodName) const noexcept;
+      void ensureIsActive(const char *methodName) const noexcept;
 
       ///////////////
       // Utilities //
@@ -416,6 +522,25 @@ namespace clap { namespace helpers {
                                                     bool is_active,
                                                     uint32_t sample_size) noexcept;
 
+      // clap_plugin_configurable_audio_ports
+      static bool clapConfigurableAudioPortsCanApplyConfiguration(
+         const clap_plugin_t *plugin,
+         const clap_audio_port_configuration_request *requests,
+         uint32_t request_count) noexcept;
+      static bool clapConfigurableAudioPortsApplyConfiguration(
+         const clap_plugin_t *plugin,
+         const clap_audio_port_configuration_request *requests,
+         uint32_t request_count) noexcept;
+
+      // clap_plugin_surround
+      static bool clapSurroundIsChannelMaskSupported(const clap_plugin_t *plugin,
+                                                     uint64_t channel_mask) noexcept;
+      static uint32_t clapSurroundGetChannelMap(const clap_plugin_t *plugin,
+                                                bool is_input,
+                                                uint32_t port_index,
+                                                uint8_t *channel_map,
+                                                uint32_t channel_map_capacity) noexcept;
+
       // clap_plugin_params
       static uint32_t clapParamsCount(const clap_plugin *plugin) noexcept;
       static bool clapParamsInfo(const clap_plugin *plugin,
@@ -523,10 +648,67 @@ namespace clap { namespace helpers {
                                                       char *path,
                                                       uint32_t path_size) noexcept;
 
+      // clap_plugin_undo_delta
+      static void
+      clapUndoDeltaGetDeltaProperties(const clap_plugin_t *plugin,
+                                      clap_undo_delta_properties_t *properties) noexcept;
+      static bool clapUndoDeltaCanUseDeltaFormatVersion(const clap_plugin_t *plugin,
+                                                        clap_id format_version) noexcept;
+      static bool clapUndoDeltaUndo(const clap_plugin_t *plugin,
+                                    clap_id format_version,
+                                    const void *delta,
+                                    size_t delta_size) noexcept;
+      static bool clapUndoDeltaRedo(const clap_plugin_t *plugin,
+                                    clap_id format_version,
+                                    const void *delta,
+                                    size_t delta_size) noexcept;
+
+      // clap_plugin_undo_context
+      static void clapUndoContextSetCanUndo(const clap_plugin_t *plugin, bool can_undo) noexcept;
+      static void clapUndoContextSetCanRedo(const clap_plugin_t *plugin, bool can_redo) noexcept;
+      static void clapUndoContextSetUndoName(const clap_plugin_t *plugin,
+                                             const char *name) noexcept;
+      static void clapUndoContextSetRedoName(const clap_plugin_t *plugin,
+                                             const char *name) noexcept;
+
+      // clap_plugin_location
+      static void clapProjectLocationSet(const clap_plugin_t *plugin,
+                                         const clap_project_location_element_t *path,
+                                         uint32_t num_elements) noexcept;
+
+      // clap_plugin_gain_adjustment_metering
+      static double clapGainAdjustmentMeteringGet(const clap_plugin_t *plugin) noexcept;
+
+      // clap_plugin_mini_curve_display
+      static uint32_t clapMiniCurveDisplayGetCurveCount(const clap_plugin_t *plugin) noexcept;
+      static uint32_t clapMiniCurveDisplayRender(const clap_plugin_t *plugin,
+                                                 clap_mini_curve_display_curve_data_t *curves,
+                                                 uint32_t curves_size) noexcept;
+      static void clapMiniCurveDisplaySetObserved(const clap_plugin_t *plugin,
+                                                  bool is_observed) noexcept;
+      static bool clapMiniCurveDisplayGetAxisName(const clap_plugin_t *plugin,
+                                                  uint32_t curve_index,
+                                                  char *x_name,
+                                                  char *y_name,
+                                                  uint32_t name_capacity) noexcept;
+
+      // clap_plugin_webview
+      static int32_t
+      clapWebviewGetUri(const clap_plugin_t *plugin, char *uri, uint32_t uri_capacity);
+      static bool clapWebviewGetResource(const clap_plugin_t *plugin,
+                                         const char *path,
+                                         char *mime,
+                                         uint32_t mime_capacity,
+                                         const clap_ostream_t *data_stream);
+      static bool
+      clapWebviewReceive(const clap_plugin_t *plugin, const void *buffer, uint32_t size);
+
       // interfaces
       static const clap_plugin_audio_ports _pluginAudioPorts;
       static const clap_plugin_audio_ports_config _pluginAudioPortsConfig;
       static const clap_plugin_audio_ports_activation _pluginAudioPortsActivation;
+      static const clap_plugin_configurable_audio_ports _pluginConfigurableAudioPorts;
+      static const clap_plugin_surround_t _pluginSurroundConfig;
       static const clap_plugin_gui _pluginGui;
       static const clap_plugin_latency _pluginLatency;
       static const clap_plugin_note_name _pluginNoteName;
@@ -546,10 +728,17 @@ namespace clap { namespace helpers {
       static const clap_plugin_voice_info _pluginVoiceInfo;
       static const clap_plugin_context_menu _pluginContextMenu;
       static const clap_plugin_resource_directory _pluginResourceDirectory;
+      static const clap_plugin_undo_delta _pluginUndoDelta;
+      static const clap_plugin_undo_context _pluginUndoContext;
+      static const clap_plugin_project_location _pluginProjectLocation;
+      static const clap_plugin_gain_adjustment_metering _pluginGainAdjustmentMetering;
+      static const clap_plugin_mini_curve_display _pluginMiniCurveDisplay;
+      static const clap_plugin_webview _pluginWebview;
 
       // state
       bool _wasInitialized = false;
       bool _isActive = false;
+      bool _isBeingActivated = false;
       bool _isProcessing = false;
       bool _isBeingDestroyed = false;
       double _sampleRate = 0;

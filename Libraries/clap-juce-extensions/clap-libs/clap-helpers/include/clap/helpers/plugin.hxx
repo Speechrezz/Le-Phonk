@@ -1,8 +1,11 @@
+#pragma once
+
 #include <cassert>
+#include <cmath>
 #include <cstring>
+#include <exception>
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
 #include <utility>
 
 #include "host-proxy.hxx"
@@ -58,6 +61,18 @@ namespace clap { namespace helpers {
    const clap_plugin_audio_ports_activation Plugin<h, l>::_pluginAudioPortsActivation = {
       clapAudioPortsActivationCanActivateWhileProcessing,
       clapAudioPortsActivationSetActive,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_configurable_audio_ports Plugin<h, l>::_pluginConfigurableAudioPorts = {
+      clapConfigurableAudioPortsCanApplyConfiguration,
+      clapConfigurableAudioPortsApplyConfiguration,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_surround_t Plugin<h, l>::_pluginSurroundConfig = {
+      clapSurroundIsChannelMaskSupported,
+      clapSurroundGetChannelMap,
    };
 
    template <MisbehaviourHandler h, CheckingLevel l>
@@ -144,6 +159,47 @@ namespace clap { namespace helpers {
    template <MisbehaviourHandler h, CheckingLevel l>
    const clap_plugin_tail Plugin<h, l>::_pluginTail = {
       clapTailGet,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_undo_delta Plugin<h, l>::_pluginUndoDelta = {
+      clapUndoDeltaGetDeltaProperties,
+      clapUndoDeltaCanUseDeltaFormatVersion,
+      clapUndoDeltaUndo,
+      clapUndoDeltaRedo,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_undo_context Plugin<h, l>::_pluginUndoContext = {
+      clapUndoContextSetCanUndo,
+      clapUndoContextSetCanRedo,
+      clapUndoContextSetUndoName,
+      clapUndoContextSetRedoName,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_project_location Plugin<h, l>::_pluginProjectLocation = {
+      clapProjectLocationSet,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_gain_adjustment_metering Plugin<h, l>::_pluginGainAdjustmentMetering = {
+      clapGainAdjustmentMeteringGet,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_mini_curve_display Plugin<h, l>::_pluginMiniCurveDisplay = {
+      clapMiniCurveDisplayGetCurveCount,
+      clapMiniCurveDisplayRender,
+      clapMiniCurveDisplaySetObserved,
+      clapMiniCurveDisplayGetAxisName,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_plugin_webview Plugin<h, l>::_pluginWebview = {
+      clapWebviewGetUri,
+      clapWebviewGetResource,
+      clapWebviewReceive,
    };
 
    template <MisbehaviourHandler h, CheckingLevel l>
@@ -319,12 +375,15 @@ namespace clap { namespace helpers {
       assert(!self._isActive);
       assert(self._sampleRate == 0);
 
+      self._isBeingActivated = true;
       if (!self.activate(sample_rate, minFrameCount, maxFrameCount)) {
+         self._isBeingActivated = false;
          assert(!self._isActive);
          assert(self._sampleRate == 0);
          return false;
       }
 
+      self._isBeingActivated = false;
       self._isActive = true;
       self._sampleRate = sample_rate;
       return true;
@@ -438,9 +497,12 @@ namespace clap { namespace helpers {
       auto &self = from(plugin);
       self.ensureInitialized("extension");
 
+      if (auto ext = self.extension(id))
+         return ext;
       if (!strcmp(id, CLAP_EXT_STATE) && self.implementsState())
          return &_pluginState;
-      if (!strcmp(id, CLAP_EXT_STATE_CONTEXT) && self.implementsStateContext() && self.implementsState())
+      if (!strcmp(id, CLAP_EXT_STATE_CONTEXT) && self.implementsStateContext() &&
+          self.implementsState())
          return &_pluginStateContext;
       if ((!strcmp(id, CLAP_EXT_PRESET_LOAD) || !strcmp(id, CLAP_EXT_PRESET_LOAD_COMPAT)) &&
           self.implementsPresetLoad())
@@ -456,10 +518,14 @@ namespace clap { namespace helpers {
          return &_pluginAudioPorts;
       if ((!strcmp(id, CLAP_EXT_AUDIO_PORTS_ACTIVATION) ||
            !strcmp(id, CLAP_EXT_AUDIO_PORTS_ACTIVATION_COMPAT)) &&
-          self.implementsAudioPorts())
+          self.implementsAudioPortsActivation())
          return &_pluginAudioPortsActivation;
       if (!strcmp(id, CLAP_EXT_AUDIO_PORTS_CONFIG) && self.implementsAudioPortsConfig())
          return &_pluginAudioPortsConfig;
+      if (!strcmp(id, CLAP_EXT_SURROUND) && self.implementsSurround())
+         return &_pluginSurroundConfig;
+      if (!strcmp(id, CLAP_EXT_CONFIGURABLE_AUDIO_PORTS) && self.implementsConfigurableAudioPorts())
+         return &_pluginConfigurableAudioPorts;
       if (!strcmp(id, CLAP_EXT_PARAMS) && self.implementsParams())
          return &_pluginParams;
       if ((!strcmp(id, CLAP_EXT_PARAM_INDICATION) ||
@@ -492,9 +558,22 @@ namespace clap { namespace helpers {
       if (self.enableDraftExtensions()) {
          if (!strcmp(id, CLAP_EXT_RESOURCE_DIRECTORY) && self.implementsResourceDirectory())
             return &_pluginResourceDirectory;
+         if (!strcmp(id, CLAP_EXT_UNDO_DELTA) && self.implementsUndoDelta())
+            return &_pluginUndoDelta;
+         if (!strcmp(id, CLAP_EXT_UNDO_CONTEXT) && self.implementsUndoContext())
+            return &_pluginUndoContext;
+         if (!strcmp(id, CLAP_EXT_PROJECT_LOCATION) && self.implementsProjectLocation())
+            return &_pluginProjectLocation;
+         if (!strcmp(id, CLAP_EXT_GAIN_ADJUSTMENT_METERING) &&
+             self.implementsGainAdjustmentMetering())
+            return &_pluginGainAdjustmentMetering;
+         if (!strcmp(id, CLAP_EXT_MINI_CURVE_DISPLAY) && self.implementsMiniCurveDisplay())
+            return &_pluginMiniCurveDisplay;
+         if (!strcmp(id, CLAP_EXT_WEBVIEW) && self.implementsWebview())
+            return &_pluginWebview;
       }
 
-      return self.extension(id);
+      return nullptr;
    }
 
    //-------------------//
@@ -506,9 +585,9 @@ namespace clap { namespace helpers {
       self.ensureMainThread("clap_plugin_latency.get");
 
       if (l >= CheckingLevel::Minimal) {
-         if (!self._isActive)
+         if (!self._isActive && !self._isBeingActivated)
             self.hostMisbehaving("It is wrong to query the latency before the plugin is activated, "
-                                 "because if the plugin dosen't know the sample rate, it can't "
+                                 "because if the plugin doesn't know the sample rate, it can't "
                                  "know the number of samples of latency.");
       }
 
@@ -525,7 +604,7 @@ namespace clap { namespace helpers {
       if (l >= CheckingLevel::Minimal) {
          if (!self._isActive)
             self.hostMisbehaving("It is wrong to query the tail before the plugin is activated, "
-                                 "because if the plugin dosen't know the sample rate, it can't "
+                                 "because if the plugin doesn't know the sample rate, it can't "
                                  "know the tail length in samples.");
       }
 
@@ -728,12 +807,14 @@ namespace clap { namespace helpers {
    bool Plugin<h, l>::clapAudioPortsSetConfig(const clap_plugin *plugin,
                                               clap_id config_id) noexcept {
       auto &self = from(plugin);
-      self.ensureMainThread("clap_plugin_audio_ports.get_config");
+      self.ensureMainThread("clap_plugin_audio_ports.set_config");
 
       if (l >= CheckingLevel::Minimal) {
-         if (self.isActive())
+         if (self.isActive()) {
             self.hostMisbehaving(
                "it is illegal to call clap_audio_ports.set_config if the plugin is active");
+            return false;
+         }
       }
 
       return self.audioPortsSetConfig(config_id);
@@ -763,6 +844,7 @@ namespace clap { namespace helpers {
                "it is illegal to call clap_audio_ports_activation.set_active() if the plugin is "
                "active if "
                "clap_plugin_audio_ports_activation.can_activate_while_processing() returns false");
+            return false;
          }
       }
 
@@ -775,6 +857,88 @@ namespace clap { namespace helpers {
       self.ensureMainThread("clap_plugin_params.count");
 
       return self.paramsCount();
+   }
+
+   //--------------------------------------//
+   // clap_plugin_configurable_audio_ports //
+   //--------------------------------------//
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapConfigurableAudioPortsCanApplyConfiguration(
+      const clap_plugin_t *plugin,
+      const clap_audio_port_configuration_request *requests,
+      uint32_t request_count) noexcept {
+      auto &self = from(plugin);
+      auto methodName = "clap_plugin_configurable_audio_ports.can_apply_configuration";
+      self.ensureMainThread(methodName);
+      self.ensureIsInactive(methodName);
+
+      return self.configurableAudioPortsCanApplyConfiguration(requests, request_count);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapConfigurableAudioPortsApplyConfiguration(
+      const clap_plugin_t *plugin,
+      const clap_audio_port_configuration_request *requests,
+      uint32_t request_count) noexcept {
+      auto &self = from(plugin);
+      auto methodName = "clap_plugin_configurable_audio_ports.apply_configuration";
+      self.ensureMainThread(methodName);
+      self.ensureIsInactive(methodName);
+
+      bool canApplyConfiguration;
+      if (l >= CheckingLevel::Minimal) {
+         canApplyConfiguration =
+            self.configurableAudioPortsCanApplyConfiguration(requests, request_count);
+      }
+
+      bool applyConfigurationSuccess =
+         self.configurableAudioPortsApplyConfiguration(requests, request_count);
+
+      if (l >= CheckingLevel::Minimal && canApplyConfiguration != applyConfigurationSuccess) {
+         self._host.pluginMisbehaving(
+            "Plugin's functions clap_plugin_configurable_audio_ports.can_apply_configuration and "
+            "clap_plugin_configurable_audio_ports.apply_configuration returned different values "
+            "for the same configuration.");
+      }
+
+      return applyConfigurationSuccess;
+   }
+
+   //----------------------//
+   // clap_plugin_surround //
+   //----------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapSurroundIsChannelMaskSupported(const clap_plugin_t *plugin,
+                                                         uint64_t channel_mask) noexcept {
+      auto &self = from(plugin);
+      auto methodName = "clap_plugin_surround.is_channel_mask_supported";
+      self.ensureMainThread(methodName);
+
+      return self.isChannelMaskSupported(channel_mask);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   uint32_t Plugin<h, l>::clapSurroundGetChannelMap(const clap_plugin_t *plugin,
+                                                    bool is_input,
+                                                    uint32_t port_index,
+                                                    uint8_t *channel_map,
+                                                    uint32_t channel_map_capacity) noexcept {
+      auto &self = from(plugin);
+      auto methodName = "clap_plugin_surround.get_channel_map";
+      self.ensureMainThread(methodName);
+
+      const uint32_t channel_count =
+         self.getChannelMap(is_input, port_index, channel_map, channel_map_capacity);
+
+      if (l >= CheckingLevel::Minimal && channel_count > channel_map_capacity) {
+         self._host.pluginMisbehaving(
+            "Plugin's functions clap_plugin_surround.get_channel_map cannot return a channel "
+            "count greater than channel_map_capacity.");
+         return channel_map_capacity;
+      }
+
+      return channel_count;
    }
 
    //--------------------//
@@ -1641,6 +1805,227 @@ namespace clap { namespace helpers {
       return self.resourceDirectoryGetFilePath(index, path, path_size);
    }
 
+   //------------------//
+   // clap_plugin_undo //
+   //------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapUndoDeltaGetDeltaProperties(
+      const clap_plugin_t *plugin, clap_undo_delta_properties_t *properties) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_delta.get_delta_properties");
+      return self.undoDeltaGetDeltaProperties(properties);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapUndoDeltaCanUseDeltaFormatVersion(const clap_plugin_t *plugin,
+                                                            clap_id format_version) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_delta.can_use_delta_format_version");
+      return self.undoDeltaCanUseDeltaFormatVersion(format_version);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapUndoDeltaUndo(const clap_plugin_t *plugin,
+                                        clap_id format_version,
+                                        const void *delta,
+                                        size_t delta_size) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_delta.undo");
+      return self.undoDeltaUndo(format_version, delta, delta_size);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapUndoDeltaRedo(const clap_plugin_t *plugin,
+                                        clap_id format_version,
+                                        const void *delta,
+                                        size_t delta_size) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_delta.redo");
+      return self.undoDeltaRedo(format_version, delta, delta_size);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapUndoContextSetCanUndo(const clap_plugin_t *plugin,
+                                                bool can_undo) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo.set_can_undo");
+      self.undoContextSetCanUndo(can_undo);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapUndoContextSetCanRedo(const clap_plugin_t *plugin,
+                                                bool can_redo) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_context.set_can_redo");
+      self.undoContextSetCanRedo(can_redo);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapUndoContextSetUndoName(const clap_plugin_t *plugin,
+                                                 const char *name) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_context.set_undo_name");
+      self.undoContextSetUndoName(name);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapUndoContextSetRedoName(const clap_plugin_t *plugin,
+                                                 const char *name) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_undo_context.set_redo_name");
+      self.undoContextSetRedoName(name);
+   }
+
+   //------------------//
+   // clap_plugin_undo //
+   //------------------//
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapProjectLocationSet(const clap_plugin_t *plugin,
+                                             const clap_project_location_element_t *path,
+                                             uint32_t num_elements) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_location.set_location");
+
+      if (l >= CheckingLevel::Minimal) {
+         if (!path) {
+            self.hostMisbehaving(
+               "clap_plugin_location.set_location() was called without a null path!");
+            return;
+         }
+
+         if (num_elements == 0) {
+            self.hostMisbehaving(
+               "clap_plugin_location.set_location() was called without any path elements!");
+            return;
+         }
+      }
+
+      self.projectLocationSet(path, num_elements);
+   }
+
+   //--------------------------------------//
+   // clap_plugin_gain_adjustment_metering //
+   //--------------------------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   double Plugin<h, l>::clapGainAdjustmentMeteringGet(const clap_plugin_t *plugin) noexcept {
+      auto &self = from(plugin);
+      self.ensureAudioThread("clap_plugin_gain_adjustment_meterig.get");
+
+      const double gain = self.gainAdjustmentMeteringGet();
+      if (l >= CheckingLevel::Minimal) {
+         if (std::isnan(gain)) {
+            self.pluginMisbehaving("clap_plugin_gain_adjustment_meterig.get() returned NaN");
+            return 0;
+         }
+      }
+      return gain;
+   }
+
+   //--------------------------------//
+   // clap_plugin_mini_curve_display //
+   //--------------------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   uint32_t Plugin<h, l>::clapMiniCurveDisplayRender(const clap_plugin_t *plugin,
+                                                     clap_mini_curve_display_curve_data_t *curves,
+                                                     uint32_t curves_size) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_mini_curve_display.render");
+
+      if (l >= CheckingLevel::Minimal) {
+         if (!curves) {
+            self.hostMisbehaving(
+               "clap_plugin_mini_curve_display.render() called with null data pointer!!!");
+            return false;
+         }
+
+         if (curves_size == 0) {
+            self.hostMisbehaving("clap_plugin_mini_curve_display.render() called an empty data "
+                                 "array, meaningless...");
+            return false;
+         }
+      }
+
+      return self.miniCurveDisplayRender(curves, curves_size);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::clapMiniCurveDisplaySetObserved(const clap_plugin_t *plugin,
+                                                      bool is_observed) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_mini_curve_display.set_observed");
+
+      self.miniCurveDisplaySetObserved(is_observed);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   uint32_t Plugin<h, l>::clapMiniCurveDisplayGetCurveCount(const clap_plugin_t *plugin) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_mini_curve_display.get_curve_count");
+
+      return self.miniCurveDisplayGetCurveCount();
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapMiniCurveDisplayGetAxisName(const clap_plugin_t *plugin,
+                                                      uint32_t curve_index,
+                                                      char *x_name,
+                                                      char *y_name,
+                                                      uint32_t name_capacity) noexcept {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_mini_curve_display.get_axis_name");
+
+      if (l >= CheckingLevel::Minimal) {
+         if (!x_name || !y_name) {
+            self.hostMisbehaving(
+               "clap_plugin_mini_curve_display.get_axis_name() called with null name pointer(s)");
+            return false;
+         }
+
+         const auto curve_count = self.miniCurveDisplayGetCurveCount();
+         if (curve_index >= curve_count) {
+            std::ostringstream os;
+            os << "clap_plugin_mini_curve_display.get_axis_name() called with curve_index = "
+               << curve_index << ", while the curve count is " << curve_count;
+            self.hostMisbehaving(os.str());
+            return false;
+         }
+      }
+
+      return self.miniCurveDisplayGetAxisName(curve_index, x_name, y_name, name_capacity);
+   }
+
+   //--------------------------------//
+   // clap_plugin_mini_curve_display //
+   //--------------------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   int32_t
+   Plugin<h, l>::clapWebviewGetUri(const clap_plugin_t *plugin, char *uri, uint32_t uri_capacity) {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_webview.get_uri");
+      return self.webviewGetUri(uri, uri_capacity);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapWebviewGetResource(const clap_plugin_t *plugin,
+                                             const char *path,
+                                             char *mime,
+                                             uint32_t mime_capacity,
+                                             const clap_ostream_t *data_stream) {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_webview.get_resource");
+      return self.webviewGetResource(path, mime, mime_capacity, data_stream);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Plugin<h, l>::clapWebviewReceive(const clap_plugin_t *plugin,
+                                         const void *buffer,
+                                         uint32_t size) {
+      auto &self = from(plugin);
+      self.ensureMainThread("clap_plugin_webview.receive");
+      return self.webviewReceive(buffer, size);
+   }
+
    /////////////
    // Logging //
    /////////////
@@ -1653,6 +2038,14 @@ namespace clap { namespace helpers {
    template <MisbehaviourHandler h, CheckingLevel l>
    void Plugin<h, l>::hostMisbehaving(const char *msg) const noexcept {
       log(CLAP_LOG_HOST_MISBEHAVING, msg);
+
+      if (h == MisbehaviourHandler::Terminate)
+         std::terminate();
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::pluginMisbehaving(const char *msg) const noexcept {
+      log(CLAP_LOG_PLUGIN_MISBEHAVING, msg);
 
       if (h == MisbehaviourHandler::Terminate)
          std::terminate();
@@ -1736,6 +2129,35 @@ namespace clap { namespace helpers {
       std::ostringstream msg;
       msg << "Host called the method " << method
           << "() on wrong thread! It must be called on audio thread!";
+      hostMisbehaving(msg.str());
+   }
+
+   ////////////////////
+   // General Checks //
+   ////////////////////
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::ensureIsInactive(const char *methodName) const noexcept {
+      if (l == CheckingLevel::None)
+         return;
+
+      if (!isActive())
+         return;
+
+      std::ostringstream msg;
+      msg << "it is illegal to call " << methodName << "() while the plugin is active!";
+      hostMisbehaving(msg.str());
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Plugin<h, l>::ensureIsActive(const char *methodName) const noexcept {
+      if (l == CheckingLevel::None)
+         return;
+
+      if (isActive())
+         return;
+
+      std::ostringstream msg;
+      msg << "it is illegal to call " << methodName << "() while the plugin is not active!";
       hostMisbehaving(msg.str());
    }
 

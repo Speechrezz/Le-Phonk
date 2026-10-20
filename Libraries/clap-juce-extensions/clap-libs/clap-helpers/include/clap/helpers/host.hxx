@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -80,6 +82,16 @@ namespace clap { namespace helpers {
    };
 
    template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_host_surround Host<h, l>::_hostSurround = {
+      clapSurroundChanged,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   const clap_host_webview Host<h, l>::_hostWebview = {
+      clapWebviewSend,
+   };
+
+   template <MisbehaviourHandler h, CheckingLevel l>
    Host<h, l>::Host(const char *name, const char *vendor, const char *url, const char *version)
       : _host{
            CLAP_VERSION,
@@ -130,6 +142,8 @@ namespace clap { namespace helpers {
    const void *Host<h, l>::clapGetExtension(const clap_host_t *host,
                                             const char *extension_id) noexcept {
       auto &self = from(host);
+      if (auto ext = self.getExtension(extension_id))
+         return ext;
       if (!std::strcmp(extension_id, CLAP_EXT_AUDIO_PORTS) && self.implementsAudioPorts())
          return &_hostAudioPorts;
       if (!std::strcmp(extension_id, CLAP_EXT_GUI) && self.implementsGui())
@@ -156,10 +170,15 @@ namespace clap { namespace helpers {
          return &_hostThreadCheck;
       if (!strcmp(extension_id, CLAP_EXT_THREAD_POOL) && self.implementsThreadPool())
          return &_hostThreadPool;
+      if (!std::strcmp(extension_id, CLAP_EXT_SURROUND) && self.implementsSurround())
+         return &_hostSurround;
 
       if (self.enableDraftExtensions()) {
+         if (!strcmp(extension_id, CLAP_EXT_WEBVIEW) && self.implementsWebview())
+            return &_hostWebview;
          // put draft ext here
       }
+
       return nullptr;
    }
 
@@ -390,6 +409,26 @@ namespace clap { namespace helpers {
       auto &self = from(host);
       self.ensureAudioThread("thread_pool.request_exec");
       return self.threadPoolRequestExec(num_tasks);
+   }
+
+   //--------------------//
+   // clap_host_surround //
+   //--------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void Host<h, l>::clapSurroundChanged(const clap_host *host) noexcept {
+      auto &self = from(host);
+      self.ensureMainThread("surround.changed");
+      self.surroundChanged();
+   }
+
+   //-------------------//
+   // clap_host_webview //
+   //-------------------//
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool Host<h, l>::clapWebviewSend(const clap_host_t *host, const void *buffer, uint32_t size) {
+      auto &self = from(host);
+      self.ensureMainThread("webview.send");
+      return self.webviewSend(buffer, size);
    }
 
    /////////////////////

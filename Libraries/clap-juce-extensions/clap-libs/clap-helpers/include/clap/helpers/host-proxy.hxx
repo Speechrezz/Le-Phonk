@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <exception>
 #include <iostream>
 #include <sstream>
 
@@ -39,6 +40,10 @@ namespace clap { namespace helpers {
       getExtension(_hostPresetLoad, CLAP_EXT_PRESET_LOAD);
       if (!_hostPresetLoad)
          getExtension(_hostPresetLoad, CLAP_EXT_PRESET_LOAD);
+      getExtension(_hostUndo, CLAP_EXT_UNDO);
+      getExtension(_hostScratchMemory, CLAP_EXT_SCRATCH_MEMORY);
+      getExtension(_hostMiniCurveDisplay, CLAP_EXT_MINI_CURVE_DISPLAY);
+      getExtension(_hostWebview, CLAP_EXT_WEBVIEW);
    }
 
    template <MisbehaviourHandler h, CheckingLevel l>
@@ -472,7 +477,8 @@ namespace clap { namespace helpers {
    }
 
    template <MisbehaviourHandler h, CheckingLevel l>
-   bool HostProxy<h, l>::posixFdSupportRegister(int fd, clap_posix_fd_flags_t flags) const noexcept {
+   bool HostProxy<h, l>::posixFdSupportRegister(int fd,
+                                                clap_posix_fd_flags_t flags) const noexcept {
       assert(canUsePosixFdSupport());
       ensureMainThread("posix_fd_support.register");
       return _hostPosixFdSupport->register_fd(_host, fd, flags);
@@ -679,5 +685,154 @@ namespace clap { namespace helpers {
       assert(canUseResourceDirectory());
       ensureMainThread("resource_directory.release_directory");
       _hostResourceDirectory->release_directory(_host, isShared);
+   }
+
+   ////////////////////
+   // clap_host_undo //
+   ////////////////////
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::canUseUndo() const noexcept {
+      if (!_hostUndo)
+         return false;
+
+      if (_hostUndo->begin_change && _hostUndo->cancel_change && _hostUndo->change_made &&
+          _hostUndo->request_undo && _hostUndo->request_redo &&
+          _hostUndo->set_wants_context_updates)
+         return true;
+
+      return false;
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::undoBeginChange() const noexcept {
+      assert(canUseUndo());
+      ensureMainThread("undo.begin_change");
+      _hostUndo->begin_change(_host);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::undoCancelChange() const noexcept {
+      assert(canUseUndo());
+      ensureMainThread("undo.cancel_change");
+      _hostUndo->cancel_change(_host);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::undoChangeMade(const char *name,
+                                        const void *delta,
+                                        size_t delta_size,
+                                        bool delta_can_undo) const noexcept {
+      assert(canUseUndo());
+      ensureMainThread("undo.change_made");
+      _hostUndo->change_made(_host, name, delta, delta_size, delta_can_undo);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::undoRequestUndo() const noexcept {
+      assert(canUseUndo());
+      ensureMainThread("undo.undo");
+      _hostUndo->request_undo(_host);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::undoRequestRedo() const noexcept {
+      assert(canUseUndo());
+      ensureMainThread("undo.redo");
+      _hostUndo->request_redo(_host);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::undoSetWantsContextUpdates(bool is_subscribed) const noexcept {
+      assert(canUseUndo());
+      ensureMainThread("undo.set_context_info_subscription");
+      _hostUndo->set_wants_context_updates(_host, is_subscribed);
+   }
+
+   //////////////////////////////
+   // clap_host_scratch_memory //
+   //////////////////////////////
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::canUseScratchMemory() const noexcept {
+      if (!_hostScratchMemory)
+         return false;
+
+      if (_hostScratchMemory->reserve && _hostScratchMemory->access)
+         return true;
+
+      hostMisbehaving("clap_host_scratch_memory is partially implemented!");
+      return false;
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::scratchMemoryReserve(uint32_t scratch_size_bytes,
+                                              uint32_t max_concurrency_hint) const noexcept {
+      assert(canUseScratchMemory());
+      ensureMainThread("scratch_memory.reserve");
+      return _hostScratchMemory->reserve(_host, scratch_size_bytes, max_concurrency_hint);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void *HostProxy<h, l>::scratchMemoryAccess() const noexcept {
+      assert(canUseScratchMemory());
+      ensureAudioThread("scratch_memory.access");
+      return _hostScratchMemory->access(_host);
+   }
+
+   //////////////////////////////////
+   // clap_host_mini_curve_display //
+   //////////////////////////////////
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::canUseMiniCurveDisplay() const noexcept {
+      if (!_hostMiniCurveDisplay)
+         return false;
+
+      if (_hostMiniCurveDisplay->set_dynamic && _hostMiniCurveDisplay->changed)
+         return true;
+
+      hostMisbehaving("clap_host_mini_curve_display is partially implemented!");
+      return false;
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::miniCurveDisplaySetDynamic(bool is_dynamic) const noexcept {
+      assert(canUseMiniCurveDisplay());
+      ensureMainThread("mini_curve_display.set_dynamic");
+      _hostMiniCurveDisplay->set_dynamic(_host, is_dynamic);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   void HostProxy<h, l>::miniCurveDisplayChanged(uint32_t flags) const noexcept {
+      assert(canUseMiniCurveDisplay());
+      ensureMainThread("mini_curve_display.set_dynamic");
+      _hostMiniCurveDisplay->changed(_host, flags);
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::miniCurveDisplayGetHints(
+      uint32_t kind, clap_mini_curve_display_curve_hints_t *hints) const noexcept {
+      assert(canUseMiniCurveDisplay());
+      ensureMainThread("mini_curve_display.get_hints");
+
+      if (!hints) {
+         pluginMisbehaving("mini_curve_display.get_hints() called with a null hints pointer");
+         return false;
+      }
+
+      return _hostMiniCurveDisplay->get_hints(_host, kind, hints);
+   }
+
+   ////////////////////////
+   // clap_host_web_view //
+   ////////////////////////
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::canUseWebview() const noexcept {
+      return _hostWebview && _hostWebview->send;
+   }
+
+   template <MisbehaviourHandler h, CheckingLevel l>
+   bool HostProxy<h, l>::webviewSend(const void *buffer, uint32_t size) const noexcept {
+      assert(canUseWebview());
+      this->ensureMainThread("webview.send");
+      return _hostWebview->send(this->_host, buffer, size);
    }
 }} // namespace clap::helpers

@@ -185,6 +185,43 @@ namespace clap { namespace helpers {
       bool requestDirectory(bool isShared) const noexcept;
       void releaseDirectory(bool isShared) const noexcept;
 
+      ////////////////////
+      // clap_host_undo //
+      ////////////////////
+      bool canUseUndo() const noexcept;
+      void undoBeginChange() const noexcept;
+      void undoCancelChange() const noexcept;
+      void undoChangeMade(const char *name,
+                          const void *delta,
+                          size_t delta_size,
+                          bool delta_can_undo) const noexcept;
+      void undoRequestUndo() const noexcept;
+      void undoRequestRedo() const noexcept;
+      void undoSetWantsContextUpdates(bool is_subscribed) const noexcept;
+
+      //////////////////////////////
+      // clap_host_scratch_memory //
+      //////////////////////////////
+      bool canUseScratchMemory() const noexcept;
+      bool scratchMemoryReserve(uint32_t scratch_size_bytes,
+                                uint32_t max_concurrency_hint) const noexcept;
+      void *scratchMemoryAccess() const noexcept;
+
+      //////////////////////////////////
+      // clap_host_mini_curve_display //
+      //////////////////////////////////
+      bool canUseMiniCurveDisplay() const noexcept;
+      void miniCurveDisplaySetDynamic(bool is_dynamic) const noexcept;
+      void miniCurveDisplayChanged(uint32_t flags) const noexcept;
+      bool miniCurveDisplayGetHints(uint32_t kind,
+                                    clap_mini_curve_display_curve_hints_t *hints) const noexcept;
+
+      ////////////////////////////
+      // nl_clap_plugin_webview //
+      ////////////////////////////
+      bool canUseWebview() const noexcept;
+      bool webviewSend(const void *buffer, uint32_t size) const noexcept;
+
    protected:
       void ensureMainThread(const char *method) const noexcept;
       void ensureAudioThread(const char *method) const noexcept;
@@ -211,5 +248,9 @@ namespace clap { namespace helpers {
       const clap_host_tail *_hostTail = nullptr;
       const clap_host_context_menu *_hostContextMenu = nullptr;
       const clap_host_preset_load *_hostPresetLoad = nullptr;
+      const clap_host_undo *_hostUndo = nullptr;
+      const clap_host_scratch_memory *_hostScratchMemory = nullptr;
+      const clap_host_mini_curve_display *_hostMiniCurveDisplay = nullptr;
+      const clap_host_webview *_hostWebview = nullptr;
    };
 }} // namespace clap::helpers
