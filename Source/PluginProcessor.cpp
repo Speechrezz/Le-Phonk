@@ -25,11 +25,10 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
                        ),
     treeState(*this, nullptr, "PARAMETER", { createParameterLayout() }),
     zekete(*this),
-    ott(*this)
+    ott(*this),
+    fonz(*this)
 #endif
 {
-    fonz.setAtomics(treeState);
-
     enableAtomic = treeState.getRawParameterValue(ENABLE_ID);
     gainAtomic   = treeState.getRawParameterValue(GAIN_ID);
 }
