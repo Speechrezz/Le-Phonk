@@ -91,7 +91,6 @@ void Dist3::processAllPassUnchanged() noexcept
 {
     const auto amount = static_cast<size_t>(smoother.getTargetValue());
     jassert(amount <= allPassFilters.size());
-    DBG(__FUNCTION__ << ": amount=" << amount);
 
     juce::dsp::ProcessContextReplacing context(interleaved.getInterleavedAudio());
 
@@ -101,8 +100,6 @@ void Dist3::processAllPassUnchanged() noexcept
 
 void Dist3::processAllPassTransition() noexcept
 {
-    DBG(__FUNCTION__ << ": amount=" << smoother.getCurrentValue());
-
     auto& interleavedBlock = interleaved.getInterleavedAudio();
     auto* interleavedChannel = interleavedBlock.getChannelPointer(0);
     const size_t numSamples = interleavedBlock.getNumSamples();

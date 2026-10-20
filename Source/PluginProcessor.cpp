@@ -128,10 +128,12 @@ void LePhonkAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void LePhonkAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    juce::dsp::ProcessSpec spec;
-    spec.maximumBlockSize = samplesPerBlock;
-    spec.numChannels = getNumInputChannels();
-    spec.sampleRate = sampleRate;
+    using uint32 = juce::uint32;
+
+    const auto channels = juce::jmax(getTotalNumInputChannels(), getTotalNumOutputChannels());
+    juce::dsp::ProcessSpec spec{ sampleRate, (uint32)samplesPerBlock, (uint32)channels };
+    DBG("prepareToPlay() - sampleRate: " << sampleRate << ", maxBlockSize: " << (int)spec.maximumBlockSize
+        << ", numChannels: " << (int)spec.numChannels);
 
     zekete.prepare(spec);
     ott.prepare(spec);

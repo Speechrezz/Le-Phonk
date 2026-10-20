@@ -15,6 +15,9 @@
 
 #include <JuceHeader.h>
 
+#if !JUCE_USE_SIMD
+  #error "SIMD is NOT available"
+#endif
 
 namespace xynth
 {
@@ -31,8 +34,33 @@ public:
     SIMDFilter() = default;
     ~SIMDFilter() = default;
 
-    void reset() noexcept;
-    SimdRegister processSample(SimdRegister sample) noexcept;
+    void reset() noexcept
+    {
+        state[0] = 0.f;
+        state[1] = 0.f;
+    }
+
+    SimdRegister processSample(SimdRegister input) noexcept
+    {
+        const float b0 = coeffs[0];
+        const float b1 = coeffs[1];
+        const float b2 = coeffs[2];
+        const float a1 = coeffs[4];
+        const float a2 = coeffs[5];
+
+        auto lv1 = state[0];
+        auto lv2 = state[1];
+
+        const auto output = (input * b0) + lv1;
+
+        lv1 = (input * b1) - (output* a1) + lv2;
+        lv2 = (input * b2) - (output* a2);
+
+        juce::dsp::util::snapToZero (lv1); state[0] = lv1;
+        juce::dsp::util::snapToZero (lv2); state[1] = lv2;
+
+        return output;
+    }
 
     template<typename ContextType>
     void process(ContextType context) noexcept
@@ -46,7 +74,7 @@ public:
     }
 
     Coefficients coeffs;
-    std::array<SimdRegister, 2> state;
+    alignas(sizeof(SimdRegister)) SimdRegister state[2];
 
 };
 
