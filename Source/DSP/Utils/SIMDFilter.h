@@ -24,19 +24,29 @@ constexpr auto registerSize = juce::dsp::SIMDRegister<float>::size();
 class SIMDFilter
 {
 public:
-    SIMDFilter();
+    using SimdRegister = juce::dsp::SIMDRegister<float>;
+    using Coefficients = std::array<float, 6>;
+
+public:
+    SIMDFilter() = default;
     ~SIMDFilter() = default;
 
-    void prepare(const juce::dsp::ProcessSpec& spec);
-    void process(juce::dsp::AudioBlock<juce::dsp::SIMDRegister<float>>& interleaved);
+    void reset() noexcept;
+    SimdRegister processSample(SimdRegister sample) noexcept;
 
-    void updateParameters(float cutoff, float Q = 0.70710678f);
+    template<typename ContextType>
+    void process(ContextType context) noexcept
+    {
+        const size_t numSamples = context.getInputBlock().getNumSamples();
+        const auto* inputChannel = context.getInputBlock().getChannelPointer(0);
+        auto* outputChannel = context.getOutputBlock().getChannelPointer(0);
 
-private:
-    std::unique_ptr<juce::dsp::IIR::Filter<juce::dsp::SIMDRegister<float>>> iir;
-    juce::dsp::IIR::Coefficients<float>::Ptr iirCoefficients;
+        for (size_t i = 0; i < numSamples; ++i)
+            outputChannel[i] = processSample(inputChannel[i]);
+    }
 
-    double sampleRate = 0.0;
+    Coefficients coeffs;
+    std::array<SimdRegister, 2> state;
 
 };
 

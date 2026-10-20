@@ -10,42 +10,32 @@
 
 #include "SIMDFilter.h"
 
+#if !JUCE_USE_SIMD
+  #error "SIMD is NOT available"
+#endif
+
 namespace xynth
 {
-
-using Coefficients = juce::dsp::IIR::ArrayCoefficients<float>;
-
-SIMDFilter::SIMDFilter()
+void SIMDFilter::reset() noexcept
 {
-    jassert(JUCE_USE_SIMD); // Make sure CPU has SIMD before compiling
-
-    using namespace juce::dsp;
-
-    // Initialize filter
-    iirCoefficients = IIR::Coefficients<float>::makeAllPass(44100.0, 200.f);
-    iir = std::make_unique<IIR::Filter<SIMDRegister<float>>>(iirCoefficients);
+    state[0] = 0.f;
+    state[1] = 0.f;
 }
 
-void SIMDFilter::prepare(const juce::dsp::ProcessSpec& spec)
+SIMDFilter::SimdRegister SIMDFilter::processSample(SimdRegister input) noexcept
 {
-    sampleRate = spec.sampleRate;
+    const float b0 = coeffs[0];
+    const float b1 = coeffs[1];
+    const float b2 = coeffs[2];
+    const float a1 = coeffs[4];
+    const float a2 = coeffs[5];
 
-    auto monoSpec = spec;
-    monoSpec.numChannels = 1;
-    iir->prepare(monoSpec);
-}
+    const auto output = (input * b0) + state[0];
 
-void SIMDFilter::process(juce::dsp::AudioBlock<juce::dsp::SIMDRegister<float>>& interleaved)
-{
-    using namespace juce::dsp;
+    state[0] = (input * b1) - (output * a1) + state[1];
+    state[1] = (input * b2) - (output * a2);
 
-    iir->process(ProcessContextReplacing<SIMDRegister<float>>(interleaved));
-}
-
-void SIMDFilter::updateParameters(float cutoff, float Q)
-{
-    if (sampleRate != 0.0)
-        *iirCoefficients = Coefficients::makeAllPass(sampleRate, cutoff, Q);
+    return output;
 }
 
 } // namespace xynth
