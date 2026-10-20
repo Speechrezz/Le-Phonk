@@ -106,6 +106,7 @@ void Dist3::processAllPassTransition() noexcept
 
     for (size_t i = 0; i < numSamples; ++i)
     {
+        const auto prevAmount = smoother.getCurrentValue();
         const auto amount = smoother.getNextValue();
         const auto amountLower = static_cast<size_t>(amount);
         const auto fraction = amount - std::floor(amount);
@@ -113,9 +114,13 @@ void Dist3::processAllPassTransition() noexcept
         for (size_t j = 0; j < amountLower; ++j)
             interleavedChannel[i] = allPassFilters[j].processSample(interleavedChannel[i]);
 
-        // Mix in new filter
         if (amountLower < allPassFilters.size())
         {
+            // Reset new filter
+            if (std::floor(amount) > std::floor(prevAmount))
+                allPassFilters[amountLower].reset();
+
+            // Mix in new filter
             auto drySample = interleavedChannel[i];
             auto wetSample = allPassFilters[amountLower].processSample(drySample);
             interleavedChannel[i] =  drySample * (1.f - fraction) + wetSample * fraction;
