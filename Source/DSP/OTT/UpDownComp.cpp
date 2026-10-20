@@ -15,7 +15,14 @@ constexpr float loudnessCutoff = 0.000015849f; // -96 dB
 
 namespace xynth
 {
-void UpDownComp::prepare(const juce::dsp::ProcessSpec& spec)
+
+void UpDownComp::reset() noexcept
+{
+    envelope.reset();
+    spikeRemoverEnv.reset();
+}
+
+void UpDownComp::prepare(const juce::dsp::ProcessSpec& spec) noexcept
 {
     envelope.prepare(spec);
     envelope.setLevelCalculationType(juce::dsp::BallisticsFilterLevelCalculationType::RMS);
@@ -24,7 +31,7 @@ void UpDownComp::prepare(const juce::dsp::ProcessSpec& spec)
     spikeRemoverEnv.setLevelCalculationType(juce::dsp::BallisticsFilterLevelCalculationType::RMS);
 }
 
-void UpDownComp::process(juce::dsp::ProcessContextReplacing<float>& context)
+void UpDownComp::process(juce::dsp::ProcessContextReplacing<float>& context) noexcept
 {
     const auto& inputBlock = context.getInputBlock();
     auto& outputBlock = context.getOutputBlock();
@@ -42,7 +49,7 @@ void UpDownComp::process(juce::dsp::ProcessContextReplacing<float>& context)
 }
 
 void UpDownComp::update(float downThresh, float downRatio, float upThresh, float upRatio, 
-    float attack, float decay, float gain)
+    float attack, float decay, float gain) noexcept
 {
     paramsDown.thresh    = juce::Decibels::decibelsToGain(downThresh);
     paramsDown.invThresh = 1.f / paramsDown.thresh;
@@ -61,7 +68,7 @@ void UpDownComp::update(float downThresh, float downRatio, float upThresh, float
     outGain = juce::Decibels::decibelsToGain(gain);
 }
 
-void UpDownComp::updateTimes(const float attack, const float decay)
+void UpDownComp::updateTimes(const float attack, const float decay) noexcept
 {
     envelope.setAttackTime(attack * 0.5f);
     envelope.setReleaseTime(decay);
@@ -70,7 +77,7 @@ void UpDownComp::updateTimes(const float attack, const float decay)
     spikeRemoverEnv.setReleaseTime(decay);
 }
 
-float UpDownComp::processSample(int channel, float sample)
+float UpDownComp::processSample(int channel, float sample) noexcept
 {
     const auto env = envelope.processSample(channel, sample);
 
@@ -92,4 +99,5 @@ float UpDownComp::processSample(int channel, float sample)
 
     return sample * gain * outGain;
 }
+
 }

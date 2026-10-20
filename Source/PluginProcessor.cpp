@@ -24,10 +24,10 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
                      #endif
                        ),
     treeState(*this, nullptr, "PARAMETER", { createParameterLayout() }),
-    zekete(*this)
+    zekete(*this),
+    ott(*this)
 #endif
 {
-    ott.setAtomics(treeState);
     fonz.setAtomics(treeState);
 
     enableAtomic = treeState.getRawParameterValue(ENABLE_ID);
@@ -139,6 +139,7 @@ void LePhonkAudioProcessor::changeProgramName (int, const juce::String&)
 void LePhonkAudioProcessor::reset()
 {
     zekete.reset();
+    ott.reset();
 }
 
 //==============================================================================

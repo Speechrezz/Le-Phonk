@@ -11,11 +11,9 @@
 #include <JuceHeader.h>
 #include "WindowLayout.h"
 
-WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ottzLayout(g), 
-    fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g), tooltip(g)
+WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), tooltip(g), zeketeLayout(g),
+    ottzLayout(g), fonzLayout(g), bypassGain(g), skinSelect(g), logoButton(g), aboutOverlay(g)
 {
-    auto& treeState = g.audioProcessor.treeState;
-
     addAndMakeVisible(zeketeLayout);
     addAndMakeVisible(ottzLayout);
     addAndMakeVisible(fonzLayout);
@@ -43,7 +41,7 @@ WindowLayout::WindowLayout(xynth::GuiData& g) : guiData(g), zeketeLayout(g), ott
     {
         auto componentPosition = component->getScreenPosition();
         auto relativePosition = componentPosition - getScreenPosition();
-        const auto scale = getTransform().getScaleFactor();
+        const auto scale = std::sqrt(std::abs(getTransform().getDeterminant()));
         relativePosition /= scale;
         relativePosition.addXY(component->getWidth() / 2, component->getHeight() + 2);
         tooltip.showTooltip(relativePosition);

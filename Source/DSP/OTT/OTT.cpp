@@ -10,6 +10,7 @@
 
 #include "OTT.h"
 #include "../../Common/Constants.h"
+#include "../../PluginProcessor.h"
 
 #define HIGH_CROSS 2500.f
 #define LOW_CROSS 88.3f
@@ -18,14 +19,19 @@
 namespace xynth
 {
 
-void OTT::setAtomics(juce::AudioProcessorValueTreeState& treeState)
+OTT::OTT(LePhonkAudioProcessor& processor) :
+    mixParam(*processor.treeState.getRawParameterValue(OTT_ID)),
+    timeParam(*processor.treeState.getRawParameterValue(OTT_TIME_ID)),
+    enableParam(*processor.treeState.getRawParameterValue(OTT_ENABLE_ID))
+{}
+
+void OTT::reset() noexcept
 {
-    mixAtomic    = treeState.getRawParameterValue(OTT_ID);
-    timeAtomic   = treeState.getRawParameterValue(OTT_TIME_ID);
-    enableAtomic = treeState.getRawParameterValue(OTT_ENABLE_ID);
+    for (auto& comp : comps)
+        comp.reset();
 }
 
-void OTT::prepare(const juce::dsp::ProcessSpec& spec)
+void OTT::prepare(const juce::dsp::ProcessSpec& spec) noexcept
 {
     // Prepare the compressors
     for (auto& comp : comps)
@@ -60,15 +66,15 @@ void OTT::prepare(const juce::dsp::ProcessSpec& spec)
     mixer.setMixingRule(juce::dsp::DryWetMixingRule::linear);
 }
 
-void OTT::process(juce::dsp::ProcessContextReplacing<float>& context)
+void OTT::process(juce::dsp::ProcessContextReplacing<float>& context) noexcept
 {
     // Check if enabled
-    const float enabled = (bool)enableAtomic->load(std::memory_order_relaxed);
+    const bool enabled = enableParam.load(std::memory_order_relaxed) >= 0.5f;
     if (!enabled) return;
 
     // Setup basics
-    const float mix  = mixAtomic ->load(std::memory_order_relaxed);
-    const float time = timeAtomic->load(std::memory_order_relaxed) / 100.f;
+    const float mix  = mixParam .load(std::memory_order_relaxed);
+    const float time = timeParam.load(std::memory_order_relaxed) * 0.01f;
 
     comps[high].updateTimes(13.5f * time, 132.f * time);
     comps[mid] .updateTimes(22.4f * time, 282.f * time);
@@ -82,9 +88,7 @@ void OTT::process(juce::dsp::ProcessContextReplacing<float>& context)
     dryWetBuffers[dry].clear();
     dryWetBuffers[wet].clear();
     auto blockDry = juce::dsp::AudioBlock<float>(dryWetBuffers[dry]).getSubBlock(0, numSamples);
-    auto contextDry = juce::dsp::ProcessContextReplacing<float>(blockDry);
     auto blockWet = juce::dsp::AudioBlock<float>(dryWetBuffers[wet]).getSubBlock(0, numSamples);
-    auto contextWet = juce::dsp::ProcessContextReplacing<float>(blockWet);
 
     // Copy buffers
     for (auto& buffer : buffers)
@@ -122,7 +126,7 @@ void OTT::process(juce::dsp::ProcessContextReplacing<float>& context)
     context.getOutputBlock().copyFrom(blockWet);
 }
 
-void OTT::processFilter(juce::dsp::ProcessContextReplacing<float>& context, const int filter)
+void OTT::processFilter(juce::dsp::ProcessContextReplacing<float>& context, const int filter) noexcept
 {
     filtersArray[0][filter].process(context);
     filtersArray[1][filter].process(context);

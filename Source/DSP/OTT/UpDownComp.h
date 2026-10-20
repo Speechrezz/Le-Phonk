@@ -13,6 +13,7 @@
 
 namespace xynth
 {
+
 struct CompParams
 {
     float thresh   { 1.f };
@@ -26,8 +27,9 @@ public:
     UpDownComp() = default;
     ~UpDownComp() = default;
 
-    void prepare(const juce::dsp::ProcessSpec& spec);
-    void process(juce::dsp::ProcessContextReplacing<float>& context);
+    void reset() noexcept;
+    void prepare(const juce::dsp::ProcessSpec& spec) noexcept;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) noexcept;
 
     /// <summary>
     /// Updates the parameters in the compressor
@@ -40,21 +42,22 @@ public:
     /// <param name="decay">- Decay time (in ms)</param>
     /// <param name="gain">- Output gain (in dB)</param>
     void update(float downThresh, float downRatio, float upThresh, float upRatio, 
-        float attack, float decay, float gain);
+        float attack, float decay, float gain) noexcept;
 
     /// <summary>
     /// Updates time-based parameters
     /// </summary>
     /// <param name="attack">- Attack time (in ms)</param>
     /// <param name="decay">- Decay time (in ms)</param>
-    void updateTimes(const float attack, const float decay);
+    void updateTimes(float attack, float decay) noexcept;
 
-    float processSample(int channel, float sample);
+    float processSample(int channel, float sample) noexcept;
 
 private:
     juce::dsp::BallisticsFilter<float> envelope, spikeRemoverEnv;
-    CompParams  paramsDown,  paramsUp;
+    CompParams paramsDown, paramsUp;
 
     float outGain = 1.f;
 };
+
 } // namespace xynth

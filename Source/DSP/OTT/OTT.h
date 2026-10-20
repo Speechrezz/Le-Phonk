@@ -13,24 +13,28 @@
 #include <JuceHeader.h>
 #include "UpDownComp.h"
 
+class LePhonkAudioProcessor;
+
 namespace xynth
 {
+
 class OTT
 {
 public:
-    OTT() = default;
+    OTT(LePhonkAudioProcessor&);
     ~OTT() = default;
 
-    void setAtomics(juce::AudioProcessorValueTreeState& treeState);
-
-    void prepare(const juce::dsp::ProcessSpec& spec);
-    void process(juce::dsp::ProcessContextReplacing<float>& context);
+    void reset() noexcept;
+    void prepare(const juce::dsp::ProcessSpec& spec) noexcept;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) noexcept;
 
 private:
     // Processes the two filters to create 24dB/oct slope
-    void processFilter(juce::dsp::ProcessContextReplacing<float>& context, const int filter);
+    void processFilter(juce::dsp::ProcessContextReplacing<float>& context, int filter) noexcept;
 
-    std::atomic<float>* mixAtomic { nullptr }, * timeAtomic{ nullptr }, * enableAtomic{ nullptr };
+    std::atomic<float>& mixParam;
+    std::atomic<float>& timeParam;
+    std::atomic<float>& enableParam;
 
     std::array<UpDownComp, 3> comps;
     std::array<juce::AudioBuffer<float>, 3> buffers;
@@ -46,4 +50,5 @@ private:
     enum BuffersEnum{ dry, wet };
     enum FiltersEnum{ lowLowpass, midHighpass, midLowpass, highHighpass };
 };
+
 } // namespace xynth

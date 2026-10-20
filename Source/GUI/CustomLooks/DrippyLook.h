@@ -22,7 +22,7 @@ public:
     ~DrippyLook() override = default;
 
     String getLnfName() override { return "DrippyLook"; }
-    Image& getBackgroundImage() override { return bgImage; };
+    Image& getBackgroundImage() override { return bgImage; }
 
     // Custom draws
     void drawSectionBackground(Graphics& g, Rectangle<int> area) override;

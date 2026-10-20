@@ -12,23 +12,25 @@
 #include "OTT.h"
 #include "../../Common/Constants.h"
 
+class LePhonkAudioProcessor;
+
 namespace xynth
 {
+
 class OTTwithMultiplier
 {
 public:
-    OTTwithMultiplier() = default;
+    OTTwithMultiplier(LePhonkAudioProcessor&);
     ~OTTwithMultiplier() = default;
 
-    void setAtomics(juce::AudioProcessorValueTreeState& treeState);
-
-    void prepare(const juce::dsp::ProcessSpec& spec);
-    void process(juce::dsp::ProcessContextReplacing<float>& context);
+    void reset() noexcept;
+    void prepare(const juce::dsp::ProcessSpec& spec) noexcept;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) noexcept;
 
 private:
-    std::atomic<float>* multiplierAtomic{ nullptr };
+    std::atomic<float>& multiplierParam;
 
-    std::array<xynth::OTT, OTT_MULT_AMOUNT> ottArray;
+    std::array<OTT, OTT_MULT_AMOUNT> ottArray;
 
 };
 

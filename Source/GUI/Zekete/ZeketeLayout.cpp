@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "ZeketeLayout.h"
 
-ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), distGraph(g), distSelect(g), mixSlider(g)
+ZeketeLayout::ZeketeLayout(xynth::GuiData& g) : guiData(g), mixSlider(g), distGraph(g), distSelect(g)
 {
     auto& treeState = g.audioProcessor.treeState;
 

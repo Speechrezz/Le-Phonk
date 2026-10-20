@@ -22,7 +22,7 @@ public:
     ~JuiceLook() override = default;
 
     String getLnfName() override { return "JuiceLook"; }
-    Image& getBackgroundImage() override { return bgImage; };
+    Image& getBackgroundImage() override { return bgImage; }
 
     Colour getAccent1() override;
     Colour getAccent2() override;

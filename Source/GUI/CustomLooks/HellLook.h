@@ -22,7 +22,7 @@ public:
     ~HellLook() override = default;
 
     String getLnfName() override { return "HellLook"; }
-    Image& getBackgroundImage() override { return bgImage; };
+    Image& getBackgroundImage() override { return bgImage; }
 
     Colour getAccent1() override;
     Colour getAccent2() override;
