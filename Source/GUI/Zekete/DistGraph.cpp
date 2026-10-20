@@ -72,7 +72,8 @@ void DistGraph::timerCallback()
     const auto newSample = guiData.audioProcessor.ringBuffer.readLoudestSample();
     if (newSample >= 0.f)
     {
-        sample = newSample > sample ? newSample : sample * decayFactor;
+        const float decayedSample = sample * decayFactor;
+        sample = newSample > decayedSample ? newSample : decayedSample;
         repaint();
     }
 }
