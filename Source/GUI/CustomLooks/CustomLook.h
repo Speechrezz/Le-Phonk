@@ -27,7 +27,7 @@ public:
     virtual void drawSectionBackground(Graphics& g, Rectangle<int> area);
     virtual void drawDistGraphBackground(Graphics& g, Rectangle<float> area, float amplitude);
     virtual void drawDistGraphForeground(Graphics& g, Rectangle<float> area);
-    virtual Image& getBackgroundImage() { return bgImage; };
+    virtual Image& getBackgroundImage() { return bgImage; }
 
     //==============================================================================
     // Sliders and buttons
@@ -61,10 +61,10 @@ public:
 
     //==============================================================================
     // Fonts and colours
-    virtual Colour getAccent1()  { return Colours::white; };
-    virtual Colour getAccent2()  { return Colours::white; };
-    virtual Colour getNeutral1() { return Colours::grey;  };
-    virtual Colour getBase1()    { return Colours::black; };
+    virtual Colour getAccent1()  { return Colours::white; }
+    virtual Colour getAccent2()  { return Colours::white; }
+    virtual Colour getNeutral1() { return Colours::grey;  }
+    virtual Colour getBase1()    { return Colours::black; }
 
     virtual const juce::Font getCustomFontRegular();
     virtual const juce::Font getCustomFontRegular2();

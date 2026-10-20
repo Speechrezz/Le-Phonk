@@ -32,8 +32,8 @@ public:
     // Input parameter (bool): false if there is NO update, true if there IS.
     std::function<void(bool)> updateCallback = [](bool) {};
 
-    inline int getUpdateState() const { return updateState; };
-    inline juce::String getLatestVersion() const { return latestVersion; };
+    inline int getUpdateState() const { return updateState; }
+    inline juce::String getLatestVersion() const { return latestVersion; }
 
     void setNotifyUpdatesSetting(const bool newSetting);
     // Returns true if user does NOT want to be notified for updates
