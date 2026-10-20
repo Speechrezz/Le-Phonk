@@ -23,10 +23,10 @@ public:
     virtual ~DistortionProcessor() = default;
 
     virtual void reset() noexcept {}
-    virtual void prepare(const juce::dsp::ProcessSpec& spec) noexcept = 0;
+    virtual void prepare(const juce::dsp::ProcessSpec& /** spec */) noexcept = 0;
 
     // `amount` is normalized to be between 0 and 1
-    virtual void process(juce::dsp::ProcessContextReplacing<float>& context, float amount) noexcept = 0;
+    virtual void process(juce::dsp::ProcessContextReplacing<float>&, float /** amount */) noexcept = 0;
 
 };
 
