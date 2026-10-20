@@ -16,6 +16,7 @@
 
 namespace xynth
 {
+
 class Dist3 : public DistTemplate
 {
 public:
@@ -44,21 +45,18 @@ public:
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) final;
 
 private:
-    void processAllPass(juce::dsp::ProcessContextReplacing<float>& context, int idx);
+    void processAllPassUnchanged(juce::dsp::ProcessContextReplacing<float>&, size_t amount);
+    void processAllPassTransition(juce::dsp::ProcessContextReplacing<float>&, size_t prevAmount, size_t newAmount);
 
-    juce::dsp::Gain<float> gainOut;
     juce::NormalisableRange<float> range;
 
-    /*std::array<juce::dsp::ProcessorDuplicator<
-        juce::dsp::IIR::Filter<float>,
-        juce::dsp::IIR::Coefficients<float>>, 200> allPassFilters;*/
-
-    std::array<xynth::SIMDFilter, 200> allPassFilters;
-    xynth::InterleavedAudio inter;
+    std::array<SIMDFilter, 200> allPassFilters;
+    InterleavedAudio interleaved;
 
     std::atomic<float>* paramAtomic{ nullptr };
 
-    int prevIdx{ 0 };
+    size_t prevAmount = 0;
 
 };
+
 } // namespace xynth

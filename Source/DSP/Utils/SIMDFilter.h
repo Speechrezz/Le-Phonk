@@ -18,6 +18,7 @@
 
 namespace xynth
 {
+
 constexpr auto registerSize = juce::dsp::SIMDRegister<float>::size();
 
 class SIMDFilter
@@ -38,4 +39,5 @@ private:
     double sampleRate = 0.0;
 
 };
+
 } // namespace xynth

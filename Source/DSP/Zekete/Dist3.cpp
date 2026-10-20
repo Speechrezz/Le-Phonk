@@ -12,10 +12,12 @@
 
 namespace xynth
 {
+
 Dist3::Dist3()
 {
     range.setSkewForCentre(0.2f);
 }
+
 void Dist3::prepare(const juce::dsp::ProcessSpec& spec)
 {
     float cutoff = 200.f;
@@ -23,50 +25,57 @@ void Dist3::prepare(const juce::dsp::ProcessSpec& spec)
     for (auto& filter : allPassFilters)
     {
         filter.prepare(spec);
-        //*filter.state = *juce::dsp::IIR::Coefficients<float>::makeAllPass(spec.sampleRate, cutoff);
         filter.updateParameters(cutoff);
         cutoff += cutoffStep;
     }
 
-    gainOut.prepare(spec);
-    gainOut.setRampDurationSeconds(0.01);
-    gainOut.setGainLinear(1.f);
-
-    inter.prepare(spec);
+    interleaved.prepare(spec);
 }
 
 void Dist3::process(juce::dsp::ProcessContextReplacing<float>& context)
 {
+    const auto maxAmount = static_cast<float>(allPassFilters.size());
+
     float param = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
     param = range.convertFrom0to1(param);
-    const int idx = int(juce::jmap(param, 1.f, float(allPassFilters.size())));
-    
-    // Gain smoothing when moving slider to mitigate popping sounds
-    gainOut.setGainLinear(float(idx == prevIdx));
+    const auto newAmount = static_cast<size_t>(juce::jmap(param, 0.f, maxAmount));
 
-    processAllPass(context, prevIdx);
-    gainOut.process(context);
+    interleaved.interleave(context);
 
-    if (!gainOut.isSmoothing())
-        prevIdx = idx;
+    if (newAmount == prevAmount)
+    {
+        processAllPassUnchanged(context, newAmount);
+    }
+    else
+    {
+        processAllPassTransition(context, prevAmount, newAmount);
+    }
+
+    prevAmount = newAmount;
+    interleaved.deinterleave(context);
 }
 
 void Dist3::setAtomics(juce::AudioProcessorValueTreeState& treeState)
 {
     paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
 }
-void Dist3::processAllPass(juce::dsp::ProcessContextReplacing<float>& context, int idx)
+
+void Dist3::processAllPassUnchanged(juce::dsp::ProcessContextReplacing<float>& context, size_t amount)
 {
-    jassert(idx >= 0 && idx <= allPassFilters.size());
+    jassert(amount <= allPassFilters.size());
 
-    inter.interleave(context);
-
-    for (int i = 0; i < idx; ++i)
-        allPassFilters[i].process(inter.getInterleavedAudio());
-
-    inter.deinterleave(context);
-
-    /*for (int i = idx; i < allPassFilters.size(); ++i)
-        allPassFilters[i].reset();*/
+    for (int i = 0; i < amount; ++i)
+        allPassFilters[i].process(interleaved.getInterleavedAudio());
 }
+
+void Dist3::processAllPassTransition(juce::dsp::ProcessContextReplacing<float>& context, size_t prevAmount, size_t newAmount)
+{
+    jassert(newAmount <= allPassFilters.size());
+
+    // TODO
+
+    for (int i = 0; i < newAmount; ++i)
+        allPassFilters[i].process(interleaved.getInterleavedAudio());
+}
+
 } // namespace xynth

@@ -12,29 +12,32 @@
 
 namespace xynth
 {
+
+using Coefficients = juce::dsp::IIR::ArrayCoefficients<float>;
+
 SIMDFilter::SIMDFilter()
 {
-    // make sure CPU has SIMD before compiling
-    jassert(JUCE_USE_SIMD);
+    jassert(JUCE_USE_SIMD); // Make sure CPU has SIMD before compiling
+
+    using namespace juce::dsp;
+
+    // Initialize filter
+    iirCoefficients = IIR::Coefficients<float>::makeAllPass(44100.0, 200.f);
+    iir = std::make_unique<IIR::Filter<SIMDRegister<float>>>(iirCoefficients);
 }
 
 void SIMDFilter::prepare(const juce::dsp::ProcessSpec& spec)
 {
-    using namespace juce::dsp;
-
     sampleRate = spec.sampleRate;
-
-    iirCoefficients = IIR::Coefficients<float>::makeAllPass(sampleRate, 200.f);
-    iir.reset(new IIR::Filter<SIMDRegister<float>>(iirCoefficients));
 
     auto monoSpec = spec;
     monoSpec.numChannels = 1;
     iir->prepare(monoSpec);
 }
+
 void SIMDFilter::process(juce::dsp::AudioBlock<juce::dsp::SIMDRegister<float>>& interleaved)
 {
-    using namespace juce;
-    using namespace dsp;
+    using namespace juce::dsp;
 
     iir->process(ProcessContextReplacing<SIMDRegister<float>>(interleaved));
 }
@@ -42,7 +45,7 @@ void SIMDFilter::process(juce::dsp::AudioBlock<juce::dsp::SIMDRegister<float>>& 
 void SIMDFilter::updateParameters(float cutoff, float Q)
 {
     if (sampleRate != 0.0)
-        *iirCoefficients = *juce::dsp::IIR::Coefficients<float>::makeAllPass(sampleRate, cutoff, Q);
+        *iirCoefficients = Coefficients::makeAllPass(sampleRate, cutoff, Q);
 }
 
 } // namespace xynth
