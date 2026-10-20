@@ -56,8 +56,8 @@ public:
         lv1 = (input * b1) - (output* a1) + lv2;
         lv2 = (input * b2) - (output* a2);
 
-        juce::dsp::util::snapToZero (lv1); state[0] = lv1;
-        juce::dsp::util::snapToZero (lv2); state[1] = lv2;
+        state[0] = lv1;
+        state[1] = lv2;
 
         return output;
     }
@@ -66,11 +66,30 @@ public:
     void process(ContextType context) noexcept
     {
         const size_t numSamples = context.getInputBlock().getNumSamples();
-        const auto* inputChannel = context.getInputBlock().getChannelPointer(0);
-        auto* outputChannel = context.getOutputBlock().getChannelPointer(0);
+        const auto* src = context.getInputBlock().getChannelPointer(0);
+        auto* dst = context.getOutputBlock().getChannelPointer(0);
+
+        const float b0 = coeffs[0];
+        const float b1 = coeffs[1];
+        const float b2 = coeffs[2];
+        const float a1 = coeffs[4];
+        const float a2 = coeffs[5];
+
+        auto lv1 = state[0];
+        auto lv2 = state[1];
 
         for (size_t i = 0; i < numSamples; ++i)
-            outputChannel[i] = processSample(inputChannel[i]);
+        {
+            const auto input = src[i];
+            const auto output = (input * b0) + lv1;
+            dst[i] = output;
+
+            lv1 = (input * b1) - (output * a1) + lv2;
+            lv2 = (input * b2) - (output * a2);
+        }
+
+        juce::dsp::util::snapToZero(lv1); state[0] = lv1;
+        juce::dsp::util::snapToZero(lv2); state[1] = lv2;
     }
 
     Coefficients coeffs;
