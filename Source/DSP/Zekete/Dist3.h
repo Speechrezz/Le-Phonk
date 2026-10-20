@@ -45,8 +45,12 @@ public:
     void setAtomics(juce::AudioProcessorValueTreeState& treeState) final;
 
 private:
-    void processAllPassUnchanged(juce::dsp::ProcessContextReplacing<float>&, size_t amount);
-    void processAllPassTransition(juce::dsp::ProcessContextReplacing<float>&, size_t prevAmount, size_t newAmount);
+    float loadAmount() const noexcept;
+
+    void processAllPassUnchanged() noexcept;
+    void processAllPassTransition() noexcept;
+
+    double sampleRate = -1.0;
 
     juce::NormalisableRange<float> range;
 
@@ -55,7 +59,9 @@ private:
 
     std::atomic<float>* paramAtomic{ nullptr };
 
-    size_t prevAmount = 0;
+    juce::LinearSmoothedValue<float> smoother;
+
+    bool isTransitioning = false;
 
 };
 
