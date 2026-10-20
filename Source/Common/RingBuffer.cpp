@@ -62,6 +62,14 @@ void RingBuffer::writeSamples(juce::dsp::AudioBlock<float>& audioBlock)
     writeAtomic.store((startIndex + numSamples) % buffer.size(), std::memory_order_release);
 }
 
+static float findMax(const float* buffer, size_t numSamples)
+{
+    using VecOps = juce::FloatVectorOperations;
+
+    auto minAndMax = VecOps::findMinAndMax(buffer, numSamples);
+    return std::max(std::abs(minAndMax.getStart()), minAndMax.getEnd());
+}
+
 float RingBuffer::readLoudestSample()
 {
     size_t write = writeAtomic.load(std::memory_order_acquire);
@@ -69,27 +77,25 @@ float RingBuffer::readLoudestSample()
     if (read == write)
         return -1.f;
 
-    // If read is before write
     if (read < write)
     {
-        float loudest = 0.f;
+        const size_t numSamples = write - read;
+        const float maxSample = findMax(buffer.data() + read, numSamples);
 
-        for (read; read < write; ++read)
-            loudest = std::max(std::abs(buffer[read]), loudest);
-
-        return loudest;
+        read = write;
+        return maxSample;
     }
+    else // Wrap around
+    {
+        const size_t initialCount = buffer.size() - read;
+        const size_t remainingCount = write;
 
-    // If read is NOT before write
-    float loudest = 0.f;
+        const float maxSample1 = findMax(buffer.data() + read, initialCount);
+        const float maxSample2 = findMax(buffer.data(), remainingCount);
 
-    for (read; read < buffer.size(); ++read)
-        loudest = std::max(std::abs(buffer[read]), loudest);
-
-    for (read = 0; read < write; ++read)
-        loudest = std::max(std::abs(buffer[read]), loudest);
-
-    return loudest;
+        read = write;
+        return std::max(maxSample1, maxSample2);
+    }
 }
 
 } // namespace xynth

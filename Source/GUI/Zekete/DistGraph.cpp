@@ -19,10 +19,6 @@ DistGraph::DistGraph(xynth::GuiData& g) : guiData(g)
     selectAtomic = g.audioProcessor.treeState.getRawParameterValue(DIST_SELECT_ID);
 }
 
-DistGraph::~DistGraph()
-{
-}
-
 void DistGraph::paint (juce::Graphics& g)
 {
     auto& look = guiData.getLnf();
@@ -36,8 +32,6 @@ void DistGraph::paint (juce::Graphics& g)
     // Load parameters and audio
     const int idx = int(selectAtomic->load(std::memory_order_relaxed));
     const float param = gainAtomic->load(std::memory_order_relaxed) * 0.01f;
-    const float newSample = guiData.audioProcessor.ringBuffer.readLoudestSample();
-    sample = newSample > sample ? newSample : sample * 0.92f;
 
     look.drawDistGraphBackground(g, rect, std::tanh(sample * juce::mapToLog10(param, 1.f, 12.f) * 0.2f));
 
@@ -71,12 +65,14 @@ void DistGraph::paint (juce::Graphics& g)
     look.drawDistGraphForeground(g, rect);
 }
 
-void DistGraph::resized()
-{
-
-}
-
 void DistGraph::timerCallback()
 {
-    repaint();
+    constexpr float decayFactor = 0.92f;
+
+    const auto newSample = guiData.audioProcessor.ringBuffer.readLoudestSample();
+    if (newSample >= 0.f)
+    {
+        sample = newSample > sample ? newSample : sample * decayFactor;
+        repaint();
+    }
 }

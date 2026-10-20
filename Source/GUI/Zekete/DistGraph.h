@@ -17,10 +17,9 @@ class DistGraph  : public juce::Component, juce::Timer
 {
 public:
     DistGraph(xynth::GuiData&);
-    ~DistGraph() override;
+    ~DistGraph() override = default;
 
     void paint (juce::Graphics&) override;
-    void resized() override;
     void timerCallback() override;
 
 private:
