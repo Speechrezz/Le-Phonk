@@ -1,9 +1,9 @@
-**/Builds/
-**/build/
-**/JuceLibraryCode
-**/.DS_Store
-cmake-build-*
-.idea
+.DS_Store
+Builds/
+JuceLibraryCode/
+cmake-build-*/
+.idea/
 .vscode/
+
 .env
 *.zip
