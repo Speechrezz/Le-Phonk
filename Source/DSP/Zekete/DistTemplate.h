@@ -19,7 +19,7 @@ class DistTemplate
 {
 public:
     DistTemplate() = default;
-    ~DistTemplate() = default;
+    virtual ~DistTemplate() = default;
 
     /// <summary>
     /// Prepares audio processing.

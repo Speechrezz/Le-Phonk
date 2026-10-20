@@ -10,6 +10,7 @@
 #include "PluginEditor.h"
 #include "Common/Ranges.h"
 #include "Common/ParameterText.h"
+#include "Common/Constants.h"
 
 //==============================================================================
 LePhonkAudioProcessor::LePhonkAudioProcessor()
@@ -31,10 +32,6 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
 
     enableAtomic = treeState.getRawParameterValue(ENABLE_ID);
     gainAtomic   = treeState.getRawParameterValue(GAIN_ID);
-}
-
-LePhonkAudioProcessor::~LePhonkAudioProcessor()
-{
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout LePhonkAudioProcessor::createParameterLayout()
@@ -126,16 +123,16 @@ int LePhonkAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void LePhonkAudioProcessor::setCurrentProgram (int index)
+void LePhonkAudioProcessor::setCurrentProgram (int)
 {
 }
 
-const juce::String LePhonkAudioProcessor::getProgramName (int index)
+const juce::String LePhonkAudioProcessor::getProgramName (int)
 {
     return {};
 }
 
-void LePhonkAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void LePhonkAudioProcessor::changeProgramName (int, const juce::String&)
 {
 }
 
@@ -190,7 +187,7 @@ bool LePhonkAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 }
 #endif
 
-void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void LePhonkAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     if (!flStudioDIYSpecificationEnforcementPreparedFlag.load(std::memory_order_acquire))
         return;

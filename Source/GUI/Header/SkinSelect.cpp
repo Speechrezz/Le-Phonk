@@ -21,14 +21,6 @@ SkinSelect::SkinSelect(xynth::GuiData& g) : guiData(g)
     addAndMakeVisible(dropDown);
 }
 
-SkinSelect::~SkinSelect()
-{
-}
-
-void SkinSelect::paint (juce::Graphics& g)
-{
-}
-
 void SkinSelect::resized()
 {
     dropDown.setBounds(getLocalBounds());

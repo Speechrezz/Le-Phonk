@@ -13,7 +13,7 @@
 
 namespace xynth
 {
-BypassButton::BypassButton(xynth::GuiData& g, juce::String parameterId) : guiData(g),
+BypassButton::BypassButton(GuiData& g, juce::String parameterId) : guiData(g),
     attach(g.audioProcessor.treeState, parameterId, *this)
 {}
 } // namespace xynth

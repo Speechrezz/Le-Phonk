@@ -18,18 +18,19 @@ namespace xynth
 class TextButton : public juce::TextButton
 {
 public:
-    TextButton(xynth::GuiData&);
+    TextButton(GuiData&);
+    ~TextButton() override = default;
 
     void paint(juce::Graphics&) override;
 
     void mouseEnter(const juce::MouseEvent& e) override;
     void mouseExit (const juce::MouseEvent& e) override;
 
-    void setFillIn(const bool shouldFillIn);
-    void setText(const juce::String newText);
+    void setFillIn(bool shouldFillIn);
+    void setText(const juce::String& newText);
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
 
     bool fillInButton = true;
     juce::String buttonText;

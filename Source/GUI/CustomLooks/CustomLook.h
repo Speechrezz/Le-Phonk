@@ -18,6 +18,7 @@ class CustomLook : public LookAndFeel_V4
 {
 public:
     CustomLook();
+    ~CustomLook() override = default;
 
     // For debugging
     virtual String getLnfName() { return "CustomLook"; }

@@ -19,7 +19,7 @@ class FonzLayout  : public juce::Component
 {
 public:
     FonzLayout(xynth::GuiData&);
-    ~FonzLayout() = default;
+    ~FonzLayout() override = default;
 
     void paint (juce::Graphics&) override;
     void resized() override;

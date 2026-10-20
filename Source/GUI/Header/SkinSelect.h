@@ -17,9 +17,8 @@ class SkinSelect  : public juce::Component
 {
 public:
     SkinSelect(xynth::GuiData&);
-    ~SkinSelect() override;
+    ~SkinSelect() override = default;
 
-    void paint (juce::Graphics&) override;
     void resized() override;
 
     void mouseEnter(const juce::MouseEvent& e) override;

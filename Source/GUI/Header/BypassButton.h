@@ -12,18 +12,17 @@
 
 #include <JuceHeader.h>
 #include "../Utils/GuiData.h"
-#include "../Utils/FullSlider.h"
 
 namespace xynth
 {
 class BypassButton : public juce::ToggleButton
 {
 public:
-    BypassButton(xynth::GuiData&, juce::String);
-    ~BypassButton() = default;
+    BypassButton(GuiData&, juce::String);
+    ~BypassButton() override = default;
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
     juce::AudioProcessorValueTreeState::ButtonAttachment attach;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BypassButton)

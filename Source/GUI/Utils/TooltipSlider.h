@@ -18,8 +18,8 @@ namespace xynth
 class TooltipSlider : public juce::Slider
 {
 public:
-    TooltipSlider(xynth::GuiData&);
-    ~TooltipSlider() = default;
+    TooltipSlider(GuiData&);
+    ~TooltipSlider() override = default;
 
     void mouseEnter(const juce::MouseEvent& e) override;
     void mouseExit (const juce::MouseEvent& e) override;
@@ -32,7 +32,7 @@ public:
     void resized() override;
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
     juce::String name, postfix;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attach;

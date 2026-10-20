@@ -18,7 +18,7 @@ class DualLabel : public juce::Label
 {
 public:
     DualLabel(juce::Slider&);
-    ~DualLabel() = default;
+    ~DualLabel() override = default;
 
     void paint(juce::Graphics&) override;
 

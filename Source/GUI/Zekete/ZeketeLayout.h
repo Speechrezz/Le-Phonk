@@ -21,7 +21,7 @@ class ZeketeLayout  : public juce::Component
 {
 public:
     ZeketeLayout(xynth::GuiData&);
-    ~ZeketeLayout() = default;
+    ~ZeketeLayout() override = default;
 
     void paint (juce::Graphics&) override;
     void resized() override;

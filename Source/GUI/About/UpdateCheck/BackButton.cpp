@@ -13,7 +13,7 @@
 
 namespace xynth 
 {
-BackButton::BackButton(xynth::GuiData& g) : guiData(g)
+BackButton::BackButton(GuiData& g) : guiData(g)
 {
     backArrow = juce::Drawable::createFromImageData(BinaryData::backArrow_svg, BinaryData::backArrow_svgSize);
 }

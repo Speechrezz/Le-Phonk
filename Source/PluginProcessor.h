@@ -9,7 +9,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "Common/Constants.h"
 #include "DSP/OTT/OTTwithMultiplier.h"
 #include "DSP/Fonz.h"
 #include "DSP/Zekete.h"
@@ -20,7 +19,7 @@ class LePhonkAudioProcessor  : public juce::AudioProcessor
 public:
     //==============================================================================
     LePhonkAudioProcessor();
-    ~LePhonkAudioProcessor() override;
+    ~LePhonkAudioProcessor() override = default;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;

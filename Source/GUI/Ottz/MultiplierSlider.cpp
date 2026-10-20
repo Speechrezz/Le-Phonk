@@ -14,7 +14,7 @@
 
 namespace xynth
 {
-MultiplierSlider::MultiplierSlider(xynth::GuiData& g) : guiData(g)
+MultiplierSlider::MultiplierSlider(GuiData& g) : guiData(g)
 {
     setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 

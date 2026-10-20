@@ -17,10 +17,9 @@ class LogoButton  : public juce::Component
 {
 public:
     LogoButton(xynth::GuiData&);
-    ~LogoButton() override;
+    ~LogoButton() override = default;
 
     void paint (juce::Graphics&) override;
-    void resized() override;
 
     void mouseDown (const juce::MouseEvent& e) override;
     void mouseEnter(const juce::MouseEvent& e) override;

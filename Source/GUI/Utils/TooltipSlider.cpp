@@ -13,7 +13,7 @@
 
 namespace xynth
 {
-TooltipSlider::TooltipSlider(xynth::GuiData& g) : guiData(g)
+TooltipSlider::TooltipSlider(GuiData& g) : guiData(g)
 {
     setSliderStyle(juce::Slider::RotaryVerticalDrag);
     setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);

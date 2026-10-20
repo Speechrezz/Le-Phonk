@@ -18,8 +18,8 @@ namespace xynth
 class UpdateChecker : public juce::Timer
 {
 public:
-    UpdateChecker(xynth::GuiData&);
-    ~UpdateChecker() = default;
+    UpdateChecker(GuiData&);
+    ~UpdateChecker() override = default;
 
     void startupUpdateCheck();
     void checkForUpdates();

@@ -16,10 +16,6 @@ AboutOverlay::AboutOverlay(xynth::GuiData& g) : guiData(g), aboutWindow(g)
     addAndMakeVisible(aboutWindow);
 }
 
-AboutOverlay::~AboutOverlay()
-{
-}
-
 void AboutOverlay::paint (juce::Graphics& g)
 {
     g.fillAll(juce::Colours::black.withAlpha(0.7f));

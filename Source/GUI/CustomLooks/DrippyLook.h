@@ -19,6 +19,7 @@ class DrippyLook : public CustomLook
 {
 public:
     DrippyLook();
+    ~DrippyLook() override = default;
 
     String getLnfName() override { return "DrippyLook"; }
     Image& getBackgroundImage() override { return bgImage; };

@@ -19,6 +19,7 @@ class JuiceLook : public CustomLook
 {
 public:
     JuiceLook();
+    ~JuiceLook() override = default;
 
     String getLnfName() override { return "JuiceLook"; }
     Image& getBackgroundImage() override { return bgImage; };

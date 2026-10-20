@@ -18,8 +18,8 @@ namespace xynth
 class TooltipLabel : public juce::Component
 {
 public:
-    TooltipLabel(xynth::GuiData&);
-    ~TooltipLabel() = default;
+    TooltipLabel(GuiData&);
+    ~TooltipLabel() override = default;
 
     void paint(juce::Graphics&) override;
 
@@ -28,7 +28,7 @@ public:
     void hideTooltip();
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
 
     juce::String tooltipText;
 

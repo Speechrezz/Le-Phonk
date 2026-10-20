@@ -13,7 +13,7 @@
 
 namespace xynth
 {
-TextButton::TextButton(xynth::GuiData& g) : guiData(g)
+TextButton::TextButton(GuiData& g) : guiData(g)
 {}
 
 void TextButton::paint(juce::Graphics& g)
@@ -60,7 +60,7 @@ void TextButton::setFillIn(const bool shouldFillIn)
     repaint();
 }
 
-void TextButton::setText(const juce::String newText)
+void TextButton::setText(const juce::String& newText)
 {
     buttonText = newText;
     repaint();

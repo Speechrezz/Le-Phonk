@@ -21,7 +21,7 @@ class OttzLayout  : public juce::Component
 {
 public:
     OttzLayout(xynth::GuiData&);
-    ~OttzLayout() = default;
+    ~OttzLayout() override = default;
 
     void paint (juce::Graphics&) override;
     void resized() override;

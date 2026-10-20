@@ -17,6 +17,7 @@ class DistSelect  : public juce::ComboBox
 {
 public:
     DistSelect(xynth::GuiData&);
+    ~DistSelect() override = default;
 
     void mouseEnter(const juce::MouseEvent& e) override;
     void mouseExit (const juce::MouseEvent& e) override;

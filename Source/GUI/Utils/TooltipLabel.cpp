@@ -13,7 +13,7 @@
 
 namespace xynth
 {
-TooltipLabel::TooltipLabel(xynth::GuiData& g) : guiData(g)
+TooltipLabel::TooltipLabel(GuiData& g) : guiData(g)
 {
     setAlwaysOnTop(true);
 }

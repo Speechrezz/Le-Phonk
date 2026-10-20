@@ -18,7 +18,7 @@ class Dist5 : public DistTemplate
 {
 public:
     Dist5();
-    ~Dist5() = default;
+    ~Dist5() override = default;
 
     void prepare(const juce::dsp::ProcessSpec& spec) final;
     void process(juce::dsp::ProcessContextReplacing<float>& context) final;

@@ -19,6 +19,7 @@ class HellLook  : public CustomLook
 {
 public:
     HellLook();
+    ~HellLook() override = default;
 
     String getLnfName() override { return "HellLook"; }
     Image& getBackgroundImage() override { return bgImage; };

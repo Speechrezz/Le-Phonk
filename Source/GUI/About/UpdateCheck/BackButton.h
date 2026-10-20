@@ -18,7 +18,8 @@ namespace xynth
 class BackButton : public juce::TextButton
 {
 public:
-    BackButton(xynth::GuiData&);
+    BackButton(GuiData&);
+    ~BackButton() override = default;
 
     void paint(juce::Graphics&) override;
 
@@ -26,7 +27,7 @@ public:
     void mouseExit(const juce::MouseEvent& e) override;
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
     std::unique_ptr<juce::Drawable> backArrow;
 
     juce::Colour previousColour = juce::Colours::white;

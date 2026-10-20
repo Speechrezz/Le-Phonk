@@ -18,7 +18,7 @@ class AboutOverlay  : public juce::Component
 {
 public:
     AboutOverlay(xynth::GuiData&);
-    ~AboutOverlay() override;
+    ~AboutOverlay() override = default;
 
     void paint (juce::Graphics&) override;
     void resized() override;

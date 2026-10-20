@@ -12,21 +12,10 @@
 #include "LogoButton.h"
 
 LogoButton::LogoButton(xynth::GuiData& g) : guiData(g)
-{
-
-}
-
-LogoButton::~LogoButton()
-{
-}
+{}
 
 void LogoButton::paint (juce::Graphics& g)
-{
-}
-
-void LogoButton::resized()
-{
-}
+{}
 
 void LogoButton::mouseDown(const juce::MouseEvent& e)
 {

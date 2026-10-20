@@ -20,16 +20,16 @@ namespace xynth
 class TimeKnob : public juce::Component
 {
 public:
-    TimeKnob(xynth::GuiData&);
-    ~TimeKnob() = default;
+    TimeKnob(GuiData&);
+    ~TimeKnob() override = default;
 
     void paint(juce::Graphics&) override;
     void resized() override;
 
 private:
-    xynth::GuiData& guiData;
-    xynth::FullSlider timeKnob;
-    xynth::DualLabel label;
+    GuiData& guiData;
+    FullSlider timeKnob;
+    DualLabel label;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TimeKnob)
 };

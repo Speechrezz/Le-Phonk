@@ -27,7 +27,7 @@ class WindowLayout : public juce::Component
 {
 public:
     WindowLayout(xynth::GuiData&);
-    ~WindowLayout() = default;
+    ~WindowLayout() override = default;
 
     void paint (juce::Graphics&) override;
     void resized() override;

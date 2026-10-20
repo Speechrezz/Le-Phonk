@@ -13,7 +13,7 @@
 
 namespace xynth
 {
- CheckmarkButton::CheckmarkButton(xynth::GuiData& g) : guiData(g)
+ CheckmarkButton::CheckmarkButton(GuiData& g) : guiData(g)
 {
      setClickingTogglesState(true);
 }
@@ -62,7 +62,7 @@ void CheckmarkButton::mouseExit(const juce::MouseEvent& e)
     juce::TextButton::mouseExit(e);
 }
 
-void CheckmarkButton::setText(const juce::String newText)
+void CheckmarkButton::setText(const juce::String& newText)
 {
     buttonText = newText;
     repaint();

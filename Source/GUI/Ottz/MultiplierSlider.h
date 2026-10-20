@@ -18,7 +18,8 @@ namespace xynth
 class MultiplierSlider : public juce::Slider
 {
 public:
-    MultiplierSlider(xynth::GuiData&);
+    MultiplierSlider(GuiData&);
+    ~MultiplierSlider() override = default;
 
     void paint(juce::Graphics&) override;
     void resized() override;
@@ -27,7 +28,7 @@ public:
     void mouseExit (const juce::MouseEvent& e) override;
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attach;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MultiplierSlider)

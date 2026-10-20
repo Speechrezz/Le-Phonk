@@ -21,12 +21,13 @@ class AboutWindow  : public juce::Component
 {
 public:
     AboutWindow(xynth::GuiData&);
+    ~AboutWindow() override = default;
 
     void paint(juce::Graphics&) override;
     void resized() override;
 
     enum StatesEnum{ main, updates };
-    void setState(const StatesEnum newState);
+    void setState(StatesEnum newState);
 
 private:
     void initPaintFunctions();

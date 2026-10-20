@@ -18,17 +18,18 @@ namespace xynth
 class CheckmarkButton : public juce::TextButton
 {
 public:
-    CheckmarkButton(xynth::GuiData&);
+    CheckmarkButton(GuiData&);
+    ~CheckmarkButton() override = default;
 
     void paint(juce::Graphics&) override;
 
     void mouseEnter(const juce::MouseEvent& e) override;
     void mouseExit(const juce::MouseEvent& e) override;
 
-    void setText(const juce::String newText);
+    void setText(const juce::String& newText);
 
 private:
-    xynth::GuiData& guiData;
+    GuiData& guiData;
 
     juce::String buttonText;
 

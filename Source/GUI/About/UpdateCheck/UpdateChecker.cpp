@@ -15,7 +15,7 @@
 
 namespace xynth
 {
-UpdateChecker::UpdateChecker(xynth::GuiData& g) : guiData(g)
+UpdateChecker::UpdateChecker(GuiData& g) : guiData(g)
 {}
 
 void UpdateChecker::startupUpdateCheck()
