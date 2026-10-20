@@ -22,6 +22,7 @@ public:
     ~LePhonkAudioProcessor() override = default;
 
     //==============================================================================
+    void reset() override;
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
@@ -54,16 +55,12 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    inline float zeketeDistort(int idx, float sample, float param) { return zekete.distArray[idx]->distort(sample, param); }
-    inline float zeketeXAxis  (int idx, float param) { return zekete.distArray[idx]->xAxis(param); }
-
-    juce::StringArray distTypes{ "1. Ungh", "2. Beef", "3. Tub of gravy", "4. Woah haha", "5. glumbis", "6. Scrimbly"};
-
     juce::AudioProcessorValueTreeState treeState;
     xynth::RingBuffer ringBuffer;
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
     xynth::OTTwithMultiplier ott;
     xynth::Fonz fonz;
     xynth::Zekete zekete;

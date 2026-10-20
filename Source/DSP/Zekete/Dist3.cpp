@@ -18,7 +18,13 @@ Dist3::Dist3()
     range.setSkewForCentre(0.2f);
 }
 
-void Dist3::prepare(const juce::dsp::ProcessSpec& spec)
+void Dist3::reset() noexcept
+{
+    for (auto& filter : allPassFilters)
+        filter.reset();
+}
+
+void Dist3::prepare(const juce::dsp::ProcessSpec& spec) noexcept
 {
     sampleRate = spec.sampleRate;
 
@@ -35,16 +41,16 @@ void Dist3::prepare(const juce::dsp::ProcessSpec& spec)
 
     interleaved.prepare(spec);
 
-    smoother.setCurrentAndTargetValue(loadAmount());
+    smoother.setCurrentAndTargetValue(smoother.getTargetValue());
     isTransitioning = false;
 }
 
-void Dist3::process(juce::dsp::ProcessContextReplacing<float>& context)
+void Dist3::process(juce::dsp::ProcessContextReplacing<float>& context, float zeketeAmount) noexcept
 {
     jassert(sampleRate > 0.0); // Call `prepare()`
 
     constexpr double secondsPerTransition = 0.001;
-    const float newAmount = loadAmount();
+    const float newAmount = computeAllPassAmount(zeketeAmount);
 
     if (!isTransitioning && newAmount != smoother.getTargetValue())
     {
@@ -73,18 +79,12 @@ void Dist3::process(juce::dsp::ProcessContextReplacing<float>& context)
     interleaved.deinterleave(context);
 }
 
-void Dist3::setAtomics(juce::AudioProcessorValueTreeState& treeState)
-{
-    paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
-}
-
-float Dist3::loadAmount() const noexcept
+float Dist3::computeAllPassAmount(float zeketeAmount) const noexcept
 {
     const auto maxAmount = static_cast<float>(allPassFilters.size());
 
-    float param = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    param = range.convertFrom0to1(param);
-    return std::round(juce::jmap(param, 0.f, maxAmount));
+    zeketeAmount = range.convertFrom0to1(zeketeAmount);
+    return std::round(juce::jmap(zeketeAmount, 0.f, maxAmount));
 }
 
 void Dist3::processAllPassUnchanged() noexcept

@@ -10,42 +10,41 @@
 
 #pragma once
 
-#include "DistTemplate.h"
+#include "DistortionProcessor.h"
 #include "../Utils/SIMDFilter.h"
 #include "../Utils/InterleavedAudio.h"
 
 namespace xynth
 {
 
-class Dist3 : public DistTemplate
+class Dist3 : public DistortionProcessor
 {
 public:
     Dist3();
     ~Dist3() override = default;
 
-    void prepare(const juce::dsp::ProcessSpec& spec) final;
-    void process(juce::dsp::ProcessContextReplacing<float>& context) final;
-    inline float distort(float x, float param = 0.f) final
+    void reset() noexcept final;
+    void prepare(const juce::dsp::ProcessSpec& spec) noexcept final;
+    void process(juce::dsp::ProcessContextReplacing<float>& context, float zeketeAmount) noexcept final;
+
+    // For visualization
+    static float distortVisual(float x, float amount)
     { 
-        float multX1 = x * (1.f + param * 27.f);
-        float multX2 = x * (2.f + param * 10.f);
+        float multX1 = x * (1.f + amount * 27.f);
+        float multX2 = x * (2.f + amount * 10.f);
         float y = 0.4f * (std::abs(x) + 0.5f) * std::sin(multX1);
         y += 0.5f * x;
         y += 0.3f * std::sin(multX2 * std::sin(x * 8.7f));
 
-        return juce::jmap(param, x, y);
+        return juce::jmap(amount, x, y);
     }
-
-    inline float xAxis(float param) final
+    static float xAxis(float amount)
     { 
-        return juce::mapToLog10(param, 1.f, 0.5f);
+        return juce::mapToLog10(amount, 1.f, 0.5f);
     }
-
-
-    void setAtomics(juce::AudioProcessorValueTreeState& treeState) final;
 
 private:
-    float loadAmount() const noexcept;
+    float computeAllPassAmount(float zeketeAmount) const noexcept;
 
     void processAllPassUnchanged() noexcept;
     void processAllPassTransition() noexcept;
@@ -56,8 +55,6 @@ private:
 
     std::array<SIMDFilter, 200> allPassFilters;
     InterleavedAudio interleaved;
-
-    std::atomic<float>* paramAtomic{ nullptr };
 
     juce::LinearSmoothedValue<float> smoother;
 

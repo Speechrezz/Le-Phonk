@@ -12,22 +12,20 @@
 
 namespace xynth
 {
-Dist1::Dist1()
+
+void Dist1::reset() noexcept
 {
-    shaper.functionToUse = [](float x)
-    {
-        return std::tanh(x);
-    };
+    for (auto& filter : filters)
+        filter.reset();
 }
-void Dist1::prepare(const juce::dsp::ProcessSpec& spec)
+
+void Dist1::prepare(const juce::dsp::ProcessSpec& spec) noexcept
 {
     gainIn.prepare(spec);
     gainIn.setRampDurationSeconds(0.005);
 
     gainOut.prepare(spec);
     gainOut.setRampDurationSeconds(0.005);
-
-    shaper.prepare(spec);
 
     for (auto& filter : filters)
         filter.prepare(spec);
@@ -36,27 +34,33 @@ void Dist1::prepare(const juce::dsp::ProcessSpec& spec)
     *filters[after].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 555.f, 1.2f, 1.f / 4.f);
 }
 
-void Dist1::process(juce::dsp::ProcessContextReplacing<float>& context)
+void Dist1::process(juce::dsp::ProcessContextReplacing<float>& context, float amount) noexcept
 {
-    float dB = paramAtomic->load(std::memory_order_relaxed) * 0.01f;
-    dB = juce::jmap(dB, 0.f, ZEKETE_MAX_DB);
+    const size_t numChannels = context.getInputBlock().getNumChannels();
+    const size_t numSamples  = context.getInputBlock().getNumSamples();
+
+    const float dB = juce::jmap(amount, 0.f, ZEKETE_MAX_DB);
     const float intensityIn = juce::Decibels::decibelsToGain(dB);
     gainIn.setGainLinear(intensityIn);
 
-    const float avgGain = 0.2f;
-    const float intensityOut = avgGain / shaper.functionToUse(intensityIn * avgGain);
+    constexpr float avgGain = 0.2f;
+    const float intensityOut = avgGain / distortSample(intensityIn * avgGain);
     gainOut.setGainLinear(intensityOut);
-    //DBG("In: " << intensityIn << ", out: " << intensityOut);
 
     filters[before].process(context);
     gainIn.process(context);
-    shaper.process(context);
+
+    for (size_t ch = 0; ch < numChannels; ++ch)
+    {
+        float* channel = context.getOutputBlock().getChannelPointer(ch);
+        for (size_t i = 0; i < numSamples; ++i)
+        {
+            channel[i] = distortSample(channel[i]);
+        }
+    }
+
     gainOut.process(context);
     filters[after].process(context);
 }
 
-void Dist1::setAtomics(juce::AudioProcessorValueTreeState& treeState)
-{
-    paramAtomic = treeState.getRawParameterValue(ZEKETE_ID);
-}
 } // namespace xynth

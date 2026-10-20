@@ -13,7 +13,7 @@
 
 DistSelect::DistSelect(xynth::GuiData& g) : guiData(g)
 {
-    addItemList(guiData.audioProcessor.distTypes, 1);
+    addItemList(distTypes, 1);
     setJustificationType(juce::Justification::centred);
     setScrollWheelEnabled(true);
 
@@ -47,6 +47,4 @@ void DistSelect::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWhee
         setSelectedItemIndex(std::min(curItem + 1, maxIdx));
         mwMovement = 0.f;
     }
-    
-    //juce::ComboBox::mouseWheelMove(e, mw);
 }

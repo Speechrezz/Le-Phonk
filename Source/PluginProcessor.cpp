@@ -23,12 +23,12 @@ LePhonkAudioProcessor::LePhonkAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    treeState(*this, nullptr, "PARAMETER", { createParameterLayout() })
+    treeState(*this, nullptr, "PARAMETER", { createParameterLayout() }),
+    zekete(*this)
 #endif
 {
     ott.setAtomics(treeState);
     fonz.setAtomics(treeState);
-    zekete.setAtomics(treeState);
 
     enableAtomic = treeState.getRawParameterValue(ENABLE_ID);
     gainAtomic   = treeState.getRawParameterValue(GAIN_ID);
@@ -134,6 +134,11 @@ const juce::String LePhonkAudioProcessor::getProgramName (int)
 
 void LePhonkAudioProcessor::changeProgramName (int, const juce::String&)
 {
+}
+
+void LePhonkAudioProcessor::reset()
+{
+    zekete.reset();
 }
 
 //==============================================================================

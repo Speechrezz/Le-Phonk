@@ -11,35 +11,35 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "Zekete/ZeketeHeader.h"
+#include "Zekete/ZeketeRegistry.h"
+
+class LePhonkAudioProcessor;
 
 namespace xynth
 {
+
 class Zekete
 {
 public:
-    Zekete();
+    Zekete(LePhonkAudioProcessor&);
     ~Zekete() = default;
 
-    void prepare(const juce::dsp::ProcessSpec& spec);
-    void process(juce::dsp::ProcessContextReplacing<float>& context);
-
-    void setAtomics(juce::AudioProcessorValueTreeState& treeState);
+    void reset() noexcept;
+    void prepare(const juce::dsp::ProcessSpec& spec) noexcept;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) noexcept;
 
 private:
     juce::dsp::DryWetMixer<float> mixer;
 
-    Dist1 dist1;
-    Dist2 dist2;
-    Dist3 dist3;
-    Dist4 dist4;
-    Dist5 dist5;
-    Dist6 dist6;
-    std::atomic<float>* selectAtomic{ nullptr };
-    std::atomic<float>* mixAtomic    {nullptr};
+    std::atomic<float>& distTypeParam;
+    std::atomic<float>& mixParam;
+    std::atomic<float>& amountParam;
 
-public:
-    std::array<DistTemplate*, 6> distArray{ &dist1, &dist2, &dist3, &dist4, &dist5, &dist6 };
+    size_t distType = 0;
+
+    juce::dsp::ProcessSpec spec;
+    std::unique_ptr<DistortionProcessor> distortion;
 
 };
+
 } // namespace xynth

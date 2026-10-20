@@ -34,5 +34,12 @@
 #define GAIN_MIN -36.f
 #define GAIN_MAX 12.f
 
+#define DIST_TYPES_NUM 6
+
+const juce::StringArray distTypes
+{
+    "1. Ungh", "2. Beef", "3. Tub of gravy", "4. Woah haha", "5. glumbis", "6. Scrimbly"
+};
+
 #define DIST_SELECT_ID "distSelect"
 #define DIST_SELECT_NAME "Zekete Type"
