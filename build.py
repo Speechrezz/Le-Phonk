@@ -36,7 +36,7 @@ def detect_generator():
             return GeneratorType(is_multi_config=True, arguments=["-G", "Xcode"])
     else:
         return GeneratorType(is_multi_config=False, arguments=["-G", "Ninja"])
-    
+
 def compile(build_dir: str, build_type: str, is_demo=False, target: str | None=None):
     os.makedirs(build_dir, exist_ok=True)
 
@@ -105,7 +105,7 @@ def get_binary_path(folder: str, extension: str, build_dir: str, build_type: str
     artifacts_dir_list = list(Path(build_dir).glob(f"*artefacts/{build_type}/{folder}/*{extension}"))
     if not artifacts_dir_list:
         raise FileNotFoundError(f"Could not find {extension} binary.")
-    
+
     return artifacts_dir_list[0]
 
 def get_project_version(build_dir: str):
@@ -160,10 +160,10 @@ def bundle_windows(build_dir: str, build_type: str, is_demo: bool):
     installer_output_name = config.installer_path.stem
     project_version = get_project_version(build_dir)
     subprocess.run([
-        ISCC_PATH, 
-        f"/DMyAppName={config.binary_paths[VST3_KEY].stem}", 
-        f"/DMyOutputName={installer_output_name}", 
-        f"/DMyAppVersion={project_version}", 
+        ISCC_PATH,
+        f"/DMyAppName={config.binary_paths[VST3_KEY].stem}",
+        f"/DMyOutputName={installer_output_name}",
+        f"/DMyAppVersion={project_version}",
         "Installers/Windows/installer.iss"
     ], check=True)
 
@@ -209,7 +209,7 @@ def bundle_windows(build_dir: str, build_type: str, is_demo: bool):
         print("❌ Signature verification failed!")
         print(verify_result.stderr)
         raise RuntimeError("Signature verification failed.")
-    
+
 
 def get_bundle_config_macos(build_dir: str, build_type: str, is_demo: bool, installer_dir=Path("Installers/MacOS")):
     plugin_name = cast(str, os.getenv("PLUGIN_NAME"))
@@ -386,13 +386,10 @@ def bundle_macos(build_dir: str, build_type: str, is_demo: bool):
     ], check=True)
     subprocess.run(["xcrun", "stapler", "staple", str(config.installer_path)], check=True)
 
-    # Step 5: Create .zip with installer and manual install files
+    # Step 5: Create .zip with installer
     print("\n📦 Archiving final installer...")
-    shutil.copy("Installers/Common/Manual Install Instructions.txt", config.manual_install_dir)
-
     current_working_dir = os.getcwd()
     os.chdir(config.installer_path.parent)
-    subprocess.run(["zip", "-r", config.output_path.name, config.manual_install_dir.name], check=True)
     subprocess.run(["zip", config.output_path.name, config.installer_path.name], check=True)
     os.chdir(current_working_dir)
 
