@@ -11,9 +11,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
-#include "../Utils/FullSlider.h"
-#include "../Utils/DualLabel.h"
+#include "GUI/Utils/GuiData.h"
+#include "GUI/Utils/FullSlider.h"
+#include "GUI/Utils/DualLabel.h"
 
 namespace xynth
 {

@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "DistGraph.h"
-#include "../../Common/Constants.h"
+#include "Common/Constants.h"
 
 DistGraph::DistGraph(xynth::GuiData& g) : guiData(g)
 {

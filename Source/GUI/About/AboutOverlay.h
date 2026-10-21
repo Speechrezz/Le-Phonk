@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "AboutWindow.h"
-#include "../Utils/GuiData.h"
+#include "GUI/Utils/GuiData.h"
 
 class AboutOverlay  : public juce::Component
 {

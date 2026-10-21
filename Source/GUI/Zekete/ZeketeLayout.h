@@ -11,9 +11,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
-#include "../Utils/FullSlider.h"
-#include "../Utils/TooltipSlider.h"
+#include "GUI/Utils/GuiData.h"
+#include "GUI/Utils/FullSlider.h"
+#include "GUI/Utils/TooltipSlider.h"
 #include "DistGraph.h"
 #include "DistSelect.h"
 

@@ -9,7 +9,7 @@
 */
 
 #include "OTTwithMultiplier.h"
-#include "../../PluginProcessor.h"
+#include "PluginProcessor.h"
 
 namespace xynth
 {

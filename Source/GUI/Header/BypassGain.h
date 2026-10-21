@@ -11,8 +11,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
-#include "../Utils/TooltipSlider.h"
+#include "GUI/Utils/GuiData.h"
+#include "GUI/Utils/TooltipSlider.h"
 #include "BypassButton.h"
 
 class BypassGain : public juce::Component

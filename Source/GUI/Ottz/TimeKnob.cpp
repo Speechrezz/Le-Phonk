@@ -13,7 +13,7 @@
 
 namespace xynth
 {
-TimeKnob::TimeKnob(xynth::GuiData& g) : guiData(g), label(timeKnob.slider)
+TimeKnob::TimeKnob(GuiData& g) : guiData(g), label(timeKnob.slider)
 {
     auto& treeState = g.audioProcessor.treeState;
 

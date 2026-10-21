@@ -11,8 +11,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Common/Constants.h"
-#include "Utils/FullSlider.h"
 #include "Utils/GuiData.h"
 #include "Utils/TooltipLabel.h"
 #include "Zekete/ZeketeLayout.h"

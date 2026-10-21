@@ -10,8 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
-#include "../../Utils/GuiData.h"
-#include <future>
+#include "GUI/Utils/GuiData.h"
 
 namespace xynth
 {

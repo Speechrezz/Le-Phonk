@@ -9,8 +9,8 @@
 */
 
 #include "OTT.h"
-#include "../../Common/Constants.h"
-#include "../../PluginProcessor.h"
+#include "Common/Constants.h"
+#include "PluginProcessor.h"
 
 #define HIGH_CROSS 2500.f
 #define LOW_CROSS 88.3f

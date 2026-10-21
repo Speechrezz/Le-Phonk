@@ -9,8 +9,8 @@
 */
 
 #include "Fonz.h"
-#include "../Common/Constants.h"
-#include "../PluginProcessor.h"
+#include "Common/Constants.h"
+#include "PluginProcessor.h"
 
 constexpr float limit = 2.f;
 constexpr float limitInv = 1.f / limit;

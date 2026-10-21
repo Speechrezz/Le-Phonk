@@ -9,7 +9,7 @@
 */
 
 #include "DrippyLook.h"
-#include "../../Common/Constants.h"
+#include "Common/Constants.h"
 
 namespace juce
 {

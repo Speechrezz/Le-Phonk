@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
+#include "GUI/Utils/GuiData.h"
 
 namespace xynth
 {

@@ -11,9 +11,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
-#include "../Utils/FullSlider.h"
-#include "../Header/BypassButton.h"
+#include "GUI/Utils/GuiData.h"
+#include "GUI/Utils/FullSlider.h"
+#include "GUI/Header/BypassButton.h"
 #include "TimeKnob.h"
 #include "MultiplierSlider.h"
 

@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
+#include "GUI/Utils/GuiData.h"
 
 class DistGraph  : public juce::Component, juce::Timer
 {

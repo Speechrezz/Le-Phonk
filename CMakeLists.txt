@@ -94,6 +94,7 @@ file(GLOB_RECURSE MY_SOURCES Source/*)
 # Maintain folder structure
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MY_SOURCES})
+target_include_directories(LePhonk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Source)
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.

@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../../Common/Constants.h"
+#include "Common/Constants.h"
 
 namespace xynth
 {

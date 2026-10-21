@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Utils/GuiData.h"
+#include "GUI/Utils/GuiData.h"
 #include "UpdateCheck/BackButton.h"
 #include "UpdateCheck/UpdateChecker.h"
 #include "TextButton.h"

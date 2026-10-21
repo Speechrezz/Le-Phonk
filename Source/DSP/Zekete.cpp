@@ -9,8 +9,8 @@
 */
 
 #include "Zekete.h"
-#include "../Common/Constants.h"
-#include "../PluginProcessor.h"
+#include "Common/Constants.h"
+#include "PluginProcessor.h"
 
 namespace xynth
 {

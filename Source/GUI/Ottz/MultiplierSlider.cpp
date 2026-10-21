@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "MultiplierSlider.h"
-#include "../../Common/Constants.h"
+#include "Common/Constants.h"
 
 namespace xynth
 {
