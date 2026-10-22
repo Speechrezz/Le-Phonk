@@ -53,7 +53,7 @@ add_subdirectory(Libraries/clap-juce-extensions EXCLUDE_FROM_ALL) # CLAP support
 # Check the readme at `docs/CMake API.md` in the JUCE repo for the full list.
 
 juce_add_plugin(LePhonk
-    VERSION 1.0.5                               # Set this if the plugin version is different to the project version
+    VERSION ${PROJECT_VERSION}                  # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     COMPANY_NAME "Xynth Audio"                  # Specify the name of the plugin's author
